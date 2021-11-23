@@ -1,42 +1,26 @@
 <template>
-  <div style="margin: 0 auto; min-height: 100vh">
+  <div style="margin: 0 auto; min-height: 100vh; background-color: #160d3d">
     <div class="centered-container">
-      <div style="width: 240px">
-        <LogoPurple />
-        <br /><br />
-        <!-- <img src="~/assets/shared/win.png" alt="" height="150" width="230" /> -->
-        <img
-          src="~/assets/shared/win.png"
-          class="img-fluid"
-          alt="Responsive image"
-        />
-        <br /><br />
-        <div class="heading2">Login to your Account</div>
-        <div class="text1">with your phone number and name</div>
-        <br />
-        <form action="">
-          <div class="form-group">
-            <input
-              class="rounded-border-input"
-              type="text"
-              placeholder="+25470 12 123 456"
-            />
-          </div>
+      <div class="row">
+        <div class="col">
+          <div
+            class="winner-container"
+            height="220"
+            width="200"
+            style="background-color: #ffb500"
+          ></div>
+          <br />
+          <LogoCyan />
+          <br />
 
-          <div class="form-group">
-            <input
-              class="rounded-border-input"
-              type="text"
-              placeholder="Username"
-            />
-          </div>
-        </form>
-        <button class="rounded-button-cyan" @click="navigate()">
-          <div class="subheading4">Login <i class="bi bi-arrow-right"></i></div>
-        </button>
-        <div class="subheading5" style="color: #bbb; padding-top: 20px">
-          Don't have an account?
-          <a href="/signup" class="subheading5">SIGN UP</a>
+          <button class="rounded-button-cyan" @click="navigate()">
+            <div class="subheading4">
+              Get started
+              <font-awesome-icon :icon="['fas', 'arrow-right']" />
+            </div>
+          </button>
+          <br />
+          <p>@copyright mSwali 2021</p>
         </div>
       </div>
     </div>
@@ -44,6 +28,7 @@
 </template>
 
 <script>
+import Purple from "../components/Logo/Purple.vue";
 export default {
   head() {
     return {
@@ -52,6 +37,9 @@ export default {
         {
           rel: "stylesheet",
           href: "https://fonts.googleapis.com/css?family=Work Sans",
+        },
+        {
+          href: " https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css",
         },
       ],
       meta: [
@@ -82,6 +70,7 @@ export default {
       });
     },
   },
+  components: { Purple },
 };
 </script>
 
@@ -91,12 +80,15 @@ input[type="text"] {
   padding: 12px 20px;
   box-sizing: border-box;
   border: 2px solid #ccc;
-  -webkit-transition: 0.5s;
-  transition: 0.5s;
   outline: none;
 }
 
 input[type="text"]:focus {
   border: 2px solid #1ceded;
+}
+p {
+  background-position: bottom;
+  color: #bbb;
+  padding-top: 2em;
 }
 </style>

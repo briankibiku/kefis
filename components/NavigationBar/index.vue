@@ -2,7 +2,6 @@
   <div style="padding-bottom: 20px">
     <b-navbar toggleable="lg" type="light">
       <b-navbar-brand>
-        <LogoPurple />
       </b-navbar-brand>
 
       <b-navbar-toggle target="nav-collapse"></b-navbar-toggle>
@@ -19,7 +18,7 @@
             ><span class="heading4" style="color: #160d3d;">My Answers </span>
           </b-nav-item>
         </b-navbar-nav>
-        <b-navbar-nav class="ml-auto">
+        <!-- <b-navbar-nav class="ml-auto">
           <b-nav-item-dropdown style="color: #160d3d" right>
             <template #button-content>
               <em>
@@ -29,7 +28,7 @@
             <b-dropdown-item class="heading4" href="/profile">Profile</b-dropdown-item>
             <b-dropdown-item class="heading4" href="/">Logout</b-dropdown-item>
           </b-nav-item-dropdown>
-        </b-navbar-nav>
+        </b-navbar-nav> -->
       </b-collapse>
     </b-navbar>
   </div>

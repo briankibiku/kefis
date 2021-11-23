@@ -265,10 +265,10 @@ export const mutations = {
   },
   // update user ansers on state
   updateUserAnswers(state, payload) {
-    state.persistedAnswers = payload;
+    state.userAnswersPayload = payload;
   },
-  updateUserAnswersSet(state) {
-    state.userAnswersPayloadSet = true;
+  updateUserAnswersPersistance(state, payload) {
+    state.userAnswersPayloadSet = payload;
   },
 
   // update score mutations
@@ -303,12 +303,9 @@ export const actions = {
     );
     return res;
   },
-  switchPersistanceState({ commit }, payload) {
-    commit("SET_STATE", payload);
-    commit("SET_ALERT", true);
-  },
-  persistAnswersState({ commit }, payload) {
+
+  startPersistance({ commit }, payload) {
     commit("updateUserAnswers", payload);
-    commit("updateUserAnswersSet");
+    commit("updateUserAnswersPersistance", true);
   },
 };

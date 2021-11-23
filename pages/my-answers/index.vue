@@ -1,23 +1,25 @@
 <template>
   <div class="container">
-    <p v-if="$fetchState.pending">
-      <b-spinner label="Spinning"></b-spinner>
-    </p>
-    <p v-else-if="$fetchState.error">An error occurred while fetching data</p>
-    <div v-else>
-      <div class="heading3">Your Answers</div>
+    <div>
+      <div class="heading3">
+        Your Answers
+        <button
+          class="primary-button"
+          style="width: 100px; height: 40px"
+          @click="refreshPage"
+        >
+          Refresh
+        </button>
+      </div>
       <b-table
         striped
         hover
-        :items="this.questionAnswers"
+        :items="this.questionAnswers2"
         :fields="fields"
         :per-page="perPage"
         :current-page="currentPage"
       ></b-table>
 
-      <p class="mt-3">
-        Current Page: <b> {{ currentPage }} </b>
-      </p>
       <b-pagination
         v-model="currentPage"
         :total-rows="rows"
@@ -38,10 +40,21 @@ export default {
       phoneNumber: "",
       perPage: 10,
       currentPage: 1,
-      userAnswersPayload: {},
       choicesPicked: [],
       questionAnswers: [],
+      choicesPicked2: [],
+      questionAnswers2: [],
+      mergedAnswersList: [],
+      userAnswers: {},
       answersPayloadSet: this.$store.state.userAnswersPayloadSet,
+      items: [
+        {
+          question: "What is the meaning of the word Nairobi?",
+          answer: "Cool waters",
+          label: "A",
+          picked: "B",
+        },
+      ],
       fields: [
         "question",
         "answer",
@@ -50,62 +63,61 @@ export default {
       ],
     };
   },
-
   computed: {
     ...mapState({
-      persistedAnswers: "persistedAnswers",
+      userAnswersPayload: "userAnswersPayload",
     }),
-  },
-  async fetch() {
-    this.userAnswersPayload = await fetch(
-      "http://cms.mswali.co.ke/mswali/mswali_app/backend/web/index.php?r=solo-play/show-my-answers&msisdn=0724609783",
-    ).then((res) => res.json());
-  },
-  mounted() {
-    if (
-      this.persistedAnswers !== null &&
-      this.$store.state.persistedAnswers !== null
-    ) {
-      console.log("Fetched answers from state!!");
-      console.log(this.$store.state.userAnswersPayloadSet);
-
-      // retrieve the user answers from state
-      // this.choicesPicked = this.$store.state.persistedAnswers.choices_picked;
-      // this.questionAnswers = this.$store.state.persistedAnswers.resp;
-      this.choicesPicked = this.$store.state.answersResponse.choices_picked;
-      this.questionAnswers = this.$store.state.answersResponse.resp;
-
-    } else {
-      this.fetchAnswersFromState();
-    }
-  },
-  methods: {
-    // persist to vuex store
-    ...mapActions({
-      persistAnswersState: "persistAnswersState",
-    }),
-    fetchAnswersFromState() {
-      // check if any answers were already fetched and stored in state
-      if (this.answersPayloadSet === false) {
-        console.log(this.$store.state.userAnswersPayloadSet);
-        console.log("Didn't fetched answers from state!!");
-        //   Storing of usconsoleer answers payload to state
-        this.persistAnswersState(this.userAnswersPayload);
-        this.choicesPicked =
-          this.$store.state.persistedAnswers.choices_picked;
-        console.log(this.choicesPicked);
-        console.log("Hello wold");
-        this.questionAnswers = this.$store.state.persistedAnswers.resp;
-        Array.prototype.push.apply(this.choicesPicked, this.questionAnswers);
-        // let mergedResp = this.choicesPicked + this.questionAnswers;
-      }
-    },
-  },
-
-  computed: {
     rows() {
       return this.questionAnswers.length;
     },
+  },
+  async fetch() {
+    this.userAnswers = await fetch(
+      "http://cms.mswali.co.ke/mswali/mswali_app/backend/web/index.php?r=solo-play/show-my-answers&msisdn=0724609783",
+    ).then((res) => res.json());
+    //this.userAnswers = this.$store.state.answersResponse;
+    this.choicesPicked2 = this.userAnswers.choices_picked;
+    this.questionAnswers2 = this.userAnswers.resp;
+
+    // for (let i = 0; i < 15; i++) {
+    //   this.questionAnswers2.forEach((item) => {
+    //     var result = questionAnswers2.map(function (el) {
+    //       var o = Object.assign({}, el);
+    //       o.isActive = this.choicesPicked2[i];
+    //     });
+    //   });
+    //   console.log(this.questionAnswers2);
+    // }
+
+    console.log("questionAnswers2");
+    console.log(this.questionAnswers2);
+  },
+  methods: {
+    ...mapActions({ startPersistance: "startPersistance" }),
+    startPersistanceNow() {
+      this.$store.commit("updateUserAnswers", this.userAnswers);
+      this.choicesPicked = this.$store.state.userAnswersPayload.choices_picked;
+      this.questionAnswers = this.$store.state.userAnswersPayload.resp;
+      this.startPersistance(this.userAnswersPayload);
+    },
+    refreshPage() {
+      this.startPersistance(null);
+      window.location.reload();
+      this.startPersistance(this.userAnswers);
+    },
+  },
+
+  mounted() {
+    if (this.userAnswersPayload == null) {
+      console.log("Fetched from state!!");
+      this.choicesPicked = this.$store.state.userAnswersPayload.choices_picked;
+      this.questionAnswers = this.$store.state.userAnswersPayload.resp;
+      console.log(this.userAnswersPayload);
+      for (let i = 0; i <= this.choicesPicked.length; i++) {}
+    } else {
+      console.log("FAILED to fetch from state!!");
+      this.startPersistanceNow();
+    }
   },
 };
 </script>

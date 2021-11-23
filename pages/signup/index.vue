@@ -1,54 +1,49 @@
 <template>
-  <div class="painted-background">
-    <LogoPurple style="margin: 30px 0px 30px; text-align: center" />
-    <div class="centered-bordered-container">
-      <p class="heading2">| Signup</p>
-      <form>
-        <div class="row">
-          <div class="col">
-            <input
-              type="text"
-              class="underline-input-style"
-              placeholder="Username"
-            /><br /><br />
-            <input
-              type="text"
-              class="underline-input-style"
-              placeholder="Phone number"
-            />
-            <br /><br />
-            <p>
-              <b-form-checkbox
-                id="checkbox-1"
-                v-model="status"
-                name="checkbox-1"
-                value="accepted"
-                unchecked-value="not_accepted"
-              >
-                Accept <a href="/terms">terms and conditions</a>
-              </b-form-checkbox>
-            </p>
-            <div v-if="show_error" style="color: red">
-              Make sure you have agreed to the terms
-            </div>
-            <button
-              class="primary-button"
-              @click="termsAccepted(status), showLoading()"
-            >
-              <div v-if="isLoading">
-                <b-spinner
-                  label="Loading..."
-                  style="color: #160d3d"
-                ></b-spinner>
-              </div>
-              <div v-else>Get me started</div>
-            </button>
-            <br /><br />
-            <p>Already have an account? <a href="/login">Login</a></p>
-            <a href="/" style="color: #bbb">Back</a>
-          </div>
+  <div style="margin: 0 auto; min-height: 100vh">
+    <div class="centered-container">
+      <div style="width: 240px">
+        <LogoPurple />
+        <br /><br />
+        <img
+          src="~/assets/shared/win.png"
+          class="img-fluid"
+          alt="Responsive image"
+        />
+        <br /><br />
+        <div class="heading2">Welcome to mSwali</div>
+        <div class="text1">
+          Enter your phone number and a user name to sign up
         </div>
-      </form>
+        <br />
+        <form action="">
+          <div class="form-group">
+            <input
+              class="rounded-border-input"
+              type="text"
+              placeholder="+25470 12 123 456"
+            />
+          </div>
+
+          <div class="form-group">
+            <input
+              class="rounded-border-input"
+              type="text"
+              placeholder="Username"
+            />
+          </div>
+        </form>
+        <button class="rounded-button-cyan" @click="navigate()">
+          <div class="subheading4">
+            Sign up
+            <font-awesome-icon :icon="['fas', 'arrow-right']" />
+          </div>
+        </button>
+
+        <div class="subheading5" style="color: #bbb; padding-top: 20px">
+          Have an account already?
+          <a href="/login" class="subheading5">LOGIN</a>
+        </div>
+      </div>
     </div>
   </div>
 </template>
@@ -65,6 +60,9 @@ export default {
   methods: {
     showLoading() {
       this.isLoading = true;
+    },
+    navigate() {
+      return this.$router.push("/otp");
     },
     termsAccepted(status) {
       return this.$router.push("/home");

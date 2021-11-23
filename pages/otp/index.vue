@@ -1,70 +1,70 @@
 <template>
-  <div class="purple-bg">
-    <div class="otp-header padding-vertical-20">
-      <div>
-        <p style="color: cyan; font-weight: bold; font-size: 20px">
-          Waiting for verification of <br />
-          {{ this.$store.state.visitor_info[0].phone }}
-        </p>
-        <p style="color: cyan">We've sent the code to you mobile phone</p>
-        <img
-          class="otp-envelop padding-all-20"
-          width="100.5"
-          height="97"
-          src="~/assets/envelop.png"
-        />
-        <h6>Enter 4 digit code</h6>
+  <div style="margin: 0 auto; min-height: 100vh">
+    <div class="centered-container">
+      <div style="width: 300px">
+        <div class="otp-header">
+          <div>
+            <div class="winner-container" height="220" width="200"></div>
+            <p
+              style="
+                color: #160d3d;
+                text-align: center;
+                font-weight: bold;
+                font-size: 20px;
+              "
+            >
+              Waiting for verification sent to <br />
+              +274 70 348788
+            </p>
+            <p style="color: #160d3d; text-align: center">
+              We've sent the code to you mobile phone
+            </p>
+          </div>
+        </div>
+
+        <div class="form-section">
+          <form action="">
+            <div class="form-group">
+              <input
+                class="rounded-border-input"
+                type="text"
+                placeholder=". . . ."
+                style="text-align: center"
+              />
+            </div>
+          </form>
+        </div>
+
+        <div class="heading4" style="text-align: center; padding-bottom: 20px">
+          Code expires in
+          <span style="color: red">00:56</span>
+        </div>
+
+        <button class="rounded-button-cyan" @click="navigate()">
+          <div class="subheading4">
+            Verify
+            <font-awesome-icon :icon="['fas', 'arrow-right']" />
+          </div>
+        </button>
+
+        <div class="heading4" style="text-align: center; padding-top: 10px">
+          Didn't receive the code?
+          <a class="heading4" style="font-weight: bold" href="">Resend OTP</a>
+        </div>
       </div>
     </div>
-
-    <div class="form-section padding-all-20">
-      <form id="otp-form" method="post">
-        <input
-          type="number"
-          size="20"
-          onin
-          maxlength="4"
-          placeholder="Enter OTP"
-          pattern="[0-9]{4}"
-          v-model="otpValue"
-          style="
-            border: none;
-            padding: 10px;
-            border-radius: 8px;
-            background-color: white;
-          "
-          required
-        />
-      </form>
-    </div>
-
-    <div>
-      <p>Didn't receive the code? <a href="">Resend OTP</a></p>
-    </div>
-
-    <div class="otp-btn-div padding-vertical-20">
-      <b-button
-        type="submit"
-        href="/home"
-        form="otp-form"
-        class="outline-button"
-        style="
-          background-color: #160d3d;
-          color: cyan;
-          border-color: cyan;
-          border-radius: 4px;
-          max-width: 200px;
-        "
-      >
-        <span class="btn-label">Verify</span>
-      </b-button>
-    </div>
-    <div class="otp-footer"></div>
   </div>
 </template>
-
+<script>
+export default {
+  methods: {
+    navigate() {
+      return this.$router.push("/home");
+    },
+  },
+};
+</script>
 <style scoped>
-
 p,
 h6 {
   color: #fff;

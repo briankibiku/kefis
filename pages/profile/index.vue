@@ -1,26 +1,3 @@
-<!-- <div class="painted-background">
-    
-    <div class="centered-bordered-container">
-      <div class="avatar"></div>
-      <div class="form">
-        <form>
-          <div class="row">
-            <div class="col">
-              <br />
-              <input type="text" size="20" onin :value="userName" />
-              <br /><br />
-              <input type="text" size="20" onin :value="phoneNumber" />
-              <br /><br />
-              <input type="text" size="20" onin :value="email" style="" />
-              <br /><br />
-              <button class="primary-button">Save</button>
-            </div>
-          </div>
-        </form>
-      </div>
-    </div>
-  </div> -->
-
 <template>
   <div class="painted-background">
     <LogoPurple style="margin: 30px 0px 30px; text-align: center" />
@@ -71,12 +48,6 @@ input {
   padding: 10px;
   border-radius: 8px;
   background-color: #ebebed;
-}
-.avatar {
-  background-image: url("~/assets/man.jpg");
-  background-repeat: no-repeat;
-  background-size: contain;
-  height: 120px; 
 }
 h6 {
   font-weight: 600;
