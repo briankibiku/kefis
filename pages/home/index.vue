@@ -16,7 +16,9 @@
           <p class="text-center subheading1 text-blue mb-0 mt-p-2">
             Welcome back
           </p>
-          <p class="text-center heading2 text-blue mb-0">{{ username }} !</p>
+          <p class="text-center heading2 text-blue mb-0">
+            {{ this.lastName }} !
+          </p>
           <!-- <p v-if ="this.$store.state.visitor_info.phone" class="text-center subheading2-title text-blue mb-0">{{this.$store.state.visitor_info.phone}}</p> -->
           <!-- <p v-else class="text-center subheading2-title text-blue mb-0">No data</p> -->
           <p class="text-center subheading3 text-blue">
@@ -25,7 +27,7 @@
         </b-col>
       </b-row>
       <div>
-        <b-row class="mt-18">
+        <b-row class="mt-18 margin-horizontal-30">
           <b-col class="pr-0">
             <div class="display-card">
               <p class="mb-0 text-blue subheading2 text-center pt-3">KSH</p>
@@ -69,14 +71,14 @@
         </b-row>
       </div>
 
-      <b-row class="mt-ipadpro">
+      <b-row class="mt-ipadpro margin-horizontal-30">
         <b-col>
           <br />
           <b-form-row class="justify-content-center">
             <b-button
               href="/category"
-              class="primary-button"
-              style="background-color: #fff; color: #000; font-weight: 600"
+              class="outline-button-cyan"
+              style="font-weight: 600"
               >Play now</b-button
             >
           </b-form-row>
@@ -90,9 +92,30 @@
 export default {
   data() {
     return {
-      username: "Kim",
       overallPoints: "2,000",
+      userProfile: {},
+      lastName: "",
     };
+  },
+  mounted() {
+    this.getuserName();
+  },
+
+  // async asyncData({ $axios }) {
+  //   // console.log(this.phoneNumber);
+  //   const userProfile = await $axios.get(
+  //     "http://cms.mswali.co.ke/mswali/mswali_app/backend/web/index.php?r=api/get-user&username=mast&account_number=0724609783"
+  //   );
+  //   const userName = userProfile.data.data.name;
+  // },
+
+  methods: {
+    async getuserName() {
+      let userProfile = await this.$store.dispatch("getuserProfile");
+      let userName = userProfile.data.data.name;
+      let splitName = userName.indexOf(" ");
+      this.lastName = userName.slice(splitName + 1, userName.length).trim();
+    },
   },
 };
 </script>
@@ -104,23 +127,23 @@ export default {
 }
 
 .display-card {
-  background: #ffffff;
+  background: #fff;
   border: 1px solid #1ceded;
   box-sizing: border-box;
   border-radius: 6px;
 }
 
-/* Extra Small Devices, Phones */
-@media only screen and (min-width: 480px) {
+/* Small Devices, Phones and Desktop screens*/
+@media only screen and (min-width: 780px) {
   .container-fluid-edited {
-    width: 30%;
-    padding: 20px;
+    padding-left: 200px;
+    padding-right: 200px;
   }
 }
-/* @media only screen and (min-width: 780px) {
+@media only screen and (min-width: 1024px) {
   .container-fluid-edited {
-    width: 50%;
-    padding: 20px;
+    padding-left: 300px;
+    padding-right: 300px;
   }
-} */
+}
 </style>

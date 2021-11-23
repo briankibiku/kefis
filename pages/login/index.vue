@@ -17,7 +17,7 @@
               placeholder="Phone number"
             />
             <br /><br />
-            <b-button class="primary-button" href="/home">Go</b-button>
+            <b-button class="primary-button" href="/otp">Go</b-button>
             <br /><br />
             <p>New to mSwali? <a href="/signup">Sing Up</a></p>
             <br />

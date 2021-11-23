@@ -1,16 +1,21 @@
 <template>
-  <div class="d-flex">
-    <div v-if="showResults">I am results component</div>
+  <div>
+    <div v-if="showResults">
+      <Results />
+    </div>
     <div v-else>
       <div class="outer-wrapper container-fluid pl-0 pr-0">
         <div class="quiz-content">
           <!-- <Notification :message="this.error" v-if="error" /> -->
-          <h1 style="text-align: center">
-            Question-{{ this.counter + 1 }} of
+          <div class="heading3" style="text-align: center; color: #fff">
+            Question {{ this.counter + 1 }} of
             {{ this.quiz.length }}
-          </h1>
+          </div>
+          <div class="center">
+            <BaseTimer />
+          </div>
 
-          <b-row>
+          <b-row style="margin-top: 120px">
             <b-col>
               <p
                 v-if="$fetchState.pending"
@@ -34,7 +39,7 @@
                   </p>
                 </div>
 
-                <div class="grid-container">
+                <div class="grid-container resize-choices">
                   <div
                     class="choices"
                     v-for="item in this.quiz[this.counter].choices"
@@ -42,8 +47,8 @@
                   >
                     <center>
                       <p class="field">
-                        <a
-                          class="button"
+                        <button
+                          class="outline-button-cyan"
                           v-on:click="goToNextQuestion(item.correct)"
                         >
                           <span v-if="item.correct" class="text-choice">
@@ -52,40 +57,21 @@
                           <span v-else class="text-choice">
                             {{ item.choice }} . {{ item.answer_text }}
                           </span>
-                        </a>
+                        </button>
                       </p>
                     </center>
                   </div>
                 </div>
+                <div class="position-bottom">
+                  <a
+                    @click="showMsgBoxTwo"
+                    style="color: #bbb; padding-bottom: 20px"
+                    >Quit</a
+                  >
+                </div>
               </div>
             </b-col>
           </b-row>
-        </div>
-        <div class="quiz-footer d-flex vh-20">
-          <div
-            class="
-              footer-timer
-              col
-              d-flex
-              justify-content-center
-              align-items-center
-              text-center
-            "
-          >
-            <!-- <p>{{ this.$store.getters.calculteScore }} </p> -->
-            <div>
-              <p v-if="!$fetchState.pending">
-                <center>
-                  <BaseTimer />
-                </center>
-              </p>
-              <a
-                @click="showMsgBoxTwo"
-                style="color: #bbb; padding-bottom: 20px"
-                >Quit</a
-              >
-            </div>
-          </div>
         </div>
       </div>
     </div>
@@ -111,17 +97,80 @@ export default {
   },
   async fetch() {
     this.quiz = await this.$store.state.test_quiz.data;
-    // this.dummyQuiz = await fetch(
-    //   "http://161.35.6.91/mswali/mswali_app/backend/web/index.php?r=api/fetch-all-questions"
-    // ).then((res) => res.json());
-    console.log(this.quiz);
-    this.$store.commit("updateTrivia", this.quiz);
-    console.log(this.$store.state.test_quiz.data);
+    this.quiz = await fetch(
+      "http://161.35.6.91/mswali/mswali_app/backend/web/index.php?r=api/fetch-all-questions"
+    ).then((res) => res.json());
+    this.quiz = this.quiz.data;
+    // console.log(this.quiz);
+  },
+  methods: {
+    // Logic to loop through questions goes here
+    goToNextQuestion(correct) {
+      let nextQuestion = (this.counter += 1);
+      if (correct) {
+        this.correctScore = this.correctScore + 1;
+        this.$store.commit("updateQuizScore", this.correctScore);
+        console.log("Correct answers" + this.$store.state.trivia_score.correct);
+      } else {
+        this.wrong = this.wrong + 1;
+        this.$store.commit("updateQuizWrongs", this.wrong);
+        console.log("Wrong answers" + this.$store.state.trivia_score.wrong);
+      }
+      if (nextQuestion < this.quiz.length) {
+        this.counter = nextQuestion;
+      } else {
+        this.showResults = true;
+        console.log("Hello world");
+      }
+    },
+    showMsgBoxTwo() {
+      this.boxTwo = "";
+      this.$bvModal
+        .msgBoxConfirm("Are you sure you want to quit quiz?", {
+          title: "Quit quiz?",
+          size: "sm",
+          buttonSize: "sm",
+          okVariant: "danger",
+          okTitle: "YES",
+          cancelTitle: "NO",
+          cancelVariant: "light",
+          footerClass: "p-2",
+          hideHeaderClose: false,
+          centered: true,
+        })
+        .then((value) => {
+          this.$router.push("/home");
+        })
+        .catch((err) => {
+          // An error occurred
+        });
+    },
   },
 };
 </script>
 
 <style scoped>
+.center {
+  margin: 0;
+  position: absolute;
+  top: 20%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+.text-choice {
+  font-style: normal;
+  font-weight: normal;
+  font-size: 14px;
+  line-height: 14px;
+
+  /* identical to box height, or 100% */
+  letter-spacing: 0.02em;
+}
+.resize-choices {
+  width: auto;
+  justify-content: center;
+  text-align: center;
+}
 .outer-wrapper {
   position: fixed;
   top: 0px;
@@ -148,7 +197,7 @@ export default {
   justify-content: center;
 }
 .question-title {
-  color: #1ceded;
+  color: #fff;
   font-size: 20px;
   justify-content: center;
   /* text-align-last:justify; */
@@ -158,5 +207,13 @@ export default {
 
   /* or 150% */
   letter-spacing: 0.03em;
+}
+.quiz-footer {
+  position: absolute;
+  height: 100vh;
+  width: 100%;
+  background-color: white;
+  padding: auto;
+  bottom: 0px;
 }
 </style>

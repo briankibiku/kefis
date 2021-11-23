@@ -2,7 +2,7 @@
   <div style="padding-bottom: 20px">
     <b-navbar toggleable="lg" type="light">
       <b-navbar-brand>
-        <img src="~/assets/logos/mSwali-cyan.png" height="30" width="120" alt="" />
+        <LogoPurple />
       </b-navbar-brand>
 
       <b-navbar-toggle target="nav-collapse"></b-navbar-toggle>
@@ -10,16 +10,13 @@
       <b-collapse id="nav-collapse" is-nav>
         <b-navbar-nav>
           <b-nav-item href="/wallet"
-            ><span style="color: #160d3d">Wallet</span></b-nav-item
+            ><span class="heading4" style="color: #160d3d">Wallet</span></b-nav-item
           >
-          <b-nav-item href="#"
-            ><span style="color: #160d3d">Gifts</span></b-nav-item
+          <b-nav-item href="/winners"
+            ><span class="heading4" style="color: #160d3d">Winners</span></b-nav-item
           >
-          <b-nav-item href="#"
-            ><span style="color: #160d3d"
-              >Notifications
-              <!-- <p class="notification-count-container">5</p>' -->
-            </span>
+          <b-nav-item href="/my-answers"
+            ><span class="heading4" style="color: #160d3d;">My Answers </span>
           </b-nav-item>
         </b-navbar-nav>
         <b-navbar-nav class="ml-auto">
@@ -29,8 +26,8 @@
                 <b-avatar variant="light"></b-avatar>
               </em>
             </template>
-            <b-dropdown-item href="#">Profile</b-dropdown-item>
-            <b-dropdown-item href="/">Logout</b-dropdown-item>
+            <b-dropdown-item class="heading4" href="/profile">Profile</b-dropdown-item>
+            <b-dropdown-item class="heading4" href="/">Logout</b-dropdown-item>
           </b-nav-item-dropdown>
         </b-navbar-nav>
       </b-collapse>
