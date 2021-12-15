@@ -1,30 +1,55 @@
 <template>
-  <div class="painted-background">
-    <LogoPurple style="margin: 30px 0px 30px; text-align: center" />
-    <div class="centered-bordered-container">
-      <p class="heading2">| Login</p>
-      <form>
-        <div class="row">
-          <div class="col">
+  <div style="margin: 0 auto; min-height: 100vh">
+    <div class="centered-container">
+      <div style="width: 240px">
+        <LogoPurple />
+        <br /><br />
+        <img
+          src="~/assets/shared/win.png"
+          class="img-fluid"
+          alt="Responsive image"
+        />
+        <br /><br />
+        <div class="heading2">Login to your Account</div>
+        <div class="text1">with your phone number</div>
+        <br />
+        <form action="">
+          <div class="form-group">
             <input
+              class="rounded-border-input"
               type="text"
-              class="underline-input-style"
-              placeholder="Username"
-            /><br /><br />
-            <input
-              type="text"
-              class="underline-input-style"
-              placeholder="Phone number"
+              placeholder="+25470 12 123 456"
             />
-            <br /><br />
-            <b-button class="primary-button" href="/otp">Go</b-button>
-            <br /><br />
-            <p>New to mSwali? <a href="/signup">Sing Up</a></p>
-            <br />
-            <a href="/" style="color: #bbb">Back</a>
           </div>
+        </form>
+        <button class="rounded-button-cyan" @click="navigate()">
+          <div class="subheading4">
+            Login
+            <font-awesome-icon :icon="['fas', 'arrow-right']" />
+          </div>
+        </button>
+
+        <div class="subheading5" style="color: #bbb; padding-top: 20px">
+          Don't have an account?
+          <a href="/signup" class="subheading5">SIGN UP</a>
         </div>
-      </form>
+      </div>
     </div>
   </div>
 </template>
+
+<script>
+import { mapGetters } from "vuex";
+export default {
+  computed: {
+    ...mapGetters("products", [
+      "maskedPhone",
+    ]),
+  },
+  methods: {
+    navigate() {
+      return this.$router.push("/otp");
+    },
+  },
+};
+</script>

@@ -55,7 +55,6 @@
   padding: 10px;
   width: 100%;
 }
-
 /* Container styles */
 .container-bg-image {
   background-image: url("shared/win.png");
@@ -66,6 +65,20 @@
   margin: 0 auto;
   min-height: 100vh;
   display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+}
+.winner-container {
+  background-image: url("~/assets/win.png");
+  background-repeat: no-repeat;
+  width: 200px;
+  height: 200px;
+  background-color: #ffb500;
+  background-size: contain;
+  margin: 0 auto;
+  display: flex;
+  border-radius: 20em;
   justify-content: center;
   align-items: center;
   text-align: center;
@@ -81,11 +94,11 @@
   text-align: center;
 }
 .painted-background {
-  background-size: contain;
-  width: 100%;
+  max-width: 100%;
   min-height: 100vh;
   text-align: center;
-  background: linear-gradient(to bottom, #ffffff 50%, #160d3d 50%);
+  overflow-x: hidden;
+  background: linear-gradient(to bottom, #1ceded 20%, #f0f0f0 50%);
 }
 .painted-background-header {
   width: 100%;
@@ -142,8 +155,6 @@
 .heading3 {
   font-size: 1.2em;
   font-weight: 600;
-  padding-top: 20px;
-  padding-bottom: 20px;
   font-family: "Work Sans", Tahoma, Geneva, Verdana, sans-serif;
 }
 .heading4 {
@@ -184,13 +195,13 @@
   width: 100%;
   color: #000;
 }
-.rounded-border-input {  
+.rounded-border-input {
   border: 1px solid #1ceded;
   border-color: #bbb;
   padding: 13px;
   border-radius: 50px;
 }
-.rounded-border-input:focus {  
+.rounded-border-input:focus {
   border: 1px solid #1ceded;
   padding: 13px;
   border-radius: 50px;
@@ -198,7 +209,7 @@
 /* Alignment styles */
 .center-align-content {
   margin: auto;
-  width: 200px;
+  width: 400px;
   justify-content: center;
   align-items: center;
   padding-bottom: 20px;
@@ -230,4 +241,10 @@
 }
 .padding-all-20 {
   padding: 20px;
+}
+.avatar {
+  background-image: url("~/assets/man.jpg");
+  background-repeat: no-repeat;
+  background-size: contain;
+  height: 120px;
 }

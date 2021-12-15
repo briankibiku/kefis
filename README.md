@@ -1,13 +1,13 @@
 # mswali-pwa
 
 
-## Build Setup Using Docker
+<!-- ## Build Setup Using Docker -->
 
-1. Clone this repo using this command `git clone git@bitbucket.org:rkepha/pwa.git`
+<!-- 1. Clone this repo using this command `git clone git@bitbucket.org:rkepha/pwa.git`
 2. cd to this project
 3. On teminal type `. docker.sh`
 4. On terminal type `build` and hit Enter
-5. On terminal type `run` and after build is complete you should be able to see project on browser via http://localhost:3000/
+5. On terminal type `run` and after build is complete you should be able to see project on browser via http://localhost:3000/ -->
 
 
 ## Build Setup

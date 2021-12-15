@@ -10,12 +10,18 @@
     "test": "jest"
   },
   "dependencies": {
+    "@fortawesome/fontawesome-free": "^5.15.4",
+    "@fortawesome/fontawesome-svg-core": "^1.2.36",
+    "@fortawesome/free-brands-svg-icons": "^5.15.4",
+    "@fortawesome/free-solid-svg-icons": "^5.15.4",
+    "@fortawesome/vue-fontawesome": "^2.0.6",
     "@nuxtjs/axios": "^5.13.6",
     "bootstrap": "^4.6.0",
     "bootstrap-vue": "^2.21.2",
     "core-js": "^3.15.1",
     "js-cookie": "^3.0.1",
     "nuxt": "^2.15.7",
+    "nuxt-fontawesome": "^0.4.0",
     "secure-ls": "^1.2.6",
     "vuex-persistedstate": "^4.1.0"
   },
@@ -28,6 +34,6 @@
     "node-sass": "^6.0.1",
     "sass-loader": "^12.3.0",
     "vue-jest": "^3.0.4",
-    "webpack": "^4.46.0"
+    "webpack": "^5.0.0"
   }
 }

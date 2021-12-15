@@ -1,91 +1,132 @@
 <template>
-  <section class="painted-background">
-    <b-container>
+  <div style="margin: 0 auto; min-height: 100vh">
+    <div class="painted-background">
       <NavigationBar />
-    </b-container>
+      <div class="row" style="vertical-align: top">
+        <div class="column left">
+          <b-avatar variant="light"></b-avatar>
+        </div>
 
-    <b-container fluid class="container-fluid-edited">
-      <b-row>
-        <b-col>
-          <p v-if="true" class="text-center subheading2 text-blue mb-0 mt-p-2">
-            <!-- {{ this.$store.state.profile.status }} -->
-          </p>
-          <p v-else class="text-center subheading2 text-blue mb-0 mt-p-2">
-            no Data
-          </p>
-          <p class="text-center subheading1 text-blue mb-0 mt-p-2">
-            Welcome back
-          </p>
-          <p class="text-center heading2 text-blue mb-0">
-            {{ this.lastName }} !
-          </p>
-          <!-- <p v-if ="this.$store.state.visitor_info.phone" class="text-center subheading2-title text-blue mb-0">{{this.$store.state.visitor_info.phone}}</p> -->
-          <!-- <p v-else class="text-center subheading2-title text-blue mb-0">No data</p> -->
-          <p class="text-center subheading3 text-blue">
-            Here is how your account is looking today
-          </p>
-        </b-col>
-      </b-row>
-      <div>
-        <b-row class="mt-18 margin-horizontal-30">
-          <b-col class="pr-0">
-            <div class="display-card">
-              <p class="mb-0 text-blue subheading2 text-center pt-3">KSH</p>
+        <div class="column middle" style="text-align: left">
+          <div class="heading3">Good morning {{ this.lastName }}!</div>
+          <div>{{ this.phoneNumber }}</div>
+        </div>
+        <div
+          class="column"
+          style="
+            background-color: #160d3d;
+            width: 50px;
+            height: 50px;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            display: flex;
+            border-radius: 10px;
+          "
+        >
+          <font-awesome-icon :icon="['fas', 'bell']" style="color: #fff" />
+        </div>
+        <div class="centered-container">
+          <div
+            class="row centered-container"
+            style="width: 100%; margin-right: 20px; margin-left: 20px"
+          >
+            <div class="col" style="text-align: left">
+              <!-- wallet card go here -->
+              <div class="wallet-card">
+                <div class="heading4">Wallet Balance</div>
+                <div class="heading2">Ksh 100,0000</div>
+              </div>
 
-              <div class="text-blue heading2 text-center">
-                {{ overallPoints }}
+              <!-- stats card go here -->
+              <div class="row scrollable">
+                <div class="stats-card">
+                  <font-awesome-icon :icon="['fas', 'flag']" />
+                  <div
+                    class="heading4"
+                    style="
+                      text-align: center;
+                      padding: 2px;
+                      border-radius: 5px;
+                      background-color: #f0f0f0;
+                    "
+                  >
+                    Quiz Passed
+                  </div>
+                  <div
+                    class="heading3"
+                    style="padding-bottom: 0px; padding-top: 0px"
+                  >
+                    27
+                  </div>
+                  <div class="subheading5">Out of 30 questions</div>
+                </div>
+                <div class="stats-card">
+                  <font-awesome-icon :icon="['fas', 'flag']" />
+                  <div
+                    class="heading4"
+                    style="
+                      text-align: center;
+                      padding: 2px;
+                      border-radius: 5px;
+                      background-color: #f0f0f0;
+                    "
+                  >
+                    Quiz Passed
+                  </div>
+                  <div
+                    class="heading3"
+                    style="padding-bottom: 0px; padding-top: 0px"
+                  >
+                    27
+                  </div>
+                  <div class="subheading5">Out of 30 questions</div>
+                </div>
               </div>
-              <p class="text-blue subheading3 text-center">Wallet Balance</p>
-            </div>
-          </b-col>
-          <b-col>
-            <div class="display-card">
-              <p class="mb-0 text-blue subheading2 text-center pt-3">
-                Overall Points
-              </p>
-              <div class="text-blue heading2 text-center">
-                {{ overallPoints }}
+              <!-- promo & ads card go here -->
+              <div class="row scrollable">
+                <div class="promo-card">
+                  <div class="row">
+                    <div class="col-7">
+                      <div class="promo-heading">Register your team today</div>
+                      <div class="subheading5">
+                        Dial *397# to register your team or click button below
+                      </div>
+                      <button
+                        class="rounded-button-cyan"
+                        style="margin-top: 10px"
+                        @click="navigate()"
+                      >
+                        <div class="subheading4">
+                          Register team
+                          <font-awesome-icon :icon="['fas', 'arrow-right']" />
+                        </div>
+                      </button>
+                    </div>
+                    <div class="col-2">
+                      <img
+                        src="~/assets/shared/win.png"
+                        height="100"
+                        width="140"
+                        alt=""
+                      />
+                    </div>
+                  </div>
+                </div>
               </div>
-              <p class="text-blue subheading3 text-center">Points Earned</p>
+
+              <button class="rounded-button-cyan" @click="navigate()">
+                <div class="subheading4">
+                  Start Quiz
+                  <font-awesome-icon :icon="['fas', 'arrow-right']" />
+                </div>
+              </button>
             </div>
-          </b-col>
-          <div class="w-100 py-2"></div>
-          <b-col class="pr-0">
-            <div class="display-card">
-              <p class="mb-0 text-blue subheading2 text-center pt-3">
-                Games Played
-              </p>
-              <div class="text-blue heading2 text-center">20</div>
-              <p class="text-blue subheading3 text-center">Sessions</p>
-            </div>
-          </b-col>
-          <b-col>
-            <div class="display-card">
-              <p class="mb-0 text-blue subheading2 text-center pt-3">
-                Free Sessions
-              </p>
-              <div class="text-blue heading2 text-center">6</div>
-              <p class="text-blue subheading3 text-center">Invite Friends</p>
-            </div>
-          </b-col>
-        </b-row>
+          </div>
+        </div>
       </div>
-
-      <b-row class="mt-ipadpro margin-horizontal-30">
-        <b-col>
-          <br />
-          <b-form-row class="justify-content-center">
-            <b-button
-              href="/category"
-              class="outline-button-cyan"
-              style="font-weight: 600"
-              >Play now</b-button
-            >
-          </b-form-row>
-        </b-col>
-      </b-row>
-    </b-container>
-  </section>
+    </div>
+  </div>
 </template>
 
 <script>
@@ -95,44 +136,103 @@ export default {
       overallPoints: "2,000",
       userProfile: {},
       lastName: "",
+      phoneNumber: "",
     };
   },
   mounted() {
     this.getuserName();
   },
 
-  // async asyncData({ $axios }) {
-  //   // console.log(this.phoneNumber);
-  //   const userProfile = await $axios.get(
-  //     "http://cms.mswali.co.ke/mswali/mswali_app/backend/web/index.php?r=api/get-user&username=mast&account_number=0724609783"
-  //   );
-  //   const userName = userProfile.data.data.name;
-  // },
-
   methods: {
     async getuserName() {
       let userProfile = await this.$store.dispatch("getuserProfile");
+      console.log(userProfile);
       let userName = userProfile.data.data.name;
+      this.phoneNumber = userProfile.data.data.account_number;
       let splitName = userName.indexOf(" ");
       this.lastName = userName.slice(splitName + 1, userName.length).trim();
+    },
+    navigate() {
+      return this.$router.push("/category");
     },
   },
 };
 </script>
 
 <style scoped>
+.promo-heading {
+  font-size: 1.2em;
+  font-weight: 600;
+  font-family: "Work Sans", Tahoma, Geneva, Verdana, sans-serif;
+}
+.centered-container {
+  width: 100%;
+  max-width: 600px;
+  background-size: contain;
+  margin: 0 auto;
+  min-height: 10vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+}
 .container-fluid-edited {
   width: auto;
   padding: 20px;
 }
+.column {
+  float: left;
+  padding: 10px;
+  height: 150px; /* Should be removed. Only for demonstration */
+}
+.scrollable {
+  margin: 4px, 4px;
+  padding: 4px;
+  max-width: 100%;
+  overflow-x: scroll;
+  /* white-space: nowrap; */
+}
 
-.display-card {
+.left,
+.right {
+  padding-left: 40px;
+  width: 25%;
+}
+
+.middle {
+  width: 50%;
+}
+
+.wallet-card {
   background: #fff;
-  border: 1px solid #1ceded;
+  padding: 10px;
+  margin: 20px;
   box-sizing: border-box;
   border-radius: 6px;
 }
-
+.stats-card {
+  background: #fff;
+  padding: 10px;
+  margin-left: 30px;
+  border-radius: 6px;
+  margin: 0 auto;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+}
+.promo-card {
+  color: #160d3d;
+  padding: 10px;
+  margin-left: 30px;
+  margin-top: 20px;
+  width: 320px;
+  height: 200px;
+  margin-bottom: 20px;
+  box-sizing: border-box;
+  border-radius: 6px;
+  object-fit: fill;
+  background: linear-gradient(to right bottom, #1ceded 20%, #160d3d 95%);
+}
 /* Small Devices, Phones and Desktop screens*/
 @media only screen and (min-width: 780px) {
   .container-fluid-edited {
