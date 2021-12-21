@@ -1,6 +1,7 @@
 <template>
   <div style="margin: 0 auto; min-height: 100vh">
-    <div class="painted-background">
+    <div v-if="showHideSpinner"><LoadingBar /></div>
+    <div v-if="!showHideSpinner" class="painted-background">
       <NavigationBar />
       <div class="row" style="vertical-align: top">
         <div class="column left">
@@ -36,6 +37,16 @@
               <div class="wallet-card">
                 <div class="heading4">Wallet Balance</div>
                 <div class="heading2">Ksh 100,0000</div>
+              </div>
+
+              <!-- start quiz button -->
+              <div style="margin-inline: 20px; padding-bottom: 10px">
+                <button class="rounded-button-cyan" @click="navigate()">
+                  <div class="subheading4">
+                    Start Quiz
+                    <font-awesome-icon :icon="['fas', 'arrow-right']" />
+                  </div>
+                </button>
               </div>
 
               <!-- stats card go here -->
@@ -114,13 +125,6 @@
                   </div>
                 </div>
               </div>
-
-              <button class="rounded-button-cyan" @click="navigate()">
-                <div class="subheading4">
-                  Start Quiz
-                  <font-awesome-icon :icon="['fas', 'arrow-right']" />
-                </div>
-              </button>
             </div>
           </div>
         </div>
@@ -137,20 +141,34 @@ export default {
       userProfile: {},
       lastName: "",
       phoneNumber: "",
+      showHideSpinner: true,
     };
   },
+  beforeCreate() {
+    this.showHideSpinner = true;
+  },
   mounted() {
-    this.getuserName();
+    if (this.$store.state.isAuthenticated) {
+      this.showHideSpinner = false;
+      this.getuserName();
+    } else {
+      this.navigateToLogin();
+    }
   },
 
   methods: {
     async getuserName() {
-      let userProfile = await this.$store.dispatch("getuserProfile");
-      console.log(userProfile);
+      this.phoneNumber = this.$store.state.signUpPhone;
+      let userProfile = await this.$axios.get(
+        `http://cms.mswali.co.ke/mswali/mswali_app/backend/web/index.php?r=api/get-user&username=mast&account_number=${this.phoneNumber}`,
+      );
       let userName = userProfile.data.data.name;
       this.phoneNumber = userProfile.data.data.account_number;
       let splitName = userName.indexOf(" ");
       this.lastName = userName.slice(splitName + 1, userName.length).trim();
+    },
+    navigateToLogin() {
+      return this.$router.push("/login");
     },
     navigate() {
       return this.$router.push("/category");

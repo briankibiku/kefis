@@ -33,35 +33,7 @@
                     alt=""
                   />
                 </div>
-                <div class="question-item">
-                  <p class="question-title text-center">
-                    {{ this.quiz[this.counter].question }}
-                  </p>
-                </div>
 
-                <div class="grid-container resize-choices">
-                  <div
-                    class="choices"
-                    v-for="item in this.quiz[this.counter].choices"
-                    :key="item.label"
-                  >
-                    <center>
-                      <p class="field">
-                        <button
-                          class="outline-button-cyan"
-                          v-on:click="goToNextQuestion(item.correct)"
-                        >
-                          <span v-if="item.correct" class="text-choice">
-                            {{ item.choice }} . {{ item.answer_text }}</span
-                          >
-                          <span v-else class="text-choice">
-                            {{ item.choice }} . {{ item.answer_text }}
-                          </span>
-                        </button>
-                      </p>
-                    </center>
-                  </div>
-                </div>
                 <div class="position-bottom">
                   <a
                     @click="showMsgBoxTwo"
@@ -79,6 +51,7 @@
 </template>
 
 <script>
+import axios from "axios";
 export default {
   data() {
     return {
@@ -96,12 +69,13 @@ export default {
     };
   },
   async fetch() {
-    this.quiz = await this.$store.state.test_quiz.data;
+    // this.quiz = await this.$store.state.test_quiz.data;
     this.quiz = await fetch(
-      "http://161.35.6.91/mswali/mswali_app/backend/web/index.php?r=api/fetch-all-questions"
+      "http://cms.mswali.co.ke/mswali/mswali_app/backend/web/index.php?r=api/fetch-all-questions",
     ).then((res) => res.json());
-    this.quiz = this.quiz.data;
-    // console.log(this.quiz);
+    // this.quiz = this.quiz.data;
+    await console.log("Questions");
+    await console.log(this.quiz);
   },
   methods: {
     // Logic to loop through questions goes here
