@@ -1,7 +1,13 @@
 <template>
   <div
     class="purple-bg"
-    style="background-color: #160d3d; width: 100%; color: #fff; height: 100vh"
+    style="
+      background-color: #160d3d;
+      width: 100%;
+      color: #fff;
+      height: 100vh;
+      padding: 20px;
+    "
   >
     <div class="centered-container">
       <div class="row">
@@ -30,7 +36,10 @@
           <div class="mt-3" v-if="!selected == ''">
             Proceed with: <strong>{{ selected }}</strong> ?
           </div>
-          <b-button class="outline-button-cyan" href="/quiz" style="margin-top: 20px"
+          <b-button
+            class="outline-button-cyan"
+            href="/quiz"
+            style="margin-top: 20px"
             >Go</b-button
           >
           <br /><br /><br />

@@ -1,12 +1,4 @@
 export const state = () => ({
-  visitor_info: [
-    {
-      id: 1,
-      username: "New User",
-      phone: "+254 724 609 783",
-      email: "abc@mail.com",
-    },
-  ],
   quiz_categories: [
     {
       tag: "Music",
@@ -60,123 +52,6 @@ export const state = () => ({
           },
         ],
       },
-      {
-        question: "Who below is famous for saying 'I am NOT boarding!' 2",
-        choices: [
-          {
-            choice: "A",
-            answer_text: "Ferdinand Waititu",
-            correct: false,
-          },
-          {
-            choice: "B",
-            answer_text: "Miguna Miguna",
-            correct: true,
-          },
-          {
-            choice: "C",
-            answer_text: "John Githongo",
-            correct: false,
-          },
-          {
-            choice: "D",
-            answer_text: "David Ndii",
-            correct: false,
-          },
-        ],
-      },
-      {
-        question:
-          "Did Ng'ang'a say'King Kaka wewe ni mjinga, mamako ni my girlfriend'? 3",
-        choices: [
-          {
-            choice: "A",
-            answer_text: "True",
-            correct: true,
-          },
-          {
-            choice: "B",
-            answer_text: "False",
-            correct: false,
-          },
-        ],
-      },
-
-      {
-        question: "1-Who was kenya first president'?4",
-        choices: [
-          {
-            choice: "A",
-            answer_text: "Pastor Ng'ang'a",
-            correct: true,
-          },
-          {
-            choice: "B",
-            answer_text: "Octopizzo",
-            correct: false,
-          },
-          {
-            choice: "C",
-            answer_text: "Churchill",
-            correct: false,
-          },
-          {
-            choice: "D",
-            answer_text: "Khaligraph",
-            correct: false,
-          },
-        ],
-      },
-      {
-        question: "Who sang National Anthem'?5",
-        choices: [
-          {
-            choice: "A",
-            answer_text: "Pastor Ng'ang'a",
-            correct: true,
-          },
-          {
-            choice: "B",
-            answer_text: "Octopizzo",
-            correct: false,
-          },
-          {
-            choice: "C",
-            answer_text: "Churchill",
-            correct: false,
-          },
-          {
-            choice: "D",
-            answer_text: "Khaligraph",
-            correct: false,
-          },
-        ],
-      },
-      {
-        question: "Who is kenya Oscars award winner '?6",
-        choices: [
-          {
-            choice: "A",
-            answer_text: "Pastor Ng'ang'a",
-            correct: true,
-          },
-          {
-            choice: "B",
-            answer_text: "Octopizzo",
-            correct: false,
-          },
-          {
-            choice: "C",
-            answer_text: "Churchill",
-            correct: false,
-          },
-          {
-            choice: "D",
-            answer_text: "Khaligraph",
-            correct: false,
-          },
-        ],
-      },
     ],
   },
 
@@ -217,11 +92,16 @@ export const state = () => ({
     timeouts: 0,
   },
   lastName: "",
+  signUpPhone: "",
+  signUpName: "",
+  signUpOTP: "",
   // question & answer variables
   persistedAnswers: null,
   userAnswersPayloadSet: false,
   persistedState: null,
   alert: false,
+  // variable to carry user authentication status
+  isAuthenticated: false,
 });
 
 export const getters = {
@@ -253,6 +133,16 @@ export const mutations = {
     state.test_results.correct = payload;
   },
 
+  updateSignUpPhone(state, payload) {
+    state.signUpPhone = payload;
+  },
+  updateSignUpName(state, payload) {
+    state.signUpName = payload;
+  },
+  updateSignUpOTP(state, payload) {
+    state.signUpOTP = payload;
+  },
+
   updateQuizScore(state, payload) {
     state.trivia_score.correct = payload;
   },
@@ -271,6 +161,10 @@ export const mutations = {
     state.userAnswersPayloadSet = payload;
   },
 
+  // update authentication
+  updateAuthentictionStatus(state, payload) {
+    state.isAuthenticated = payload;
+  },
   // update score mutations
   updateTopScoreSet(state, payload) {
     state.topScoreSet = payload;
@@ -299,7 +193,7 @@ export const mutations = {
 export const actions = {
   async getuserProfile() {
     let res = await this.$axios.get(
-      "http://cms.mswali.co.ke/mswali/mswali_app/backend/web/index.php?r=api/get-user&username=mast&account_number=0724609783",
+      `http://cms.mswali.co.ke/mswali/mswali_app/backend/web/index.php?r=api/get-user&username=mast&account_number=0724609783`,
     );
     return res;
   },
@@ -307,5 +201,8 @@ export const actions = {
   startPersistance({ commit }, payload) {
     commit("updateUserAnswers", payload);
     commit("updateUserAnswersPersistance", true);
+  },
+  peristAuthentication({ commit }, payload) {
+    commit("updateAuthentictionStatus", payload);
   },
 };
