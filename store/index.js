@@ -95,6 +95,8 @@ export const state = () => ({
   signUpPhone: "",
   signUpName: "",
   signUpOTP: "",
+  loggedinUserName: "",
+  loggedinUserPhone: "",
   // question & answer variables
   persistedAnswers: null,
   userAnswersPayloadSet: false,
@@ -142,7 +144,12 @@ export const mutations = {
   updateSignUpOTP(state, payload) {
     state.signUpOTP = payload;
   },
-
+  updateloggedinUserName(state, payload) {
+    state.loggedinUserName = payload;
+  },
+  updateloggedinUserPhone(state, payload) {
+    state.loggedinUserPhone = payload;
+  },
   updateQuizScore(state, payload) {
     state.trivia_score.correct = payload;
   },
@@ -204,5 +211,11 @@ export const actions = {
   },
   peristAuthentication({ commit }, payload) {
     commit("updateAuthentictionStatus", payload);
+  },
+  peristUserPhone({ commit }, payload) {
+    commit("updateloggedinUserPhone", payload);
+  },
+  peristUserName({ commit }, payload) {
+    commit("updateloggedinUserName", payload);
   },
 };

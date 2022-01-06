@@ -61,6 +61,9 @@
 import axios from "axios";
 import MswaliExplained from "../../components/MswaliExplained.vue";
 export default {
+  head: {
+    title: "Sign Up",
+  },
   data() {
     return {
       status: "not_accepted",
