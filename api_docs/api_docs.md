@@ -283,3 +283,58 @@ Response 200
 }
 ```
 
+
+#### 7. Cash deposit
+
+##### POST /a/sample/endpoint
+
+[http://cms.mswali.co.ke/mswali/mswali_app/backend/web/index.php?r=api/initiate-payment&account_number=254724609783&amount=10](http://cms.mswali.co.ke/mswali/mswali_app/backend/web/index.php?r=api/initiate-payment&account_number=254724609783&amount=100)  ---> Working
+
+##### Authentication
+
+- Authentication is **REQUIRED** since this is a feature inside the app.
+
+- Type of authentication required is for a user to be logged in
+
+##### Payload
+
+- A table of field names, their types, description and whether they are required or not
+
+##### Headers
+
+- A table of headers, their description and whether required or not
+
+##### Responses
+
+Response 200
+```
+true
+```
+
+#### 8. Cash withdraw
+
+##### POST /a/sample/endpoint
+
+[api goes here](api goes here)  ---> Working
+
+##### Authentication
+
+- Authentication is **REQUIRED** since this is a feature inside the app.
+
+- Type of authentication required is for a user to be logged in
+
+##### Payload
+
+- A table of field names, their types, description and whether they are required or not
+
+##### Headers
+
+- A table of headers, their description and whether required or not
+
+##### Responses
+
+Response 200
+```
+{
+}
+```
