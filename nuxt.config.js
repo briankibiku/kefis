@@ -11,13 +11,21 @@ export default {
       { hid: "description", name: "description", content: "" },
       { name: "format-detection", content: "telephone=no" },
     ],
-    link: [{ rel: "icon", type: "image/x-icon", href: "/favicon.ico" }],
+    link: [
+      { rel: "icon", type: "image/x-icon", href: "/favicon.ico" },
+      {
+        rel: "stylesheet",
+        href: "https://fonts.googleapis.com/css2?family=Nunito+Sans:400,500,600,700,800",
+      },
+    ],
   },
   // Disable server side rendering
   // ssr: false,
 
   // Global CSS: https://go.nuxtjs.dev/config-css
   css: ["~/assets/main.css"],
+  // loading progress bar specifications
+  loading: "~/components/LoadingBar.vue",
 
   // Plugins to run before rendering page: https://go.nuxtjs.dev/config-plugins
   plugins: [{ src: "~/plugins/persistedState.client.js" }],
@@ -26,7 +34,7 @@ export default {
   components: true,
 
   // Modules for dev and build (recommended): https://go.nuxtjs.dev/config-modules
-  buildModules: ["@nuxtjs/pwa"],
+  buildModules: ["@nuxtjs/pwa", "@nuxtjs/google-fonts"],
 
   // Modules: https://go.nuxtjs.dev/config-modules
   modules: [

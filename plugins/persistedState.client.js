@@ -3,6 +3,6 @@ import createPersistedState from "vuex-persistedstate";
 export default ({ store }) => {
   createPersistedState({
     key: "vuex",
-    paths: ["userAnswersPayload"],
+    paths: ["userAnswersPayload", "isAuthenticated"],
   })(store);
 };
