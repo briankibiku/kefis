@@ -4,47 +4,73 @@
       <Results />
     </div>
     <div v-else>
-      <div class="outer-wrapper container-fluid pl-0 pr-0">
-        <div class="quiz-content">
-          <!-- <Notification :message="this.error" v-if="error" /> -->
-          <div class="heading3" style="text-align: center; color: #fff">
-            Question {{ this.counter + 1 }} of
-            {{ this.quiz.length }}
-          </div>
-          <div class="center">
-            <BaseTimer />
-          </div>
+      <div class="quiz-content">
+        <!-- <Notification :message="this.error" v-if="error" /> -->
+        <div class="heading3" style="text-align: center; color: #fff">
+          Question {{ this.counter + 1 }} of
+          {{ this.quiz.length }}
+        </div>
+        <div class="center" v-if="!$fetchState.pending">
+          <BaseTimer />
+        </div>
 
-          <b-row style="margin-top: 120px">
-            <b-col>
-              <p
-                v-if="$fetchState.pending"
-                class="container center-align-content"
-              >
-                <span class="loading"></span>
-              </p>
-              <p v-else-if="$fetchState.error">An error occurred :(</p>
-              <div v-else class="card-content">
-                <div class="center-align-content">
-                  <img
-                    src="~/assets/music.jpeg"
-                    width="200"
-                    height="100"
-                    alt=""
-                  />
-                </div>
+        <b-row style="margin-top: 20vh">
+          <b-col class="d-flex justify-content-around">
+            <p v-if="$fetchState.pending" class="centered-container">
+              <b-spinner variant="primary" label="Spinning"></b-spinner>
+            </p>
+            <p v-else-if="$fetchState.error">An error occurred :(</p>
+            <div v-else class="card-content">
+              <div class="d-flex justify-content-center text-center">
+                <img
+                  class=""
+                  src="~/assets/music.jpeg"
+                  width="200"
+                  height="100"
+                  alt="quiz image"
+                  style="padding-top: 10px"
+                />
+              </div>
+              <br />
+              <div class="question-item">
+                <p class="question-title text-center">
+                  {{ this.quiz[this.counter].question }}
+                </p>
+              </div>
 
-                <div class="position-bottom">
-                  <a
-                    @click="showMsgBoxTwo"
-                    style="color: #bbb; padding-bottom: 20px"
-                    >Quit</a
-                  >
+              <div class="grid-container resize-choices">
+                <div
+                  class="choices"
+                  v-for="item in this.quiz[this.counter].choices"
+                  :key="item.label"
+                >
+                  <center>
+                    <p class="field">
+                      <button
+                        class="outline-button-cyan"
+                        v-on:click="goToNextQuestion(item.correct)"
+                      >
+                        <span v-if="item.correct" class="text-choice">
+                          {{ item.choice }} . {{ item.answer_text }}</span
+                        >
+                        <span v-else class="text-choice">
+                          {{ item.choice }} . {{ item.answer_text }}
+                        </span>
+                      </button>
+                    </p>
+                  </center>
                 </div>
               </div>
-            </b-col>
-          </b-row>
-        </div>
+              <div class="position-bottom">
+                <a
+                  @click="showMsgBoxTwo"
+                  style="color: #bbb; padding-bottom: 20px"
+                  >Quit</a
+                >
+              </div>
+            </div>
+          </b-col>
+        </b-row>
       </div>
     </div>
   </div>
@@ -68,16 +94,49 @@ export default {
       showResults: false,
     };
   },
+  mounted() {
+    if (!this.$store.state.isAuthenticated) {
+      this.navigateToLogin();
+    }
+  },
   async fetch() {
     // this.quiz = await this.$store.state.test_quiz.data;
+    console.log("Fetching questions");
     this.quiz = await fetch(
-      "http://cms.mswali.co.ke/mswali/mswali_app/backend/web/index.php?r=api/fetch-all-questions",
+      "http://161.35.6.91/mswali/mswali_app/backend/web/index.php?r=api/fetch-all-questions",
     ).then((res) => res.json());
-    // this.quiz = this.quiz.data;
-    await console.log("Questions");
-    await console.log(this.quiz);
+    console.log(this.quiz);
+    this.quiz = this.quiz.data;
+    console.log("Questions");
+    console.log(this.quiz);
+  },
+  computed: {
+    fetchQuestionsFromApi: function () {
+      this.fecthQuestions();
+    },
   },
   methods: {
+    navigateToLogin() {
+      return this.$router.push("/login");
+    },
+    async fecthQuestions() {
+      const config = {
+        headers: {
+          Accept: "application/json",
+        },
+      };
+
+      try {
+        const res = await axios.get(
+          `http://cms.mswali.co.ke/mswali/mswali_app/backend/web/index.php?r=api/fetch-all-questions`,
+          config,
+        );
+        console.log("Kwa computed");
+        console.log(res);
+      } catch (err) {
+        console.log("Error fetching questions");
+      }
+    },
     // Logic to loop through questions goes here
     goToNextQuestion(correct) {
       let nextQuestion = (this.counter += 1);

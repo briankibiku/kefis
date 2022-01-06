@@ -1,6 +1,9 @@
 <template>
   <div class="container">
-    <div>
+    <div v-if="userHasNeverPlayed">
+      <div>You have not played mSwali yet. play to view your answers</div>
+    </div>
+    <div v-if="!userHasNeverPlayed">
       <div class="heading3">
         Your Answers
         <button
@@ -45,6 +48,7 @@ export default {
       choicesPicked2: [],
       questionAnswers2: [],
       mergedAnswersList: [],
+      userHasNeverPlayed: false,
       userAnswers: {},
       answersPayloadSet: this.$store.state.userAnswersPayloadSet,
       items: [
@@ -63,6 +67,20 @@ export default {
       ],
     };
   },
+  mounted() {
+    if (this.userAnswersPayload == null && !this.userAnswers.has_played) {
+      console.log("Fetched from state!!");
+      this.choicesPicked = this.$store.state.userAnswersPayload.choices_picked;
+      this.questionAnswers = this.$store.state.userAnswersPayload.resp;
+      console.log(this.userAnswersPayload);
+      for (let i = 0; i <= this.choicesPicked.length; i++) {}
+    } else if (this.userAnswers.has_played) {
+      this.userHasNeverPlayed = true;
+    } else {
+      console.log("FAILED to fetch from state!!");
+      this.startPersistanceNow();
+    }
+  },
   computed: {
     ...mapState({
       userAnswersPayload: "userAnswersPayload",
@@ -75,7 +93,9 @@ export default {
     this.userAnswers = await fetch(
       "http://cms.mswali.co.ke/mswali/mswali_app/backend/web/index.php?r=solo-play/show-my-answers&msisdn=0724609783",
     ).then((res) => res.json());
-    //this.userAnswers = this.$store.state.answersResponse;
+    console.log("Herooku");
+    console.log(this.userAnswers.has_played);
+    this.userAnswers = this.$store.state.answersResponse;
     this.choicesPicked2 = this.userAnswers.choices_picked;
     this.questionAnswers2 = this.userAnswers.resp;
 
@@ -88,10 +108,8 @@ export default {
     //   });
     //   console.log(this.questionAnswers2);
     // }
-
-    console.log("questionAnswers2");
-    console.log(this.questionAnswers2);
   },
+
   methods: {
     ...mapActions({ startPersistance: "startPersistance" }),
     startPersistanceNow() {
@@ -100,24 +118,20 @@ export default {
       this.questionAnswers = this.$store.state.userAnswersPayload.resp;
       this.startPersistance(this.userAnswersPayload);
     },
+    async getUserAnswers() {
+      this.phoneNumber = this.$store.state.loggedinUserPhone;
+      this.userAnswers = await this.$axios.get(
+        `http://cms.mswali.co.ke/mswali/mswali_app/backend/web/index.php?r=solo-play/show-my-answers&msisdn=${this.phoneNumber}`,
+      );
+      console.log("My answer now");
+      console.log(this.userAnswers.has_played);
+      return this.userAnswers.has_played;
+    },
     refreshPage() {
       this.startPersistance(null);
       window.location.reload();
       this.startPersistance(this.userAnswers);
     },
-  },
-
-  mounted() {
-    if (this.userAnswersPayload == null) {
-      console.log("Fetched from state!!");
-      this.choicesPicked = this.$store.state.userAnswersPayload.choices_picked;
-      this.questionAnswers = this.$store.state.userAnswersPayload.resp;
-      console.log(this.userAnswersPayload);
-      for (let i = 0; i <= this.choicesPicked.length; i++) {}
-    } else {
-      console.log("FAILED to fetch from state!!");
-      this.startPersistanceNow();
-    }
   },
 };
 </script>

@@ -48,7 +48,7 @@
       <div id="col2">
         <div style="margin: 0 auto; min-height: 100vh">
           <div class="centered-container">
-            <div style="width: 300px">
+            <div>
               <div class="otp-header">
                 <div>
                   <div class="player-container"></div>
@@ -85,14 +85,13 @@
                 </form>
               </div>
 
-              <div
+              <p
                 v-if="!showResendBtn"
-                class="heading4"
-                style="text-align: center; padding-bottom: 20px"
+                style="text-align: center; padding-bottom: 20px; color: #160d3d"
               >
                 Resend OTP in
                 <span style="color: red">{{ remainingTime }}</span>
-              </div>
+              </p>
               <div v-if="showResendBtn">
                 <button
                   class="heading4"

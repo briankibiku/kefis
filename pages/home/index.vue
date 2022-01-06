@@ -1,8 +1,13 @@
 <template>
-  <div class="row">
+  <div>
+    <div class="overlay" v-if="loading">
+      <LoadingBar />
+    </div>
     <!--Big screen device code begins here-->
     <div
+      v-if="!loading"
       class="d-none d-md-block d-lg-none d-none d-lg-block d-xl-none d-none d-xl-block"
+      style="padding: 40px"
     >
       <div class="row" style="padding-left: 50px">
         <!--Big screen sidebar navigation starts here-->
@@ -15,93 +20,11 @@
           "
         >
           <div style="text-align: left">
-            <LogoPurple style="height: 27px; width: 120px" />
+            <NuxtLink to="/home">
+              <LogoPurple style="height: 27px; width: 120px" />
+            </NuxtLink>
           </div>
-          <div style="text-align: left">
-            <b-button
-              class="rounded-button-transparent padding-top-20"
-              style="text-align: left; background-color: transparent"
-              @click="navigateToAnswers()"
-            >
-              <div class="menu">
-                <font-awesome-icon :icon="['fas', 'question-circle']" />
-                My Answers
-              </div>
-            </b-button>
-            <b-button
-              class="rounded-button-transparent"
-              style="text-align: left; background-color: transparent"
-              @click="navigateToWallet()"
-            >
-              <div class="menu">
-                <font-awesome-icon :icon="['fas', 'wallet']" />
-                Wallet
-              </div>
-            </b-button>
-            <b-button
-              class="rounded-button-transparent"
-              style="text-align: left; background-color: transparent"
-              @click="navigateToRankings()"
-            >
-              <div class="menu">
-                <font-awesome-icon :icon="['fas', 'trophy']" />
-                Rankings
-              </div>
-            </b-button>
-            <b-button
-              class="rounded-button-transparent"
-              style="text-align: left; background-color: transparent"
-              @click="navigateToSettings()"
-            >
-              <div class="menu">
-                <font-awesome-icon :icon="['fas', 'cog']" />
-                Settings
-              </div>
-            </b-button>
-            <b-button
-              class="rounded-button-transparent"
-              style="text-align: left; background-color: transparent"
-              @click="navigateToNotifications()"
-            >
-              <div class="menu">
-                <font-awesome-icon :icon="['fas', 'bell']" />
-                Notifications
-              </div>
-            </b-button>
-            <b-button
-              class="rounded-button-transparent"
-              style="text-align: left; background-color: transparent"
-              @click="navigateToSupport()"
-            >
-              <div class="menu">
-                <font-awesome-icon :icon="['fas', 'headset']" />
-                Support
-              </div>
-            </b-button>
-            <b-button
-              @click="revokeAuthentication()"
-              class="rounded-button-transparent"
-              style="
-                background-position: bottom;
-                background-color: transparent;
-                text-align: left;
-              "
-            >
-              <div
-                class="menu"
-                style="
-                  position: fixed;
-                  bottom: 0;
-
-                  /* And if you want the div to be full-width: */
-                  right: 0;
-                "
-              >
-                <font-awesome-icon :icon="['fa', 'sign-out-alt']" />
-                Logout
-              </div>
-            </b-button>
-          </div>
+          <LargeScreenNavBar />
         </div>
         <!--Big screen sidebar navigation starts here-->
 
@@ -113,7 +36,7 @@
                 <input
                   class="rounded-border-input"
                   type="text"
-                  placeholder="Search"
+                  placeholder="Search quiz..."
                   style="margin-bottom: 10px"
                 />
               </div>
@@ -129,9 +52,10 @@
               </div>
             </b-button>
             <div class="d-flex align-items-center" style="flex-direction: row">
-              <button class="avatar margin-horizontal-20" @click="">
+              <b-button class="text-button margin-horizontal-20" @click="">
+                <b-avatar variant="light"></b-avatar>
                 <div class="subheading4"></div>
-              </button>
+              </b-button>
               <div class="heading4">
                 {{ this.$store.state.loggedinUserName }}
               </div>
@@ -145,66 +69,22 @@
             <div class="row" style="flex-direction: column">
               <div class="row d-flex justify-content-start">
                 <div>
-                  <div class="heading3 padding-right-20">
+                  <div class="heading33 padding-right-20">
                     Good morning {{ this.$store.state.loggedinUserName }}!
                   </div>
-                  <div class="subheading2">
+                  <div class="subheading22">
                     {{ this.$store.state.loggedinUserPhone }}
                   </div>
                 </div>
-                <div class="card padding-10">
-                  <div class="heading4">Wallet Balance</div>
-                  <div class="heading2">Ksh 100,0000</div>
-                </div>
+                <template>
+                  <div class="card padding-10" style="margin-bottom: 20px">
+                    <div class="heading4">Wallet Balance</div>
+                    <div class="heading2">KSH {{ this.walletBalance }}</div>
+                  </div>
+                </template>
               </div>
               <!--Statistics area, quiz passed, fastest times go here-->
-              <div
-                class="d-flex justify-content-start"
-                style="flex-direction: row"
-              >
-                <div class="stats-card">
-                  <font-awesome-icon :icon="['fas', 'flag']" />
-                  <div
-                    class="heading4"
-                    style="
-                      text-align: center;
-                      padding: 2px;
-                      border-radius: 5px;
-                      background-color: #f0f0f0;
-                    "
-                  >
-                    Quiz Passed
-                  </div>
-                  <div
-                    class="heading3"
-                    style="padding-bottom: 0px; padding-top: 0px"
-                  >
-                    27
-                  </div>
-                  <div class="subheading5">Out of 30 questions</div>
-                </div>
-                <div class="stats-card">
-                  <font-awesome-icon :icon="['fas', 'clock']" />
-                  <div
-                    class="heading4"
-                    style="
-                      text-align: center;
-                      padding: 2px;
-                      border-radius: 5px;
-                      background-color: #f0f0f0;
-                    "
-                  >
-                    Fastest time
-                  </div>
-                  <div
-                    class="heading3"
-                    style="padding-bottom: 0px; padding-top: 0px"
-                  >
-                    27 mins
-                  </div>
-                  <div class="subheading5">In under an hour</div>
-                </div>
-              </div>
+              <StatsCards />
             </div>
           </div>
           <!--Nudge area promotions go here-->
@@ -217,8 +97,8 @@
     </div>
 
     <!--Small screen device code begins here-->
-    <div class="d-block d-sm-none d-none d-sm-block d-md-none">
-      <div class="painted-background">
+    <div class="d-block d-sm-none d-none d-sm-block d-md-none" v-if="!loading">
+      <div class="painted-background" style="padding: 20px">
         <NavigationBar />
         <div class="row" style="vertical-align: top">
           <div class="column left">
@@ -233,21 +113,25 @@
               {{ this.$store.state.loggedinUserPhone }}
             </div>
           </div>
-          <div
-            class="column"
-            style="
-              background-color: #160d3d;
-              width: 50px;
-              height: 50px;
-              justify-content: center;
-              align-items: center;
-              text-align: center;
-              display: flex;
-              border-radius: 10px;
-            "
-          >
-            <font-awesome-icon :icon="['fas', 'bell']" style="color: #fff" />
-          </div>
+          <a href="/notifications">
+            <div
+              class="column"
+              style="
+                background-color: #160d3d;
+                width: 50px;
+                height: 50px;
+                justify-content: center;
+                align-items: center;
+                text-align: center;
+                display: flex;
+                border-radius: 10px;
+              "
+            >
+              <font-awesome-icon
+                :icon="['fas', 'bell']"
+                style="color: #fff"
+              /></div
+          ></a>
           <div class="centered-container">
             <div
               class="row centered-container"
@@ -255,11 +139,7 @@
             >
               <div class="col" style="text-align: left">
                 <!-- wallet card go here -->
-                <div class="wallet-card">
-                  <div class="heading4">Wallet Balance</div>
-                  <div class="heading2">Ksh 100,0000</div>
-                </div>
-
+                <WalletCard />
                 <!-- start quiz button -->
                 <div style="margin-inline: 20px; padding-bottom: 10px">
                   <button
@@ -274,53 +154,18 @@
                 </div>
 
                 <!-- stats card go here -->
-                <div class="row scrollable">
-                  <div class="stats-card">
-                    <font-awesome-icon :icon="['fas', 'flag']" />
-                    <div
-                      class="heading4"
-                      style="
-                        text-align: center;
-                        padding: 2px;
-                        border-radius: 5px;
-                        background-color: #f0f0f0;
-                      "
-                    >
-                      Quiz Passed
-                    </div>
-                    <div
-                      class="heading3"
-                      style="padding-bottom: 0px; padding-top: 0px"
-                    >
-                      27
-                    </div>
-                    <div class="subheading5">Out of 30 questions</div>
-                  </div>
-                  <div class="stats-card">
-                    <font-awesome-icon :icon="['fas', 'clock']" />
-                    <div
-                      class="heading4"
-                      style="
-                        text-align: center;
-                        padding: 2px;
-                        border-radius: 5px;
-                        background-color: #f0f0f0;
-                      "
-                    >
-                      Fastest time
-                    </div>
-                    <div
-                      class="heading3"
-                      style="padding-bottom: 0px; padding-top: 0px"
-                    >
-                      27 mins
-                    </div>
-                    <div class="subheading5">In under an hour</div>
-                  </div>
+                <div
+                  class="scrollable"
+                  style="display: flex; flex-direction: row"
+                >
+                  <StatsCards />
                 </div>
                 <!-- promo & ads card go here -->
-                <div class="row scrollable">
-                  <NudgeArea />
+                <div
+                  class="scrollable"
+                  style="display: flex; flex-direction: row"
+                >
+                  <NudgeArea /><NudgeArea /><NudgeArea />
                 </div>
               </div>
             </div>
@@ -334,6 +179,8 @@
 <script>
 import { mapState, mapActions } from "vuex";
 import NudgeArea from "../../components/NudgeArea.vue";
+import StatsCards from "../../components/StatsCards.vue";
+import LoadingBar from "../../components/LoadingBar.vue";
 export default {
   data() {
     return {
@@ -343,15 +190,16 @@ export default {
       phoneNumber: "",
       showHideSpinner: true,
       largeScreen: true,
+      loading: false,
+      mswaliUserId: "",
+      walletBalance: "",
     };
-  },
-  beforeCreate() {
-    this.showHideSpinner = true;
   },
   mounted() {
     if (this.$store.state.isAuthenticated) {
-      this.showHideSpinner = false;
+      this.loading = true;
       this.getuserName();
+      this.loading = false;
     } else {
       this.navigateToLogin();
     }
@@ -361,6 +209,7 @@ export default {
       isAuthenticated: "isAuthenticated",
       loggedinUserName: "loggedinUserName",
       loggedinUserPhone: "loggedinUserPhone",
+      mswaliId: "mswaliId",
     }),
   },
   methods: {
@@ -368,6 +217,7 @@ export default {
       peristAuthentication: "peristAuthentication",
       peristUserPhone: "peristUserPhone",
       peristUserName: "peristUserName",
+      persistMswaliId: "persistMswaliId",
     }),
     async revokeAuthentication() {
       await this.peristAuthentication(false);
@@ -375,15 +225,20 @@ export default {
       await this.peristUserName("");
       return this.$router.push("/login");
     },
+    navigateToLogin() {
+      return this.$router.push("/login");
+    },
+    navigateToCategory() {
+      return this.$router.push("/category");
+    },
     async getuserName() {
       this.phoneNumber = this.$store.state.signUpPhone;
       let userProfile = await this.$axios.get(
         `http://cms.mswali.co.ke/mswali/mswali_app/backend/web/index.php?r=api/get-user&username=mast&account_number=${this.phoneNumber}`,
       );
-      console.log("userProfile");
-      console.log(userProfile);
       let userName = userProfile.data.data.name;
       let phoneNumberFromApi = userProfile.data.data.account_number;
+      let mswaliIdfromApi = userProfile.data.data.id;
       let splitName = userName.indexOf(" ");
       let lastNameFromApi = userName
         .slice(splitName + 1, userName.length)
@@ -391,35 +246,22 @@ export default {
       // persist username and phone number
       await this.peristUserPhone(phoneNumberFromApi);
       await this.peristUserName(lastNameFromApi);
+      await this.persistMswaliId(mswaliIdfromApi);
       this.lastName = this.$store.state.loggedinUserName;
       this.phoneNumber = this.$store.state.loggedinUserPhone;
+      await fetchWalletBalance();
     },
-    navigateToAnswers() {
-      return this.$router.push("/my-answers");
-    },
-    navigateToWallet() {
-      return this.$router.push("/wallet");
-    },
-    navigateToNotifications() {
-      return this.$router.push("/notifications");
-    },
-    navigateToSettings() {
-      return this.$router.push("/settings");
-    },
-    navigateToSupport() {
-      return this.$router.push("/support");
-    },
-    navigateToLogin() {
-      return this.$router.push("/login");
-    },
-    navigateToRankings() {
-      return this.$router.push("/winners");
-    },
-    navigateToCategory() {
-      return this.$router.push("/category");
+    async fetchWalletBalance() {
+      this.mswaliUserId = this.$store.state.mswaliId;
+      let response = await this.$axios.get(
+        `http://cms.mswali.co.ke/mswali/mswali_app/backend/web/index.php?r=api/get-balance&user_id=${this.mswaliUserId}`,
+      );
+      console.log("response");
+      console.log(response);
+      this.walletBalance = response.data.data;
     },
   },
-  components: { NudgeArea },
+  components: { NudgeArea, StatsCards, LoadingBar },
 };
 </script>
 
@@ -476,19 +318,6 @@ export default {
   justify-content: center;
   align-items: center;
 }
-.promo-card {
-  color: #160d3d;
-  padding: 10px;
-  margin-left: 30px;
-  margin-top: 20px;
-  width: 320px;
-  height: 200px;
-  margin-bottom: 20px;
-  box-sizing: border-box;
-  border-radius: 6px;
-  object-fit: fill;
-  background: linear-gradient(to right bottom, #1ceded 20%, #160d3d 95%);
-}
 .row {
   width: 100%;
   display: flex;
@@ -500,6 +329,19 @@ export default {
 }
 #col2 {
   width: 80%;
+}
+.heading33 {
+  font-size: 1.5vw;
+  font-weight: 600;
+  font-family: "Nunito Sans", sans-serif;
+  color: #160d3d;
+}
+
+.subheading22 {
+  font-size: 1vw;
+  font-weight: 600;
+  font-family: "Nunito Sans", sans-serif;
+  color: #160d3d;
 }
 /* Small Devices, Phones and Desktop screens*/
 @media only screen and (min-width: 780px) {

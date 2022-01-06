@@ -97,6 +97,7 @@ export const state = () => ({
   signUpOTP: "",
   loggedinUserName: "",
   loggedinUserPhone: "",
+  mswaliId: "",
   // question & answer variables
   persistedAnswers: null,
   userAnswersPayloadSet: false,
@@ -137,6 +138,9 @@ export const mutations = {
 
   updateSignUpPhone(state, payload) {
     state.signUpPhone = payload;
+  },
+  updateMswaliId(state, payload) {
+    state.mswaliId = payload;
   },
   updateSignUpName(state, payload) {
     state.signUpName = payload;
@@ -217,5 +221,8 @@ export const actions = {
   },
   peristUserName({ commit }, payload) {
     commit("updateloggedinUserName", payload);
+  },
+  persistMswaliId({ commit }, payload) {
+    commit("updateMswaliId", payload);
   },
 };

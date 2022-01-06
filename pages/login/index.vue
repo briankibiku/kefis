@@ -20,14 +20,14 @@
         <b-spinner variant="primary" label="Spinning"></b-spinner>
       </div>
     </div>
-    <div v-if="!showOverlay" class="row">
+    <div v-if="!showOverlay" class="row" >
       <div id="col1" class="bg-image d-none d-lg-block">
         <MswaliExplained />
       </div>
       <div id="col2">
         <div style="margin: 0 auto; min-height: 100vh">
           <div class="centered-container">
-            <div style="width: 240px">
+            <div  >
               <div>
                 <LogoPurple class="d-block d-sm-none" />
                 <br />
@@ -38,14 +38,14 @@
               <div class="text1">Enter your number to continue</div>
               <br />
               <form action="">
-                <div class="form-group">
+                <div class="form-group" >
                   <input
                     class="rounded-border-input"
                     type="number"
                     placeholder="+25470 12 123 456"
                     v-model="phoneNumber"
                     required
-                    style="margin-bottom: 10px"
+                    style="margin-bottom: 10px;"
                   />
                 </div>
               </form>
