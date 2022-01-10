@@ -42,7 +42,7 @@
 import { mapState, mapActions } from "vuex";
 export default {
   head: {
-    title: "About",
+    title: "Home",
     script: [
       {
         src: "https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.1/jquery.min.js",
@@ -60,14 +60,20 @@ export default {
   computed: {
     ...mapState({
       isAuthenticated: "isAuthenticated",
+      loggedinUserName: "loggedinUserName",
+      loggedinUserPhone: "loggedinUserPhone",
     }),
   },
   methods: {
     ...mapActions({
       peristAuthentication: "peristAuthentication",
+      peristUserPhone: "peristUserPhone",
+      peristUserName: "peristUserName",
     }),
     async revokeAuthentication() {
       await this.peristAuthentication(false);
+      await this.peristUserPhone("");
+      await this.peristUserName("");
       return this.$router.push("/login");
     },
   },

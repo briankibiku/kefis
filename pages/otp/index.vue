@@ -127,6 +127,9 @@ const TIME_LIMIT = 60;
 import axios from "axios";
 import { mapState, mapActions } from "vuex";
 export default {
+  head: {
+    title: "Verify phone",
+  },
   data() {
     return {
       signUpPhone: "",

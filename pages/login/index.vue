@@ -68,6 +68,9 @@ import axios from "axios";
 import { mapGetters } from "vuex";
 import MswaliExplained from "../../components/MswaliExplained.vue";
 export default {
+  head: {
+    title: "Login",
+  },
   data() {
     return {
       phoneNumber: this.phoneNumber,
