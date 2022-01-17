@@ -1,134 +1,208 @@
 <template>
-  <main class="container text-center">
-    <figure class="text-center">
-      <svg
-        width="50"
-        height="46"
-        viewBox="0 0 50 46"
-        fill="none"
-        xmlns="http://www.w3.org/2000/svg"
-      >
-        <path
-          d="M35.375 26.7183C35.5833 26.7183 35.7916 26.9274 35.7916 27.1364C35.7916 27.3455 35.5833 27.5546 35.375 27.5546C35.1666 27.5546 34.9583 27.3455 34.9583 27.1364C34.9583 26.9274 35.1666 26.7183 35.375 26.7183Z"
-          stroke="#160D3D"
-          stroke-width="2"
-          stroke-linecap="round"
-          stroke-linejoin="round"
-        />
-        <path
-          d="M42.6667 21.909V15.6363C42.6667 12.0817 39.9583 9.36353 36.4167 9.36353H7.25"
-          stroke="#160D3D"
-          stroke-width="2"
-          stroke-linecap="round"
-          stroke-linejoin="round"
-        />
-        <path
-          d="M32.25 5.18188H7.25002C6.00002 5.18188 5.16669 6.01825 5.16669 7.27279C5.16669 8.52734 6.00002 9.3637 7.25002 9.3637"
-          stroke="#160D3D"
-          stroke-width="2"
-          stroke-linecap="round"
-          stroke-linejoin="round"
-        />
-        <path
-          d="M42.6667 32.3636V38.6364C42.6667 42.1909 39.9583 44.9091 36.4167 44.9091H7.25C3.70833 44.9091 1 42.1909 1 38.6364V7.27273C1 3.71818 3.70833 1 7.25 1H32.25C35.5833 1 38.5 2.88182 38.5 5.18182V9.78182"
-          stroke="#160D3D"
-          stroke-width="2"
-          stroke-linecap="round"
-          stroke-linejoin="round"
-        />
-        <path
-          d="M9.33331 38.6365H11.4166"
-          stroke="#160D3D"
-          stroke-width="2"
-          stroke-linecap="round"
-          stroke-linejoin="round"
-        />
-        <path
-          d="M15.5833 38.6365H19.75"
-          stroke="#160D3D"
-          stroke-width="2"
-          stroke-linecap="round"
-          stroke-linejoin="round"
-        />
-        <path
-          d="M23.9167 38.6365H28.0834"
-          stroke="#160D3D"
-          stroke-width="2"
-          stroke-linecap="round"
-          stroke-linejoin="round"
-        />
-        <path
-          d="M32.25 38.6365H36.4167"
-          stroke="#160D3D"
-          stroke-width="2"
-          stroke-linecap="round"
-          stroke-linejoin="round"
-        />
-        <path
-          d="M9.33331 15.6365H11.4166"
-          stroke="#160D3D"
-          stroke-width="2"
-          stroke-linecap="round"
-          stroke-linejoin="round"
-        />
-        <path
-          d="M15.5833 15.6365H19.75"
-          stroke="#160D3D"
-          stroke-width="2"
-          stroke-linecap="round"
-          stroke-linejoin="round"
-        />
-        <path
-          d="M23.9167 15.6365H28.0834"
-          stroke="#160D3D"
-          stroke-width="2"
-          stroke-linecap="round"
-          stroke-linejoin="round"
-        />
-        <path
-          d="M32.25 15.6365H36.4167"
-          stroke="#160D3D"
-          stroke-width="2"
-          stroke-linecap="round"
-          stroke-linejoin="round"
-        />
-        <path
-          d="M30.1667 26.091C30.1667 23.791 32.0417 21.9092 34.3334 21.9092H44.75C47.0417 21.9092 48.9167 23.791 48.9167 26.091V28.1819C48.9167 30.4819 47.0417 32.3637 44.75 32.3637H34.3334C32.0417 32.3637 30.1667 30.4819 30.1667 28.1819V26.091Z"
-          stroke="#160D3D"
-          stroke-width="2"
-          stroke-linecap="round"
-          stroke-linejoin="round"
-        />
-      </svg>
-    </figure>
-    <p class="text-center text-mswali user-title mb-40">{{ user.name }}</p>
-
-    <b-row>
-      <b-col>
-        <p class="text-mswali text-label1">{{ label1 }}</p>
-        <p class="text-mswali text-label3">{{ label2 }}</p>
-        <p class="text-mswali text-label1 pb-2">{{ label3 }}</p>
-      </b-col>
-      <DividerVertical />
-      <b-col cols="6" class="align-self-center">
-        <button
-          class="transact-container"
-          @click.stop.prevent="makeToast('b-toaster-bottom-full', 'info')"
+  <div>
+    <!--Big screen device code begins here-->
+    <div
+      class="d-none d-md-block d-lg-none d-none d-lg-block d-xl-none d-none d-xl-block"
+    >
+      <div class="row" style="padding-left: 50px">
+        <!--Big screen sidebar navigation starts here-->
+        <div
+          id="col1"
+          style="
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+          "
         >
-          {{ label4 }}
-        </button>
-        <DividerHorizontal />
-        <button
-          class="transact-container"
-          @click.stop.prevent="makeToast('b-toaster-bottom-full', 'info')"
-        >
-          {{ label5 }}
-        </button>
-      </b-col>
+          <div style="text-align: left">
+            <NuxtLink to="/home">
+              <LogoPurple style="height: 27px; width: 120px" />
+            </NuxtLink>
+          </div>
+          <LargeScreenNavBar />
+        </div>
+        <!--Big screen sidebar navigation starts here-->
 
-      <a href="/home" class="center-align-content" style="color: #bbb">Quit</a>
-    </b-row>
-  </main>
+        <div id="col2">
+          <!-- salutations, wallet card, statistics cards go here -->
+          <div class="d-flex flex-row" style="padding-top: 2em">
+            <div class="col-3 winner-container"></div>
+            <div
+              class="col-9 padding-top-20 padding-left-60 d-flex justify-content-around"
+            >
+              <div class="row" style="flex-direction: column">
+                <div class="row d-flex justify-content-start">
+                  <div>
+                    <div class="heading3 padding-right-20">
+                      Good morning {{ this.$store.state.loggedinUserName }}!
+                    </div>
+                    <div class="subheading3">
+                      Here is how your account is looking today
+                    </div>
+                  </div>
+                </div>
+                <br />
+
+                <template>
+                  <div class="card padding-10" style="margin-bottom: 20px">
+                    <div class="heading4">Wallet Balance</div>
+                    <div class="heading2">KSH {{ this.walletBalance }}</div>
+                  </div>
+                </template>
+
+                <!--Statistics area, quiz passed, fastest times go here-->
+                <div class="d-flex justify-content-around">
+                  <b-button
+                    class="rounded-button"
+                    @click="navigateToDeposit()"
+                    style="background-color: #ededed; color: #160d3d"
+                  >
+                    <div class="subheading4">Deposit</div>
+                  </b-button>
+                  <div style="padding: 10px"></div>
+                  <b-button
+                    class="rounded-button"
+                    @click="navigateToWithdraw()"
+                    style="background-color: #ededed; color: #160d3d"
+                  >
+                    <div class="subheading4">Withdraw</div>
+                  </b-button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!--Search bar / Start quiz button / Profile  Ends here-->
+      </div>
+    </div>
+    <div class="d-block d-sm-none d-none d-sm-block d-md-none">
+      <div class="painted-background" style="padding: 20px">
+        <div style="text-align: left">
+          <a href="/home">
+            <font-awesome-icon
+              :icon="['fas', 'chevron-left']"
+              style="color: #160d3d"
+            />
+          </a>
+        </div>
+        <div class="row" style="vertical-align: top">
+          <div class="column left">
+            <b-avatar variant="light"></b-avatar>
+          </div>
+
+          <div class="column middle" style="text-align: left">
+            <div class="heading3">
+              Good morning {{ this.$store.state.loggedinUserName }}!
+            </div>
+            <div class="subheading2">
+              {{ this.$store.state.loggedinUserPhone }}
+            </div>
+          </div>
+          <div
+            class="column"
+            style="
+              background-color: #160d3d;
+              width: 50px;
+              height: 50px;
+              justify-content: center;
+              align-items: center;
+              text-align: center;
+              display: flex;
+              border-radius: 10px;
+            "
+          >
+            <font-awesome-icon :icon="['fas', 'bell']" style="color: #fff" />
+          </div>
+          <div class="text1 text-center">
+            Here is how your account is looking today
+          </div>
+          <hr />
+
+          <div
+            class="card d-flex justify-content-center"
+            style="
+              height: 30vh;
+              width: 80vw;
+              border-radius: 10px;
+              padding: 20px;
+            "
+          >
+            <div
+              class="d-flex flex-row padding-10 justify-content-between"
+              style="margin-bottom: 10px"
+            >
+              <div>
+                <div class="heading4">Wallet Balance</div>
+                <div v-if="showBalance">
+                  <div
+                    class="heading4"
+                    style="
+                      font-size: 24px;
+                      font-weight: 800;
+                      font-family: 'Nunito Sans', sans-serif;
+                      color: #160d3d;
+                    "
+                  >
+                    KSH {{ this.walletBalance }}
+                  </div>
+                </div>
+                <div v-if="!showBalance">
+                  <div
+                    class="heading4"
+                    style="
+                      font-size: 24px;
+                      font-weight: 800;
+                      font-family: 'Nunito Sans', sans-serif;
+                      color: #160d3d;
+                    "
+                  >
+                    *** ***
+                  </div>
+                </div>
+              </div>
+              <div>
+                <b-button
+                  style="background-color: transparent; border: none"
+                  @click="toggleShowBalance()"
+                >
+                  <font-awesome-icon
+                    :icon="['fas', 'eye']"
+                    style="color: #91919f"
+                  />
+                </b-button>
+              </div>
+            </div>
+            <!--Statistics area, quiz passed, fastest times go here-->
+            <div class="d-flex justify-content-around">
+              <b-button
+                class="rounded-button"
+                @click="navigateToDeposit()"
+                style="
+                  background-color: #fff;
+                  color: #160d3d;
+                  border: 1px solid #abb3bb;
+                "
+              >
+                <div class="subheading4">Deposit</div>
+              </b-button>
+              <div style="padding: 10px"></div>
+              <b-button
+                class="rounded-button"
+                @click="navigateToWithdraw()"
+                style="
+                  background-color: #fff;
+                  color: #160d3d;
+                  border: 1px solid #abb3bb;
+                "
+              >
+                <div class="subheading4">Withdraw</div>
+              </b-button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
 </template>
 <script>
 export default {
@@ -139,12 +213,46 @@ export default {
       label3: "Wallet Balance",
       label4: "Deposit",
       label5: "Withdraw",
+      walletBalance: "",
+      mswaliUserId: "",
       user: {
         name: "Titus Mwaniki",
       },
+      showBalance: false,
     };
   },
+  mounted() {
+    if (!this.$store.state.isAuthenticated) {
+      this.navigateToLogin();
+    }
+    this.fetchWalletBalance();
+  },
   methods: {
+    async fetchWalletBalance() {
+      this.mswaliUserId = this.$store.state.mswaliId;
+      let response = await this.$axios.get(
+        `http://cms.mswali.co.ke/mswali/mswali_app/backend/web/index.php?r=api/get-balance&user_id=${this.mswaliUserId}`,
+      );
+      console.log("response");
+      console.log(response);
+      this.walletBalance = response.data.data;
+    },
+    toggleShowBalance() {
+      if (this.showBalance) {
+        this.showBalance = false;
+      } else {
+        this.showBalance = true;
+      }
+    },
+    navigateToDeposit() {
+      return this.$router.push("/deposit");
+    },
+    navigateToWithdraw() {
+      return this.$router.push("/withdraw");
+    },
+    navigateToLogin() {
+      return this.$router.push("/login");
+    },
     makeToast(toaster, variant = null) {
       this.$bvToast.toast("Dev at work to bring this feature", {
         title: `Coming soon!`,
@@ -157,6 +265,56 @@ export default {
 };
 </script>
 <style scoped>
+.hr {
+  display: block;
+  height: 1px;
+  border: 0;
+  border-top: 1px solid #000;
+  margin: 1em 0;
+  padding: 0;
+}
+.left,
+.right {
+  padding-left: 40px;
+  width: 25%;
+}
+
+.middle {
+  width: 50%;
+}
+.column {
+  float: left;
+  padding: 10px;
+  height: 150px; /* Should be removed. Only for demonstration */
+}
+.row {
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  padding-top: 20px;
+}
+#col1 {
+  width: 20%;
+}
+#col2 {
+  width: 80%;
+}
+
+.winner-container {
+  background-image: url("~/assets/win.png");
+  background-repeat: no-repeat;
+  width: 200px;
+  height: 200px;
+  background-color: #160d3d;
+  background-size: contain;
+  background-position: center;
+  margin: 0 auto;
+  display: flex;
+  border-radius: 1em;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+}
 .transact-container {
   background-color: #fff;
   opacity: 80%;

@@ -1,45 +1,29 @@
 <template>
-  <div v-if="loading" class="loading-page">
-    <div class="white-container">
-      <div class="text-center">
-        <b-spinner variant="primary" label="Spinning"></b-spinner>
-      </div>
-    </div>
-  </div>
+  <div class="spinner"></div>
 </template>
 
-<script>
-export default {
-  data: () => ({
-    loading: false,
-  }),
-  methods: {
-    start() {
-      this.loading = true;
-    },
-    finish() {
-      this.loading = false;
-    },
-  },
-};
-</script>
-
-<style scoped>
-.white-container {
-  background-color: #fff;
-  width: 100%;
-  min-height: 100vh;
+<style lang="css">
+.spinner {
+  position: absolute;
+  height: 60px;
+  width: 60px;
+  border: 3px solid transparent;
+  border-top-color: var(--v-success-base);
+  top: 50%;
+  left: 50%;
+  margin: -30px;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+  z-index: 100; 
 }
-.loading-page {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: rgba(255, 255, 255, 0.8);
-  text-align: center;
-  padding-top: 200px;
-  font-size: 30px;
-  font-family: sans-serif;
+
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+
+  100% {
+    transform: rotate(360deg);
+  }
 }
 </style>

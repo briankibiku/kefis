@@ -12,15 +12,37 @@
               >Wallet</span
             ></b-nav-item
           >
-          <b-nav-item href="/winners"
-            ><span class="heading4" style="color: #160d3d"
-              >Winners</span
-            ></b-nav-item
-          >
           <b-nav-item href="/my-answers"
             ><span class="heading4" style="color: #160d3d">My Answers </span>
           </b-nav-item>
-          <b-button @click="revokeAuthentication()">Logout</b-button>
+          <b-nav-item href="/winners"
+            ><span class="heading4" style="color: #160d3d"
+              >Rankings</span
+            ></b-nav-item
+          >
+          <b-nav-item href="/winners"
+            ><span class="heading4" style="color: #160d3d"
+              >Settings</span
+            ></b-nav-item
+          >
+          <b-nav-item
+            ><span class="heading4" style="color: #160d3d">
+              <b-button
+                @click="sharemSwali()"
+                style="
+                  background-color: transparent;
+                  color: #160d3d;
+                  border: none;
+                "
+                >Share</b-button
+              >
+            </span></b-nav-item
+          >
+          <b-button
+            @click="revokeAuthentication()"
+            style="background-color: transparent; color: #160d3d; border: none"
+            >Logout</b-button
+          >
         </b-navbar-nav>
         <!-- <b-navbar-nav class="ml-auto">
           <b-nav-item-dropdown style="color: #160d3d" right>
@@ -70,6 +92,18 @@ export default {
       peristUserPhone: "peristUserPhone",
       peristUserName: "peristUserName",
     }),
+    sharemSwali() {
+      navigator.clipboard.writeText("apps.mwsali.co.ke");
+      this.copiedLinkToast();
+    },
+    copiedLinkToast(toaster, variant = "success") {
+      this.$bvToast.toast("Link has been copied to clipboard 📋.", {
+        title: `Link copied`,
+        variant: variant,
+        toaster: toaster,
+        solid: true,
+      });
+    },
     async revokeAuthentication() {
       await this.peristAuthentication(false);
       await this.peristUserPhone("");

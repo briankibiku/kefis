@@ -1,8 +1,8 @@
 <template>
   <img
     class="NuxtLogo"
-    width="200"
-    height="43"
+    width="360"
+    height="83"
     src="~/assets/logos/mSwali-cyan.png"
     style="margin-top: 20px; margin-bottom: 20px"
   />

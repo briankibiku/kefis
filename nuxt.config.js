@@ -24,8 +24,6 @@ export default {
 
   // Global CSS: https://go.nuxtjs.dev/config-css
   css: ["~/assets/main.css"],
-  // loading progress bar specifications
-  loading: "~/components/LoadingBar.vue",
 
   // Plugins to run before rendering page: https://go.nuxtjs.dev/config-plugins
   plugins: [{ src: "~/plugins/persistedState.client.js" }],
@@ -57,6 +55,17 @@ export default {
       },
     ],
   ],
+  axios: {
+    proxy: true,
+  },
+
+  proxy: {
+    "/api/": {
+      target: `http://161.35.6.91/mswali/mswali_app/backend/web/index.php?`,
+      pathRewrite: { "^/api/": "" },
+      changeOrigin: true,
+    },
+  },
 
   // Build Configuration: https://go.nuxtjs.dev/config-build
   build: {},

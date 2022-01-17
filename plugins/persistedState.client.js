@@ -8,6 +8,7 @@ export default ({ store }) => {
       "isAuthenticated",
       "loggedinUserName",
       "loggedinUserPhone",
+      "mswaliId",
     ],
   })(store);
 };
