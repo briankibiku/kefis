@@ -9,6 +9,7 @@ export default ({ store }) => {
       "loggedinUserName",
       "loggedinUserPhone",
       "mswaliId",
+      "walletBalance",
     ],
   })(store);
 };

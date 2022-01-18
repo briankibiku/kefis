@@ -56,7 +56,7 @@
                 background-color: #f0f0f0;
               "
             >
-              Fastets Time
+              Fastest Time
             </div>
             <div class="subheading55">Out of 30 questions</div>
           </div>
@@ -115,7 +115,7 @@
                 background-color: #f0f0f0;
               "
             >
-              Fastets Time
+              Fastest Time
             </div>
             <div class="subheading555">Out of 30 questions</div>
           </div>

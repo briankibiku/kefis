@@ -76,12 +76,41 @@
                     {{ this.$store.state.loggedinUserPhone }}
                   </div>
                 </div>
-                <template>
-                  <div class="card padding-10" style="margin-bottom: 20px">
+                <div
+                  class="card padding-10"
+                  style="margin-bottom: 20px; padding-left: 40px"
+                >
+                  <div class="d-flex justify-content-between">
                     <div class="heading4">Wallet Balance</div>
-                    <div class="heading2">KSH {{ this.walletBalance }}</div>
+                    <div>
+                      <b-button
+                        style="background-color: transparent; border: none"
+                        @click="toggleShowBalance()"
+                      >
+                        <font-awesome-icon
+                          :icon="['fas', 'eye']"
+                          style="color: #91919f"
+                        />
+                      </b-button>
+                    </div>
                   </div>
-                </template>
+                  <div class="heading2" v-if="showBalance">
+                    KSH {{ this.walletBalanceFromAPI }}
+                  </div>
+                  <div v-if="!showBalance">
+                    <div
+                      class="heading4"
+                      style="
+                        font-size: 24px;
+                        font-weight: 800;
+                        font-family: 'Nunito Sans', sans-serif;
+                        color: #160d3d;
+                      "
+                    >
+                      *** ***
+                    </div>
+                  </div>
+                </div>
               </div>
               <!--Statistics area, quiz passed, fastest times go here-->
               <StatsCards />
@@ -134,12 +163,50 @@
           ></a>
           <div class="centered-container">
             <div
-              class="row centered-container"
+              class="row"
               style="width: 100%; margin-right: 20px; margin-left: 20px"
             >
               <div class="col" style="text-align: left">
                 <!-- wallet card go here -->
-                <WalletCard />
+                <div
+                  class="card padding-10"
+                  style="
+                    margin-bottom: 20px;
+                    border-radius: 10px;
+                    padding-left: 40px;
+                  "
+                >
+                  <div class="d-flex justify-content-between">
+                    <div class="heading4">Wallet Balance</div>
+                    <div>
+                      <b-button
+                        style="background-color: transparent; border: none"
+                        @click="toggleShowBalance()"
+                      >
+                        <font-awesome-icon
+                          :icon="['fas', 'eye']"
+                          style="color: #91919f"
+                        />
+                      </b-button>
+                    </div>
+                  </div>
+                  <div class="heading2" v-if="showBalance">
+                    KSH {{ this.walletBalanceFromAPI }}
+                  </div>
+                  <div v-if="!showBalance">
+                    <div
+                      class="heading4"
+                      style="
+                        font-size: 24px;
+                        font-weight: 800;
+                        font-family: 'Nunito Sans', sans-serif;
+                        color: #160d3d;
+                      "
+                    >
+                      *** ***
+                    </div>
+                  </div>
+                </div>
                 <!-- start quiz button -->
                 <div style="margin-inline: 20px; padding-bottom: 10px">
                   <button
@@ -186,19 +253,20 @@ export default {
     return {
       overallPoints: "2,000",
       userProfile: {},
-      lastName: "",
-      phoneNumber: "",
+      lastName: this.$store.state.loggedinUserName,
+      phoneNumber: this.$store.state.loggedinUserPhone,
       showHideSpinner: true,
       largeScreen: true,
       loading: false,
-      mswaliUserId: "",
-      walletBalance: "",
+      showBalance: false,
+      mswaliUserId: this.$store.state.mswaliId,
+      walletBalanceFromAPI: this.$store.state.walletBalance,
     };
   },
   mounted() {
     if (this.$store.state.isAuthenticated) {
       this.loading = true;
-      this.getuserName();
+      // this.getuserName();
       this.loading = false;
     } else {
       this.navigateToLogin();
@@ -210,6 +278,7 @@ export default {
       loggedinUserName: "loggedinUserName",
       loggedinUserPhone: "loggedinUserPhone",
       mswaliId: "mswaliId",
+      walletBalance: "walletBalance",
     }),
   },
   methods: {
@@ -218,6 +287,7 @@ export default {
       peristUserPhone: "peristUserPhone",
       peristUserName: "peristUserName",
       persistMswaliId: "persistMswaliId",
+      persistwalletBalance: "persistwalletBalance",
     }),
     async revokeAuthentication() {
       await this.peristAuthentication(false);
@@ -225,40 +295,19 @@ export default {
       await this.peristUserName("");
       return this.$router.push("/login");
     },
+
+    toggleShowBalance() {
+      if (this.showBalance) {
+        this.showBalance = false;
+      } else {
+        this.showBalance = true;
+      }
+    },
     navigateToLogin() {
       return this.$router.push("/login");
     },
     navigateToCategory() {
       return this.$router.push("/category");
-    },
-    async getuserName() {
-      this.phoneNumber = this.$store.state.signUpPhone;
-      let userProfile = await this.$axios.get(
-        `http://cms.mswali.co.ke/mswali/mswali_app/backend/web/index.php?r=api/get-user&username=mast&account_number=${this.phoneNumber}`,
-      );
-      let userName = userProfile.data.data.name;
-      let phoneNumberFromApi = userProfile.data.data.account_number;
-      let mswaliIdfromApi = userProfile.data.data.id;
-      let splitName = userName.indexOf(" ");
-      let lastNameFromApi = userName
-        .slice(splitName + 1, userName.length)
-        .trim();
-      // persist username and phone number
-      await this.peristUserPhone(phoneNumberFromApi);
-      await this.peristUserName(lastNameFromApi);
-      await this.persistMswaliId(mswaliIdfromApi);
-      this.lastName = this.$store.state.loggedinUserName;
-      this.phoneNumber = this.$store.state.loggedinUserPhone;
-      await fetchWalletBalance();
-    },
-    async fetchWalletBalance() {
-      this.mswaliUserId = this.$store.state.mswaliId;
-      let response = await this.$axios.get(
-        `http://cms.mswali.co.ke/mswali/mswali_app/backend/web/index.php?r=api/get-balance&user_id=${this.mswaliUserId}`,
-      );
-      console.log("response");
-      console.log(response);
-      this.walletBalance = response.data.data;
     },
   },
   components: { NudgeArea, StatsCards, LoadingBar },

@@ -28,8 +28,8 @@
           <div class="d-flex flex-row" style="padding-top: 0em">
             <div class="col padding-left-60 d-flex justify-content-around">
               <div class="row" style="flex-direction: column">
-                <div class="heading3 padding-right-20">Notifications</div>
-                <div class="subheading3">Message goes here</div>
+                <div class="heading3 padding-right-20">FAQS</div>
+                <div class="subheading3">Frequently asked questions</div>
                 <div class="accordion" role="tablist">
                   <b-card no-body class="mb-1">
                     <b-card-header header-tag="header" class="p-1" role="tab">
@@ -91,14 +91,8 @@
       </div>
     </div>
     <div class="d-block d-sm-none d-none d-sm-block d-md-none">
-      <div>
-        <div class="centered-container">
-          <div>
-            <font-awesome-icon :icon="['fas', 'cog']" />
-            <div class="heading3">Notifications</div>
-            <a href="/home">Home</a>
-          </div>
-        </div>
+      <div class="painted-background" style="padding: 20px">
+        Small screen view
       </div>
     </div>
   </div>

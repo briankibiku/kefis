@@ -1,21 +1,41 @@
 <template>
   <div>
-    <p v-if="$fetchState.pending">
+    <p class="centered-container" v-if="$fetchState.pending">
       <b-spinner label="Spinning"></b-spinner>
     </p>
     <p v-else-if="$fetchState.error">An error occurred while fetching data</p>
     <div v-else>
       <div class="center-align-content">
-        <div class="row">
-          <div class="heading3" style="padding-right: 40px;">
-            <button class="primary-button" style="height: 40px" @click="topScoreView = true">Top Players</button>
+        <div class="row d-flex align-items-center">
+          <a href="/home">
+            <font-awesome-icon
+              :icon="['fas', 'chevron-left']"
+              style="color: #160d3d; margin-left: 20px; margin-right: 40px"
+            />
+          </a>
+          <div class="heading3" style="padding-right: 40px">
+            <button
+              class="outline-button subheading3"
+              style="height: 40px"
+              @click="topScoreView = true"
+            >
+              Top Players
+            </button>
           </div>
           <div class="heading3">
-            <button class="primary-button" style="height: 40px;" @click="topScoreView = false">Top Teams</button>
+            <button
+              class="outline-button subheading3"
+              style="height: 40px"
+              @click="topScoreView = false"
+            >
+              Top Teams
+            </button>
           </div>
         </div>
+        <br />
 
         <div v-if="topScoreView">
+          <div class="heading3">Top players</div>
           <b-table
             striped
             hover
@@ -27,6 +47,7 @@
         </div>
 
         <div v-if="!topScoreView">
+          <div class="heading3">Top teams</div>
           <b-table
             striped
             hover
@@ -37,7 +58,7 @@
           ></b-table>
         </div>
 
-        <div v-if="topScoreView"> 
+        <div v-if="topScoreView">
           <b-pagination
             v-model="currentPage"
             :total-rows="rows"
@@ -57,7 +78,6 @@
             aria-controls="my-table"
           ></b-pagination>
         </div>
-        <a href="/home" style="color: #bbb">Home</a>
       </div>
     </div>
   </div>
@@ -75,7 +95,7 @@ export default {
       teamPerPage: 8,
       teamCurrentPage: 1,
       topScoreView: true,
-      fields: ["name", "score", "phone"],
+      fields: [{ key: "name", label: "Player Name" }, , "score", "phone"],
       teamFields: ["team_name", "score"],
     };
   },
@@ -84,7 +104,7 @@ export default {
       console.log(this.$store.state.topScoreSet);
       console.log("Didn't fetched top scores from state!!");
       this.topScores = await fetch(
-        "http://cms.mswali.co.ke/mswali/mswali_app/backend/web/index.php?r=team-play/get-top-performers"
+        "http://cms.mswali.co.ke/mswali/mswali_app/backend/web/index.php?r=team-play/get-top-performers",
       ).then((res) => res.json());
       // this.topScores = this.topScores.data;
       //   getting of user answers payload to state
@@ -93,10 +113,10 @@ export default {
       this.topScores = this.$store.state.topScores.data;
 
       this.topTeams = await fetch(
-        "http://cms.mswali.co.ke/mswali/mswali_app/backend/web/index.php?r=team-play/get-top-teams"
+        "http://cms.mswali.co.ke/mswali/mswali_app/backend/web/index.php?r=team-play/get-top-teams",
       ).then((res) => res.json());
       this.$store.commit("updateTopScoreSet", true);
-      console.log("updateTopScoreSet set to TRUE")
+      console.log("updateTopScoreSet set to TRUE");
       this.$store.commit("updateTopTeams", this.topTeams);
       //   getting of top teams from state
       this.topTeams = this.$store.state.topTeams.data;
