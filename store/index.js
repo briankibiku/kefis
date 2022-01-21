@@ -98,6 +98,8 @@ export const state = () => ({
   loggedinUserName: "",
   loggedinUserPhone: "",
   mswaliId: "",
+  walletBalance: "",
+  isExistingUser: false,
   // question & answer variables
   persistedAnswers: null,
   userAnswersPayloadSet: false,
@@ -135,6 +137,9 @@ export const mutations = {
   updateScore(state, payload) {
     state.test_results.correct = payload;
   },
+  updateisExistingUser(state, payload) {
+    state.isExistingUser = payload;
+  },
 
   updateSignUpPhone(state, payload) {
     state.signUpPhone = payload;
@@ -142,6 +147,10 @@ export const mutations = {
   updateMswaliId(state, payload) {
     state.mswaliId = payload;
   },
+  updatewalletBalance(state, payload) {
+    state.walletBalance = payload;
+  },
+
   updateSignUpName(state, payload) {
     state.signUpName = payload;
   },
@@ -224,5 +233,11 @@ export const actions = {
   },
   persistMswaliId({ commit }, payload) {
     commit("updateMswaliId", payload);
+  },
+  persistwalletBalance({ commit }, payload) {
+    commit("updatewalletBalance", payload);
+  },
+  peristIsExistingUSer({ commit }, payload) {
+    commit("updateisExistingUser", payload);
   },
 };

@@ -1,6 +1,6 @@
 <template>
   <div class="row">
-    <div class="overlay" v-if="successfulLogin">
+    <div class="overlay-home" v-if="successfulLogin">
       <div style="margin: 20px">
         <div class="custom-modal">
           <div
@@ -36,7 +36,7 @@
         </button>
       </div>
     </div>
-    <div class="overlay" v-if="loading">
+    <div class="overlay-home" v-if="loading">
       <div style="margin: 20px">
         <b-spinner variant="primary" label="Spinning"></b-spinner>
       </div>
@@ -108,7 +108,11 @@
                 </button>
               </div>
 
-              <button class="rounded-button-cyan" @click="verifyOTP()">
+              <button
+                class="rounded-button-cyan"
+                @click="verifyOTP()"
+                style="width: 240px"
+              >
                 <div class="subheading4">
                   Verify
                   <font-awesome-icon :icon="['fas', 'arrow-right']" />
@@ -158,6 +162,10 @@ export default {
   computed: {
     ...mapState({
       isAuthenticated: "isAuthenticated",
+      loggedinUserName: "loggedinUserName",
+      loggedinUserPhone: "loggedinUserPhone",
+      mswaliId: "mswaliId",
+      walletBalance: "walletBalance",
     }),
     remainingTime() {
       const timeLeft = this.timeLeft;
@@ -176,6 +184,13 @@ export default {
     },
   },
   methods: {
+    ...mapActions({
+      peristAuthentication: "peristAuthentication",
+      peristUserPhone: "peristUserPhone",
+      peristUserName: "peristUserName",
+      persistMswaliId: "persistMswaliId",
+      persistwalletBalance: "persistwalletBalance",
+    }),
     startTimer() {
       this.timerInterval = setInterval(() => (this.timePassed += 1), 1000);
     },
@@ -219,7 +234,6 @@ export default {
           `http://cms.mswali.co.ke/mswali/mswali_app/backend/web/index.php?r=api/generate-otp&msisdn=${this.resendPhoneNumber}`,
           config,
         );
-        console.log(this.resendPhoneNumber);
         await this.$store.commit("updateSignUpOTP", res);
         this.showResendBtn = false;
       } catch (err) {
@@ -233,6 +247,40 @@ export default {
         toaster: toaster,
         solid: true,
       });
+    },
+
+    async getuserName() {
+      this.phoneNumber = this.$store.state.signUpPhone;
+      let userProfile = await this.$axios.get(
+        `http://cms.mswali.co.ke/mswali/mswali_app/backend/web/index.php?r=api/get-user&username=mast&account_number=${this.phoneNumber}`,
+      );
+      let userName = userProfile.data.data.name;
+      // persist phone number to state
+      let phoneNumberFromApi = userProfile.data.data.account_number;
+      await this.peristUserPhone(phoneNumberFromApi);
+      // update mSwali user id to state
+      let mswaliIdfromApi = userProfile.data.data.id;
+      await this.persistMswaliId(mswaliIdfromApi);
+
+      await this.fetchWalletBalance(mswaliIdfromApi);
+      // split complete user name and use their last name
+      let splitName = userName.indexOf(" ");
+      let lastNameFromApi = userName
+        .slice(splitName + 1, userName.length)
+        .trim();
+      // persist username to state
+      await this.peristUserName(lastNameFromApi);
+
+      this.lastName = this.$store.state.loggedinUserName;
+      this.phoneNumber = this.$store.state.loggedinUserPhone;
+    },
+    async fetchWalletBalance(mswaliUserId) {
+      let response = await this.$axios.get(
+        `http://cms.mswali.co.ke/mswali/mswali_app/backend/web/index.php?r=api/get-balance&user_id=${mswaliUserId}`,
+      );
+      let walletBalanceFromAPI = await Math.trunc(response.data.data);
+      await this.persistwalletBalance(walletBalanceFromAPI);
+      this.walletBalanceFromAPI = this.$store.state.walletBalance;
     },
     // verify OTP happens here
     async verifyOTP() {
@@ -264,8 +312,15 @@ export default {
           this.loading = false;
           // update user authentication status
           await this.authenticateUser(true);
-          // redirect to home page
-          this.successfulLogin = true;
+          if (this.$store.state.isExistingUser) {
+            // if it is not a new user redirect to home
+            await this.getuserName();
+            await this.goToHomePage();
+          } else {
+            // if it is first time user redirect to modal and continue from home
+            await this.getuserName();
+            this.successfulLogin = true;
+          }
         } else {
           await this.app.$toast;
         }
@@ -274,10 +329,6 @@ export default {
         this.verifyOTPError();
       }
     },
-
-    ...mapActions({
-      peristAuthentication: "peristAuthentication",
-    }),
     async authenticateUser() {
       await this.peristAuthentication(true);
     },

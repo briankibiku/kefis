@@ -20,29 +20,41 @@
               >Rankings</span
             ></b-nav-item
           >
-          <b-nav-item href="/winners"
+          <b-nav-item href="/settings"
             ><span class="heading4" style="color: #160d3d"
               >Settings</span
             ></b-nav-item
           >
-          <b-nav-item
-            ><span class="heading4" style="color: #160d3d">
-              <b-button
-                @click="sharemSwali()"
-                style="
-                  background-color: transparent;
-                  color: #160d3d;
-                  border: none;
-                "
-                >Share</b-button
-              >
-            </span></b-nav-item
+          <b-nav-item href="/notifications"
+            ><span class="heading4" style="color: #160d3d"
+              >Notifications</span
+            ></b-nav-item
           >
+          <b-nav-item href="/faq"
+            ><span class="heading4" style="color: #160d3d"
+              >FAQs</span
+            ></b-nav-item
+          >
+          <b-nav-item>
+            <b-button
+              @click="sharemSwali()"
+              style="
+                background-color: transparent;
+                color: #160d3d;
+                border: none;
+              "
+            >
+              <span class="heading4" style="color: #160d3d">
+                Share</span
+              ></b-button
+            >
+          </b-nav-item>
           <b-button
             @click="revokeAuthentication()"
             style="background-color: transparent; color: #160d3d; border: none"
-            >Logout</b-button
           >
+            <span class="heading4"> Logout </span>
+          </b-button>
         </b-navbar-nav>
         <!-- <b-navbar-nav class="ml-auto">
           <b-nav-item-dropdown style="color: #160d3d" right>
@@ -113,3 +125,11 @@ export default {
   },
 };
 </script>
+<style>
+.heading4 {
+  font-size: 14px;
+  font-weight: 600;
+  font-family: "Nunito Sans", sans-serif;
+  color: #160d3d;
+}
+</style>

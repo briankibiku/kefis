@@ -44,9 +44,40 @@
                 <br />
 
                 <template>
-                  <div class="card padding-10" style="margin-bottom: 20px">
-                    <div class="heading4">Wallet Balance</div>
-                    <div class="heading2">KSH {{ this.walletBalance }}</div>
+                  <div
+                    class="card padding-10"
+                    style="margin-bottom: 20px; padding-left: 40px"
+                  >
+                    <div class="row d-flex justify-content-between">
+                      <div class="heading4">Wallet Balance</div>
+                      <div>
+                        <b-button
+                          style="background-color: transparent; border: none"
+                          @click="toggleShowBalance()"
+                        >
+                          <font-awesome-icon
+                            :icon="['fas', 'eye']"
+                            style="color: #91919f"
+                          />
+                        </b-button>
+                      </div>
+                    </div>
+                    <div class="heading2" v-if="showBalance">
+                      KSH {{ this.walletBalanceFromState }}
+                    </div>
+                    <div v-if="!showBalance">
+                      <div
+                        class="heading4"
+                        style="
+                          font-size: 24px;
+                          font-weight: 800;
+                          font-family: 'Nunito Sans', sans-serif;
+                          color: #160d3d;
+                        "
+                      >
+                        *** ***
+                      </div>
+                    </div>
                   </div>
                 </template>
 
@@ -143,7 +174,7 @@
                       color: #160d3d;
                     "
                   >
-                    KSH {{ this.walletBalance }}
+                    KSH {{ this.walletBalanceFromState }}
                   </div>
                 </div>
                 <div v-if="!showBalance">
@@ -205,6 +236,7 @@
   </div>
 </template>
 <script>
+import { mapState, mapActions } from "vuex";
 export default {
   data() {
     return {
@@ -213,7 +245,7 @@ export default {
       label3: "Wallet Balance",
       label4: "Deposit",
       label5: "Withdraw",
-      walletBalance: "",
+      walletBalanceFromState: "",
       mswaliUserId: "",
       user: {
         name: "Titus Mwaniki",
@@ -225,17 +257,45 @@ export default {
     if (!this.$store.state.isAuthenticated) {
       this.navigateToLogin();
     }
-    this.fetchWalletBalance();
+    this.refreshBalance();
+  },
+  computed: {
+    ...mapState({
+      walletBalance: "walletBalance",
+    }),
   },
   methods: {
+    ...mapActions({
+      persistwalletBalance: "persistwalletBalance",
+    }),
     async fetchWalletBalance() {
-      this.mswaliUserId = this.$store.state.mswaliId;
+      try {
+        this.walletBalanceFromState = this.$store.state.walletBalance;
+      } catch (e) {
+        console.log(e);
+        this.fetchBalanceErrorToast();
+      }
+    },
+    async refreshBalance() {
+      // fetch user balance from db to check if amount was deposited successfully
+      let mswaliUserId = this.$store.state.mswaliId;
       let response = await this.$axios.get(
-        `http://cms.mswali.co.ke/mswali/mswali_app/backend/web/index.php?r=api/get-balance&user_id=${this.mswaliUserId}`,
+        `http://cms.mswali.co.ke/mswali/mswali_app/backend/web/index.php?r=api/get-balance&user_id=${mswaliUserId}`,
       );
-      console.log("response");
-      console.log(response);
-      this.walletBalance = response.data.data;
+      let walletBalanceFromAPI = await Math.trunc(response.data.data);
+      await this.persistwalletBalance(walletBalanceFromAPI);
+      this.walletBalanceFromState = this.$store.state.walletBalance;
+    },
+    fetchBalanceErrorToast(toaster, variant = null) {
+      this.$bvToast.toast(
+        "We encoundeted an error while trying to fetch your balance, try later",
+        {
+          title: `Balance Error`,
+          variant: variant,
+          toaster: toaster,
+          solid: true,
+        },
+      );
     },
     toggleShowBalance() {
       if (this.showBalance) {

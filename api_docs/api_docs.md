@@ -80,7 +80,7 @@ Response 200
 
 ##### POST /a/sample/endpoint
 
-[http://cms.mswali.co.ke/mswali/mswali_app/backend/web/index.php?r=solo-play/show-my-answers&msisdn=0724909783](http://cms.mswali.co.ke/mswali/mswali_app/backend/web/index.php?r=solo-play/show-my-answers&msisdn=0724909783) --->  Working
+[http://cms.mswali.co.ke/mswali/mswali_app/backend/web/index.php?r=solo-play/show-my-answers&msisdn=${this.phoneNumber}](http://cms.mswali.co.ke/mswali/mswali_app/backend/web/index.php?r=solo-play/show-my-answers&msisdn=${this.phoneNumber}) --->  Working
 
 ##### Authentication
 
@@ -129,7 +129,7 @@ Response 200
 
 ##### POST /a/sample/endpoint
 
-[http://cms.mswali.co.ke/mswali/mswali_app/backend/web/index.php?r=solo-play/show-my-answers&msisdn=0724909783](http://cms.mswali.co.ke/mswali/mswali_app/backend/web/index.php?r=solo-play/show-my-answers&msisdn=0724909783)  ---> Working
+[http://cms.mswali.co.ke/mswali/mswali_app/backend/web/index.php?r=solo-play/show-my-answers&msisdn=${this.phoneNumber}](http://cms.mswali.co.ke/mswali/mswali_app/backend/web/index.php?r=solo-play/show-my-answers&msisdn=${this.phoneNumber})  ---> Working
 
 ##### Authentication
 
@@ -198,7 +198,7 @@ Response 200
 #### 5. Register new user
 ##### POST /a/sample/endpoint
 
-[http://cms.mswali.co.ke/mswali/mswali_app/backend/web/index.php?r=api/register-user&username=TestUser&account_number=0724909783](http://cms.mswali.co.ke/mswali/mswali_app/backend/web/index.php?r=api/register-user&username=TestUser&account_number=0724909783)  ---> Working
+[http://cms.mswali.co.ke/mswali/mswali_app/backend/web/index.php?r=api/register-user&username=TestUser&account_number=${this.phoneNumber}](http://cms.mswali.co.ke/mswali/mswali_app/backend/web/index.php?r=api/register-user&username=TestUser&account_number=${this.phoneNumber})  ---> Working
 
 ##### Authentication
 

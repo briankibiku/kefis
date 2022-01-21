@@ -62,6 +62,16 @@
     </b-button>
     <b-button
       class="rounded-button-transparent"
+      style="text-align: left; background-color: transparent"
+      @click="navigateToFAQ()"
+    >
+      <div class="menu">
+        <font-awesome-icon :icon="['fas', 'question']" />
+        FAQs
+      </div>
+    </b-button>
+    <b-button
+      class="rounded-button-transparent"
       @click="sharemSwali()"
       style="text-align: left; background-color: transparent"
     >
@@ -134,6 +144,9 @@ export default {
     },
     navigateToRankings() {
       return this.$router.push("/winners");
+    },
+    navigateToFAQ() {
+      return this.$router.push("/faq");
     },
     sharemSwali() {
       navigator.clipboard.writeText("apps.mwsali.co.ke");

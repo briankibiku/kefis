@@ -4,11 +4,20 @@
       class="d-none d-md-block d-lg-none d-none d-lg-block d-xl-none d-none d-xl-block"
       style="padding: 40px"
     >
-      <div class="overlay">
+      <div class="overlay" v-if="loading">
+        <div style="margin: 20px">
+          <b-spinner variant="primary" label="Spinning"></b-spinner>
+        </div>
+      </div>
+      <div class="overlay-home">
         <div style="margin: 20px">
           <div style="text-align: center">
-            <div class="heading2" style="color: #fff">Hi Doe</div>
-            <div class="subheading3">How much would you wish to withdraw?</div>
+            <div class="heading2" style="color: #fff">
+              Hi {{ this.userName }}
+            </div>
+            <div class="subheading3" style="color: #fff; padding-bottom: 20px">
+              How much would you wish to withdraw?
+            </div>
           </div>
           <div class="custom-modal">
             <div class="form-section">
@@ -20,29 +29,31 @@
                     placeholder="KES 0.00"
                     v-model="withdrawAmount"
                     required
-                    style="text-align: center; border-bottom: 1px solid"
+                    style="text-align: center"
                   />
                 </div>
               </form>
             </div>
             <div>M-pesa</div>
           </div>
-          <button class="rounded-button-cyan" @click="goToHomePage()">
+          <button class="rounded-button-cyan" @click="processWithdrawal()">
             <div class="subheading4">
               Continue
               <font-awesome-icon :icon="['fas', 'arrow-right']" />
             </div>
           </button>
+          <div class="subheading3" style="margin-top: 20px">
+            <a href="/wallet" style="color: #bbb">Back</a>
+          </div>
         </div>
       </div>
     </div>
     <!--Small screen view-->
     <div class="d-block d-sm-none d-none d-sm-block d-md-none">
       <div class="painted-background">
-        <div class="centered-container" v-if="loading">
+        <div class="overlay" v-if="loading">
           <div style="margin: 20px">
             <b-spinner variant="primary" label="Spinning"></b-spinner>
-            <div class="heading4">Loading...</div>
           </div>
         </div>
 
@@ -55,7 +66,7 @@
               />
             </a>
 
-            <div class="heading2">Hi Doe</div>
+            <div class="heading2">Hi {{ this.userName }}</div>
 
             <div class="subheading3">How much would you wish to withdraw?</div>
           </div>
@@ -69,14 +80,6 @@
                 border-radius: 10px;
               "
             >
-              <img
-                src="~/assets/mpesa.svg"
-                style="margin: 10px"
-                alt=""
-                height="40"
-                width="100"
-              />
-              <div class="subheading3">Enter amount you wish to withdraw</div>
               <br />
               <div class="form-section">
                 <form method="post">
@@ -92,15 +95,19 @@
                   </div>
                 </form>
               </div>
+              <div class="subheading3">M-Pesa</div>
             </div>
             <br /><br />
-            <button class="rounded-button-cyan" @click="onSubmit()">
+            <button class="rounded-button-cyan" @click="processWithdrawal()">
               <div class="subheading4">
                 Continue
 
                 <font-awesome-icon :icon="['fas', 'arrow-right']" />
               </div>
             </button>
+            <div class="subheading3" style="margin-top: 20px">
+              <a href="/wallet" style="color: #bbb">Back</a>
+            </div>
           </div>
         </div>
       </div>
@@ -110,18 +117,20 @@
 
 <script>
 import axios from "axios";
+import { mapState, mapActions } from "vuex";
 
 export default {
   data() {
     return {
       withdrawAmount: this.withdrawAmount,
-
       depositResponse: {},
-
       phoneNumber: "",
       loading: false,
-
+      transactionCost: "16",
       text: "",
+      allowableWithdraw: "",
+      maximumWithdrawable: "",
+      userName: this.$store.state.loggedinUserName,
     };
   },
   mounted() {
@@ -129,7 +138,15 @@ export default {
       this.navigateToLogin();
     }
   },
+  computed: {
+    ...mapState({
+      walletBalance: "walletBalance",
+    }),
+  },
   methods: {
+    ...mapActions({
+      persistwalletBalance: "persistwalletBalance",
+    }),
     async navigate() {
       let makeDepositResponse = await this.$store.dispatch("makeDeposit");
 
@@ -143,25 +160,101 @@ export default {
       return this.$router.push("/login");
     },
 
-    async onSubmit() {
-      try {
-        this.loading = true;
-        console.log(this.withdrawAmount);
-        this.phoneNumber = this.$store.state.loggedinUserPhone;
+    async processWithdrawal() {
+      // check if user has input amount they want to withdraw
+      if (!!this.withdrawAmount) {
+        if (this.withdrawAmount > 9) {
+          try {
+            this.loading = true;
+            // check if user account has enough money to transact a withdrawal
+            // withdrawal costs KSH 16
+            // get wallet balance
+            this.walletBalanceFromState = this.$store.state.walletBalance;
 
-        console.log(this.phoneNumber);
-        let res = await this.$axios.post(
-          `http://161.35.6.91/mswali/mswali_app/backend/web/index.php?r=api/log-payment-request&msisdn=${this.phoneNumber}&amount=${this.withdrawAmount}&type=WITHDRAWAL`,
-        );
+            // subtract amount they wish to withdraw + KSH 16 for the transaction and make sure the account does run a negative
+            this.balanceAfterWithdraw =
+              parseInt(this.walletBalanceFromState) -
+              parseInt(this.transactionCost) -
+              parseInt(this.withdrawAmount);
+            // check if balanceAfterWithdraw is a negative and proceed with withdrawal
 
-        this.loading = false;
-        console.log("Withdraw request successful!!!");
-        console.log(res.data);
-      } catch (err) {
-        console.log(err);
+            // check for maximum amount user can withdraw
+            this.maximumWithdrawable =
+              this.walletBalanceFromState - this.transactionCost;
 
-        console.log("error occured while trying to deposit...");
+            this.balanceAfterWithdraw = parseInt(this.balanceAfterWithdraw);
+            if (this.balanceAfterWithdraw < 0) {
+              // decline  withdrawal request
+              this.loading = false;
+              this.withdrawErrorToast();
+            } else {
+              // allow withdrawl request
+              this.phoneNumber = this.$store.state.loggedinUserPhone;
+              let res = await this.$axios.post(
+                `http://161.35.6.91/mswali/mswali_app/backend/web/index.php?r=api/log-payment-request&msisdn=${this.phoneNumber}&amount=${this.withdrawAmount}&type=WITHDRAWAL`,
+              );
+              console.log("Withdraw successful");
+              console.log(res.data);
+              if (res.data == "Successful") {
+                await this.persistwalletBalance(this.balanceAfterWithdraw);
+                await this.withdrawSuccessfulToast();
+                await this.$router.push("/wallet");
+              } else {
+                await this.withdrawErrorToast();
+              }
+            }
+          } catch (err) {
+            this.loading = false;
+            console.log(err);
+            this.withdrawErrorToast();
+
+            console.log("error occured while trying to deposit...");
+          }
+        } else {
+          this.amountErrorToast();
+        }
+      } else {
+        // show required filled toast
+        this.inputErrorToast();
       }
+    },
+    withdrawSuccessfulToast(toaster) {
+      this.$bvToast.toast(`Withdraw transaction successful`, {
+        title: `Withdrawal successful`,
+        variant: "success",
+        toaster: toaster,
+        solid: true,
+      });
+    },
+    amountErrorToast(toaster) {
+      this.$bvToast.toast(`You cannot withdraw amount less than KSH 10`, {
+        title: `Minimum withdraw limit`,
+        variant: "danger",
+        toaster: toaster,
+        solid: true,
+      });
+    },
+    withdrawErrorToast(toaster) {
+      this.$bvToast.toast(
+        `You account does not have enough money to complete the transaction. Your withdraw limit is ${this.maximumWithdrawable}`,
+        {
+          title: `Insufficient balance`,
+          variant: "danger",
+          toaster: toaster,
+          solid: true,
+        },
+      );
+    },
+    inputErrorToast(toaster) {
+      this.$bvToast.toast(
+        `Withdraw amount is a required field. Make sure you fill it before proceeding`,
+        {
+          title: `Amount required`,
+          variant: "danger",
+          toaster: toaster,
+          solid: true,
+        },
+      );
     },
   },
 };
