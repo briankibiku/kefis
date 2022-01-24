@@ -66,58 +66,76 @@
 
     <!--small screen view-->
     <div class="d-block d-sm-none d-none d-sm-block d-md-none">
-      <div
-        class="d-flex justify-content-start"
-        style="margin-top: 4vh; margin-bottom: 4vw"
-      >
-        <div class="d-flex justify-content-start align-items-center">
-          <div>
-            <font-awesome-icon
-              :icon="['fas', 'check']"
-              style="height: 25px; width: 25px; margin-right: 10px"
-            />
-          </div>
-          <div>
-            <div class="heading333 justify-content-center">27</div>
-            <div
-              class="heading444"
-              style="
-                border-radius: 5px;
-                background-color: #f0f0f0;
-              "
-            >
-              Quiz Passed
-            </div>
-            <div class="subheading555">Out of 30 questions</div>
-          </div>
-        </div>
+      <div class="scrollable">
         <div
-          class="d-flex justify-content-start align-items-center"
-          style="margin-left: 20px"
+          class="d-flex justify-content-start"
+          style=" margin-bottom: 4vw"
         >
-          <div>
-            <font-awesome-icon
-              :icon="['fas', 'clock']"
-              style="height: 25px; width: 25px; margin-right: 10px"
-            />
+          <div
+            class="d-flex justify-content-start align-items-center"
+            style="
+              background-color: #1ceded;
+              opacity: 76%;
+              padding: 10px;
+              border-radius: 8px;
+            "
+          >
+            <div>
+              <font-awesome-icon
+                :icon="['fas', 'check']"
+                style="height: 25px; width: 25px; margin-right: 10px"
+              />
+            </div>
+            <div>
+              <div class="heading333 justify-content-center">27</div>
+              <div
+                class="heading444"
+                style="
+                  border-radius: 5px;
+                  padding: 2px;
+                  background-color: #f0f0f0;
+                "
+              >
+                Quiz Passed
+              </div>
+              <div class="subheading555">Out of 30 questions</div>
+            </div>
           </div>
-          <div>
-            <div
-              class="heading333"
-              style="padding-bottom: 0px; padding-top: 0px"
-            >
-              12min
+          <div
+            class="d-flex justify-content-start align-items-center"
+            style="
+              background-color: #ffc107;
+              opacity: 76%;
+              padding: 10px;
+              border-radius: 8px;
+              margin-left: 20px;
+            "
+          >
+            <div>
+              <font-awesome-icon
+                :icon="['fas', 'clock']"
+                style="height: 25px; width: 25px; margin-right: 10px"
+              />
             </div>
-            <div
-              class="heading444"
-              style="
-                border-radius: 5px;
-                background-color: #f0f0f0;
-              "
-            >
-              Fastest Time
+            <div>
+              <div
+                class="heading333"
+                style="padding-bottom: 0px; padding-top: 0px"
+              >
+                12min
+              </div>
+              <div
+                class="heading444"
+                style="
+                  border-radius: 5px;
+                  padding: 2px;
+                  background-color: #f0f0f0;
+                "
+              >
+                Fastest Time
+              </div>
+              <div class="subheading555">Out of 30 questions</div>
             </div>
-            <div class="subheading555">Out of 30 questions</div>
           </div>
         </div>
       </div>
@@ -164,6 +182,6 @@
   font-size: 10px;
   font-weight: 500;
   font-family: "Nunito Sans", sans-serif;
-  color: #b0b0b0;
+  color: #4b4949;
 }
 </style>

@@ -3,6 +3,7 @@
     <!--Big screen device code begins here-->
     <div
       class="d-none d-md-block d-lg-none d-none d-lg-block d-xl-none d-none d-xl-block"
+      style="padding: 40px"
     >
       <div class="row" style="padding-left: 50px">
         <!--Big screen sidebar navigation starts here-->
@@ -26,19 +27,21 @@
         <div id="col2">
           <!-- salutations, wallet card, statistics cards go here -->
           <div class="d-flex flex-row">
-            <div class="col-3 support-container"></div>
             <div
-              class="col-9 padding-top-20 padding-left-60 d-flex justify-content-around"
+              class="col-12 padding-top-20 padding-left-60 d-flex justify-content-around"
             >
-              <div class="row" style="flex-direction: column">
-                <div class="row d-flex justify-content-start">
+              <div>
+                <div class="row">
                   <div>
-                    <div class="heading3 padding-right-20">Need help?</div>
-                    <div class="subheading3">
+                    <div class="support-container"></div>
+                    <div class="heading3 d-flex justify-content-center">
+                      Need help?
+                    </div>
+                    <div class="subheading3 d-flex justify-content-center">
                       Give us a call at +254 795 583 651 or reach out to us via
                       our socials
                     </div>
-                    <div class="row">
+                    <div class="row d-flex justify-content-center">
                       <div>
                         <a href="https://wa.me/254795583651" target="blank">
                           <img
@@ -50,7 +53,10 @@
                         </a>
                       </div>
                       <div class="padding-horizontal-20">
-                        <a href="https://www.instagram.com/mswali_ke/" target="blank">
+                        <a
+                          href="https://www.instagram.com/mswali_ke/"
+                          target="blank"
+                        >
                           <img
                             src="~/assets/instagram.png"
                             height="40"
@@ -80,9 +86,69 @@
         <!--Search bar / Start quiz button / Profile  Ends here-->
       </div>
     </div>
+
     <div class="d-block d-sm-none d-none d-sm-block d-md-none">
       <div class="painted-background" style="padding: 20px">
-        Small screen view
+        <div>
+          <a href="/home" class="d-flex justify-content-start">
+            <font-awesome-icon
+              :icon="['fas', 'chevron-left']"
+              style="color: #160d3d; margin-left: 20px; margin-right: 40px"
+            />
+          </a>
+
+          <div class="centered-container" style="width: 320px">
+            <div class="col d-flex justify-content-around">
+              <div class="row" style="flex-direction: column">
+                <div class="support-container"></div>
+                <div class="heading3 d-flex justify-content-center">
+                  Need help?
+                </div>
+                <div class="subheading3 d-flex justify-content-center">
+                  Give us a call at +254 795 583 651 or reach out to us via our
+                  socials
+                </div>
+
+                <div class="row d-flex justify-content-center">
+                  <div>
+                    <a href="https://wa.me/254795583651" target="blank">
+                      <img
+                        src="~/assets/whatsapp.png"
+                        height="40"
+                        width="40"
+                        alt=""
+                      />
+                    </a>
+                  </div>
+                  <div class="padding-horizontal-20">
+                    <a
+                      href="https://www.instagram.com/mswali_ke/"
+                      target="blank"
+                    >
+                      <img
+                        src="~/assets/instagram.png"
+                        height="40"
+                        width="40"
+                        alt=""
+                      />
+                    </a>
+                  </div>
+                  <div>
+                    <a href="https://twitter.com/mSwali_KE" target="blank">
+                      <img
+                        src="~/assets/twitter.png"
+                        height="40"
+                        width="40"
+                        alt=""
+                      />
+                    </a>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <br />
+        </div>
       </div>
     </div>
   </div>

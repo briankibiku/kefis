@@ -3,6 +3,7 @@
     <!--Big screen device code begins here-->
     <div
       class="d-none d-md-block d-lg-none d-none d-lg-block d-xl-none d-none d-xl-block"
+      style="padding: 40px"
     >
       <div class="row" style="padding-left: 50px">
         <!--Big screen sidebar navigation starts here-->
@@ -27,63 +28,7 @@
           <!-- salutations, wallet card, statistics cards go here -->
           <div class="d-flex flex-row" style="padding-top: 0em">
             <div class="col padding-left-60 d-flex justify-content-around">
-              <div class="row" style="flex-direction: column">
-                <div class="heading3 padding-right-20">FAQS</div>
-                <div class="subheading3">Frequently asked questions</div>
-                <div class="accordion" role="tablist">
-                  <b-card no-body class="mb-1">
-                    <b-card-header header-tag="header" class="p-1" role="tab">
-                      <b-button block v-b-toggle.accordion-1 variant="info"
-                        >mSwali top up</b-button
-                      >
-                    </b-card-header>
-                    <b-collapse
-                      id="accordion-1"
-                      accordion="my-accordion"
-                      role="tabpanel"
-                    >
-                      <b-card-body>
-                        <b-card-text>{{ text }}</b-card-text>
-                      </b-card-body>
-                    </b-collapse>
-                  </b-card>
-
-                  <b-card no-body class="mb-1">
-                    <b-card-header header-tag="header" class="p-1" role="tab">
-                      <b-button block v-b-toggle.accordion-2 variant="info"
-                        >mSwali withdraw request</b-button
-                      >
-                    </b-card-header>
-                    <b-collapse
-                      id="accordion-2"
-                      accordion="my-accordion"
-                      role="tabpanel"
-                    >
-                      <b-card-body>
-                        <b-card-text>{{ text }}</b-card-text>
-                      </b-card-body>
-                    </b-collapse>
-                  </b-card>
-
-                  <b-card no-body class="mb-1">
-                    <b-card-header header-tag="header" class="p-1" role="tab">
-                      <b-button block v-b-toggle.accordion-3 variant="info"
-                        >Accordion 3</b-button
-                      >
-                    </b-card-header>
-                    <b-collapse
-                      id="accordion-3"
-                      accordion="my-accordion"
-                      role="tabpanel"
-                    >
-                      <b-card-body>
-                        <b-card-text>{{ text }}</b-card-text>
-                      </b-card-body>
-                    </b-collapse>
-                  </b-card>
-                </div>
-                <br />
-              </div>
+              <Faq />
             </div>
           </div>
         </div>
@@ -92,21 +37,78 @@
     </div>
     <div class="d-block d-sm-none d-none d-sm-block d-md-none">
       <div class="painted-background" style="padding: 20px">
-        Small screen view
+        <Faq />
       </div>
     </div>
   </div>
 </template>
 
 <script>
+import Faq from "../../components/Faq.vue";
 export default {
   data() {
     return {
       text: `
           You have deposited Kshs 100.00
         `,
+      mswaliFaqs: [
+        {
+          id: "accordion-1",
+          question: "What is mSwali?",
+          answer:
+            "mSwali is a QUIZ league where winners get CASH prizes by simply choosing the correct answers from general knowledge multiple choice questions.",
+        },
+        {
+          id: "accordion-2",
+          question: "How do I register on mSwali?",
+          answer: "Simply Dial *397#",
+        },
+        {
+          id: "accordion-3",
+          question: "How do I win the mSwali Quiz session jackpot?",
+          answer:
+            "To win the Quiz session prize, answer ALL the Quiz questions CORRECTLY within 15 seconds EACH.",
+        },
+        {
+          id: "accordion-4",
+          question:
+            "How do I win the mSwali League to be the King/Queen of Quiz?",
+          answer:
+            "Simply play as many mSwali sessions as possible and accumulate as many points, from correctly answered questions, which will allow you to participate in the knockout competition, the winner of which will be the King/Queen of Quiz.",
+        },
+        {
+          id: "accordion-5",
+          question: "When is the mSwali Quiz played?",
+          answer:
+            "Play mSwali Quiz any time from 10am to 10pm every Monday to Saturday.",
+        },
+        {
+          id: "accordion-6",
+          question: "How will I know that I have won the mSwali Quiz?",
+          answer:
+            "You WIN when you answer ALL the Quiz questions CORRECTLY within 15 seconds EACH",
+        },
+        {
+          id: "accordion-7",
+          question: "How will I receive my money when I win?",
+          answer:
+            "Your prize money is sent to your mSwali wallet automatically at the end of the winning Quiz session. You can then withdraw from your mSwali wallet to your MPESA. NB: A tax rate of 15% applies to each win",
+        },
+        {
+          id: "accordion-8",
+          question: "How much will it cost to play an mSwali Quiz?",
+          answer:
+            "Each mSwali Quiz costs 50/=, To play four quizzes for the day costs Kshs. 100/=, To play eight quizzes for the day costs Kshs. 200/= (expires at midnight on the same day).",
+        },
+        {
+          id: "accordion-9",
+          question: "How many times can I play during an mSwali Quiz session?",
+          answer: "You can only play one mSwali Quiz session once.",
+        },
+      ],
     };
   },
+  components: { Faq },
 };
 </script>
 

@@ -3,6 +3,7 @@
     <!--Big screen device code begins here-->
     <div
       class="d-none d-md-block d-lg-none d-none d-lg-block d-xl-none d-none d-xl-block"
+      style="padding: 40px"
     >
       <div class="row" style="padding-left: 50px">
         <!--Big screen sidebar navigation starts here-->
@@ -25,13 +26,11 @@
 
         <div id="col2">
           <!-- salutations, wallet card, statistics cards go here -->
-          <div class="d-flex flex-row" style="padding-top: 2em">
-            <div class="col-3 winner-container"></div>
-            <div
-              class="col-9 padding-top-20 padding-left-60 d-flex justify-content-around"
-            >
+          <div class="d-flex flex-row">
+            <div class="col-3 winner-container" style="margin-top: 3em"></div>
+            <div class="col-9 padding-left-60 d-flex justify-content-around">
               <div class="row" style="flex-direction: column">
-                <div class="row d-flex justify-content-start">
+                <div class="row">
                   <div>
                     <div class="heading3 padding-right-20">
                       Good morning {{ this.$store.state.loggedinUserName }}!
@@ -43,50 +42,48 @@
                 </div>
                 <br />
 
-                <template>
-                  <div
-                    class="card padding-10"
-                    style="margin-bottom: 20px; padding-left: 40px"
-                  >
-                    <div class="row d-flex justify-content-between">
-                      <div class="heading4">Wallet Balance</div>
-                      <div>
-                        <b-button
-                          style="background-color: transparent; border: none"
-                          @click="toggleShowBalance()"
-                        >
-                          <font-awesome-icon
-                            :icon="['fas', 'eye']"
-                            style="color: #91919f"
-                          />
-                        </b-button>
-                      </div>
-                    </div>
-                    <div class="heading2" v-if="showBalance">
-                      KSH {{ this.walletBalanceFromState }}
-                    </div>
-                    <div v-if="!showBalance">
-                      <div
-                        class="heading4"
-                        style="
-                          font-size: 24px;
-                          font-weight: 800;
-                          font-family: 'Nunito Sans', sans-serif;
-                          color: #160d3d;
-                        "
+                <div
+                  class="card padding-10"
+                  style="margin-bottom: 20px; padding-left: 40px"
+                >
+                  <div class="row d-flex justify-content-between">
+                    <div class="heading4">Wallet Balance</div>
+                    <div>
+                      <b-button
+                        style="background-color: transparent; border: none"
+                        @click="toggleShowBalance()"
                       >
-                        *** ***
-                      </div>
+                        <font-awesome-icon
+                          :icon="['fas', 'eye']"
+                          style="color: #91919f"
+                        />
+                      </b-button>
                     </div>
                   </div>
-                </template>
+                  <div class="heading2" v-if="showBalance">
+                    KES {{ this.walletBalanceFromState }}
+                  </div>
+                  <div v-if="!showBalance">
+                    <div
+                      class="heading4"
+                      style="
+                        font-size: 24px;
+                        font-weight: 800;
+                        font-family: 'Nunito Sans', sans-serif;
+                        color: #160d3d;
+                      "
+                    >
+                      ******
+                    </div>
+                  </div>
+                </div>
 
                 <!--Statistics area, quiz passed, fastest times go here-->
                 <div class="d-flex justify-content-around">
                   <b-button
                     class="rounded-button"
                     @click="navigateToDeposit()"
-                    style="background-color: #ededed; color: #160d3d"
+                    style="background-color: #1ceded; color: #160d3d"
                   >
                     <div class="subheading4">Deposit</div>
                   </b-button>
@@ -94,7 +91,7 @@
                   <b-button
                     class="rounded-button"
                     @click="navigateToWithdraw()"
-                    style="background-color: #ededed; color: #160d3d"
+                    style="background-color: #1ceded; color: #160d3d"
                   >
                     <div class="subheading4">Withdraw</div>
                   </b-button>
@@ -106,6 +103,7 @@
         <!--Search bar / Start quiz button / Profile  Ends here-->
       </div>
     </div>
+    <!--Small screen begins here-->
     <div class="d-block d-sm-none d-none d-sm-block d-md-none">
       <div class="painted-background" style="padding: 20px">
         <div style="text-align: left">
@@ -144,13 +142,15 @@
           >
             <font-awesome-icon :icon="['fas', 'bell']" style="color: #fff" />
           </div>
+        </div>
+        <div>
           <div class="text1 text-center">
             Here is how your account is looking today
           </div>
           <hr />
 
           <div
-            class="card d-flex justify-content-center"
+            class="card"
             style="
               height: 30vh;
               width: 80vw;
@@ -174,7 +174,7 @@
                       color: #160d3d;
                     "
                   >
-                    KSH {{ this.walletBalanceFromState }}
+                    KES {{ this.walletBalanceFromState }}
                   </div>
                 </div>
                 <div v-if="!showBalance">
@@ -187,7 +187,7 @@
                       color: #160d3d;
                     "
                   >
-                    *** ***
+                    ******
                   </div>
                 </div>
               </div>
@@ -202,6 +202,7 @@
                   />
                 </b-button>
               </div>
+              <div>Credits: {{ this.creditsBalanceFromState }}</div>
             </div>
             <!--Statistics area, quiz passed, fastest times go here-->
             <div class="d-flex justify-content-around">
@@ -240,17 +241,10 @@ import { mapState, mapActions } from "vuex";
 export default {
   data() {
     return {
-      label1: "KSH",
-      label2: "1,200",
-      label3: "Wallet Balance",
-      label4: "Deposit",
-      label5: "Withdraw",
-      walletBalanceFromState: "",
+      walletBalanceFromState: this.$store.state.walletBalance,
+      creditsBalanceFromState: this.$store.state.userCredits,
       mswaliUserId: "",
-      user: {
-        name: "Titus Mwaniki",
-      },
-      showBalance: false,
+      showBalance: true,
     };
   },
   mounted() {
@@ -272,7 +266,6 @@ export default {
       try {
         this.walletBalanceFromState = this.$store.state.walletBalance;
       } catch (e) {
-        console.log(e);
         this.fetchBalanceErrorToast();
       }
     },
@@ -363,8 +356,8 @@ export default {
 .winner-container {
   background-image: url("~/assets/win.png");
   background-repeat: no-repeat;
-  width: 200px;
-  height: 200px;
+  width: 300px;
+  height: 260px;
   background-color: #160d3d;
   background-size: contain;
   background-position: center;

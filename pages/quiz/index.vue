@@ -10,11 +10,39 @@
           Question {{ this.counter + 1 }} of
           {{ this.quiz.length }}
         </div>
+        <!-- base timer goes here  -->
         <div class="center">
-          <BaseTimer />
+          <div class="base-timer">
+            <svg
+              class="base-timer__svg"
+              viewBox="0 0 100 100"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <g class="base-timer__circle">
+                <circle
+                  class="base-timer__path-elapsed"
+                  cx="50"
+                  cy="50"
+                  r="45"
+                ></circle>
+                <path
+                  :stroke-dasharray="circleDasharray"
+                  class="base-timer__path-remaining"
+                  :class="remainingPathColor"
+                  d="
+            M 50, 50
+            m -45, 0
+            a 45,45 0 1,0 90,0
+            a 45,45 0 1,0 -90,0
+          "
+                ></path>
+              </g>
+            </svg>
+            <span class="base-timer__label">{{ formattedTimeLeft }}</span>
+          </div>
         </div>
 
-        <b-row style="margin-top: 120px">
+        <b-row style="margin-top: 180px">
           <b-col>
             <p
               v-if="$fetchState.pending"
@@ -78,10 +106,33 @@
 </template>
 
 <script>
+import { mapState, mapActions } from "vuex";
+
+const FULL_DASH_ARRAY = 283;
+const WARNING_THRESHOLD = 7;
+const ALERT_THRESHOLD = 5;
+
+const COLOR_CODES = {
+  info: {
+    color: "green",
+  },
+  warning: {
+    color: "orange",
+    threshold: WARNING_THRESHOLD,
+  },
+  alert: {
+    color: "red",
+    threshold: ALERT_THRESHOLD,
+  },
+};
+
+const TIME_LIMIT = 10;
+
 export default {
   data() {
     return {
       counter: 0,
+      mswaliUserId: this.$store.state.mswaliId,
       number: 1,
       quiz_score: 0,
       wrong: 0,
@@ -92,19 +143,80 @@ export default {
       boxTwo: "",
       correctScore: 0,
       showResults: false,
+      timePassed: 0,
+      timerInterval: null,
     };
   },
   async fetch() {
-    this.quiz = await this.$store.state.test_quiz.data;
-    this.quiz = await fetch(
-      "http://161.35.6.91/mswali/mswali_app/backend/web/index.php?r=api/fetch-all-questions",
-    ).then((res) => res.json());
-    this.quiz = this.quiz.data;
+    this.quiz = this.$store.state.triviaQuestions;
     // console.log(this.quiz);
   },
+  watch: {
+    timeLeft(newValue) {
+      if (newValue === 0) {
+        this.onTimesUp();
+        this.timePassed = 0;
+        this.startTimer();
+      }
+    },
+  },
+  mounted() {
+    if (!this.$store.state.isAuthenticated) {
+      this.navigateToLogin();
+    } else {
+      this.startTimer();
+    }
+  },
+  computed: {
+    ...mapState({
+      canWinStatus: "canWinStatus",
+    }),
+    circleDasharray() {
+      return `${(this.timeFraction * FULL_DASH_ARRAY).toFixed(0)} 283`;
+    },
+
+    formattedTimeLeft() {
+      const timeLeft = this.timeLeft;
+      const minutes = Math.floor(timeLeft / 60);
+      let seconds = timeLeft % 60;
+
+      if (seconds < 10) {
+        seconds = `0${seconds}`;
+      }
+
+      return `${minutes}:${seconds}`;
+    },
+
+    timeLeft() {
+      return TIME_LIMIT - this.timePassed;
+    },
+
+    timeFraction() {
+      const rawTimeFraction = this.timeLeft / TIME_LIMIT;
+      return rawTimeFraction - (1 / TIME_LIMIT) * (1 - rawTimeFraction);
+    },
+
+    remainingPathColor() {
+      const { alert, warning, info } = COLOR_CODES;
+
+      if (this.timeLeft <= alert.threshold) {
+        return alert.color;
+      } else if (this.timeLeft <= warning.threshold) {
+        return warning.color;
+      } else {
+        return info.color;
+      }
+    },
+  },
   methods: {
+    ...mapActions({
+      persistCanWinStatus: "persistCanWinStatus",
+    }),
+    navigateToLogin() {
+      return this.$router.push("/login");
+    },
     // Logic to loop through questions goes here
-    goToNextQuestion(correct) {
+    async goToNextQuestion(correct) {
       let nextQuestion = (this.counter += 1);
       if (correct) {
         this.correctScore = this.correctScore + 1;
@@ -114,7 +226,18 @@ export default {
         this.wrong = this.wrong + 1;
         this.$store.commit("updateQuizWrongs", this.wrong);
         console.log("Wrong answers" + this.$store.state.trivia_score.wrong);
+        this.persistCanWinStatus(false);
       }
+      // update individual question score
+      //let sessionID = this.$store.state.sessionDetails.session.id;
+      //let questionID = this.quiz[this.counter].question_id;
+      //let questionNO = this.counter + 1;
+
+      //let updateQuestionScoreResponse = await this.$axios.get(
+      //  `http://cms.mswali.co.ke/mswali/mswali_app/backend/web/index.php?r=solo-play/update-session-score&session_id=${sessionID}&question_id=${questionID}&user_id=${this.mswaliUserId}&user_response=timeout&user_text=A&question=${questionNO}&timeout=1&correct=1`,
+      //);
+      //console.log(updateQuestionScoreResponse);
+
       if (nextQuestion < this.quiz.length) {
         this.counter = nextQuestion;
       } else {
@@ -143,6 +266,13 @@ export default {
         .catch((err) => {
           // An error occurred
         });
+    },
+    // base timer methods go here
+    onTimesUp() {
+      clearInterval(this.timerInterval);
+    },
+    startTimer() {
+      this.timerInterval = setInterval(() => (this.timePassed += 1), 1000);
     },
   },
 };
@@ -215,5 +345,58 @@ export default {
   background-color: white;
   padding: auto;
   bottom: 0px;
+}
+.base-timer {
+  position: relative;
+  width: 100px;
+  height: 100px;
+}
+
+.base-timer__svg {
+  transform: scaleX(-1);
+}
+
+.base-timer__circle {
+  fill: none;
+  stroke: none;
+}
+
+.base-timer__path-elapsed {
+  stroke-width: 7px;
+  stroke: grey;
+}
+
+.base-timer__path-remaining {
+  stroke-width: 7px;
+  stroke-linecap: round;
+  transform: rotate(90deg);
+  transform-origin: center;
+  transition: 1s linear all;
+  fill-rule: nonzero;
+  stroke: currentColor;
+}
+
+.base-timer__path-remaining.green {
+  color: rgb(65, 184, 131);
+}
+
+.base-timer__path-remaining.orange {
+  color: orange;
+}
+
+.base-timer__path-remaining.red {
+  color: red;
+}
+
+.base-timer__label {
+  position: absolute;
+  width: 100px;
+  height: 100px;
+  top: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 18px;
+  color: #fff;
 }
 </style>

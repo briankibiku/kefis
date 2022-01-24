@@ -1,9 +1,9 @@
 <template>
-  <b-button class="outline-button">{{ title }}</b-button>
+  <b-button class="outline-button" @click="clickEvent">{{ title }}</b-button>
 </template>
 
 <script>
 export default {
-  props: { title: String },
+  props: { title: String, clickEvent: Promise },
 };
 </script>

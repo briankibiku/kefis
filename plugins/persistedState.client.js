@@ -10,6 +10,12 @@ export default ({ store }) => {
       "loggedinUserPhone",
       "mswaliId",
       "walletBalance",
+      "sessionDetails",
+      "triviaQuestions",
+      "signUpPhone",
+      "isExistingUser",
+      "userCredits",
+      "canWinStatus"
     ],
   })(store);
 };

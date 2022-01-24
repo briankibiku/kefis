@@ -1,6 +1,6 @@
 <template>
   <section class="purple-bg">
-    <div style="width: 300px" class="center-align-content">
+    <div style="width: 300px; padding-top: 30px" class="center-align-content">
       <div class="otp-header">
         <div>
           <img
@@ -28,9 +28,7 @@
       <div class="t-section">
         <button
           type="submit"
-          @click.stop.prevent="
-            onSubmit(), makeToast('b-toaster-bottom-full', 'info')
-          "
+          @click.stop.prevent="onSubmit()"
           form="otp-form"
           class="outline-button-cyan ml-10 mr-10"
         >
@@ -62,13 +60,33 @@ export default {
 
   methods: {
     async onSubmit() {
+      if (this.correctAttempts == 9) {
+        let sessionID = this.$store.state.sessionDetails.session.prize;
+        let mswaliUserId = this.$store.state.mswaliId;
+        let awardPrize = this.$store.state.sessionDetails.session.id;
+        // update trackwinner
+        let trackUserResponse = await this.$axios.post(
+          `http://cms.mswali.co.ke/mswali/mswali_app/backend/web/index.php?r=solo-play/post-winner&user_id=${mswaliUserId}&session_id=${sessionID}`,
+        );
+        // award winner game play amount of the session
+        let awardUserResponse = await this.$axios.post(
+          `http://localhost/mswali/mswali_app/backend/web/index.php?r=api/give-prize&user_id=${mswaliUserId}&amount=${awardPrize}`,
+        );
+      }
+      this.$store.commit("updateQuizScore", "");
+      this.$store.commit("updateQuizWrongs", "");
+      // track user
+      // let trackUserResponse = await this.$axios.post(
+      //   `http://cms.mswali.co.ke/mswali/mswali_app/backend/web/index.php?r=solo-play/post-winner&user_id=${mswaliUserId}&session_id=${sessionID}`,
+      // );
+      this.makeToast(), await this.$store.dispatch("delayTwoSeconds");
       this.$router.push("/home");
     },
 
-    makeToast(toaster, variant = null) {
+    makeToast(toaster) {
       this.$bvToast.toast("Thanks and see you again.", {
         title: `Come again`,
-        variant: variant,
+        variant: 'success',
         toaster: toaster,
         solid: true,
       });

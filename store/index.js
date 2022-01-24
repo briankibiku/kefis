@@ -78,7 +78,7 @@ export const state = () => ({
       },
     ],
   },
-  trivia: [],
+  triviaQuestions: {},
   trialQuestion: [],
   profile: {},
   userAnswersPayload: null,
@@ -99,12 +99,15 @@ export const state = () => ({
   loggedinUserPhone: "",
   mswaliId: "",
   walletBalance: "",
+  userCredits: "",
   isExistingUser: false,
   // question & answer variables
   persistedAnswers: null,
   userAnswersPayloadSet: false,
   persistedState: null,
   alert: false,
+  canWinStatus: false,
+  sessionDetails: {},
   // variable to carry user authentication status
   isAuthenticated: false,
 });
@@ -137,10 +140,15 @@ export const mutations = {
   updateScore(state, payload) {
     state.test_results.correct = payload;
   },
+  updatetriviaQuestions(state, payload) {
+    state.triviaQuestions = payload;
+  },
   updateisExistingUser(state, payload) {
     state.isExistingUser = payload;
   },
-
+  updateSessionDetails(state, payload) {
+    state.sessionDetails = payload;
+  },
   updateSignUpPhone(state, payload) {
     state.signUpPhone = payload;
   },
@@ -198,9 +206,14 @@ export const mutations = {
   addlastName(state, payload) {
     state.lastName = payload;
   },
-
+  updateUserCredits(state, payload) {
+    state.userCredits = payload;
+  },
   updateQuizTimeouts(state, payload) {
     state.trivia_score.timeouts = payload;
+  },
+  updateCanWinStatus(state, payload) {
+    state.canWinStatus = payload;
   },
   SET_STATE(state, payload) {
     state.persistedState = payload;
@@ -217,7 +230,26 @@ export const actions = {
     );
     return res;
   },
-
+  async delay() {
+    const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
+    await delay(15000);
+  },
+  async delayMinute() {
+    const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
+    await delay(60000);
+  },
+  async delayThirtySeconds() {
+    const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
+    await delay(30000);
+  },
+  async delayFiveSeconds() {
+    const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
+    await delay(5000);
+  },
+  async delayTwoSeconds() {
+    const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
+    await delay(2000);
+  },
   startPersistance({ commit }, payload) {
     commit("updateUserAnswers", payload);
     commit("updateUserAnswersPersistance", true);
@@ -239,5 +271,20 @@ export const actions = {
   },
   peristIsExistingUSer({ commit }, payload) {
     commit("updateisExistingUser", payload);
+  },
+  persistSessionDetails({ commit }, payload) {
+    commit("updateSessionDetails", payload);
+  },
+  persistTriviaQuestions({ commit }, payload) {
+    commit("updatetriviaQuestions", payload);
+  },
+  persistupdateSignUpPhone({ commit }, payload) {
+    commit("updateSignUpPhone", payload);
+  },
+  persistUserCredits({ commit }, payload) {
+    commit("updateUserCredits", payload);
+  },
+  persistCanWinStatus({ commit }, payload) {
+    commit("updateCanWinStatus", payload);
   },
 };

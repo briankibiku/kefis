@@ -3,11 +3,9 @@
     <div class="centered-container">
       <div class="row">
         <div class="col">
-          <div
-            class="winner-container"
-          ></div>
+          <div class="winner-container"></div>
           <br />
-          <LogoCyan />
+          <LogoCyan style="height: 35px; width: 150px" />
           <br />
           <br />
           <p>@copyright mSwali 2021</p>
@@ -45,11 +43,15 @@ export default {
     this.$nextTick(() => {
       this.$nuxt.$loading.start();
       // navigate to phone  input
-      setTimeout(() => window.location.href = '/login', 2000);
+
+      if (this.$store.state.isAuthenticated) {
+        setTimeout(() => (window.location.href = "/home"), 2000);
+      } else {
+        setTimeout(() => (window.location.href = "/login"), 2000);
+      }
     });
   },
-  methods: {
-  },
+  methods: {},
   components: { Purple },
 };
 </script>

@@ -1,5 +1,5 @@
 <template>
-  <div class="row">
+  <div>
     <div class="overlay-home" v-if="successfulLogin">
       <div style="margin: 20px">
         <div class="custom-modal">
@@ -39,10 +39,11 @@
     <div class="overlay-home" v-if="loading">
       <div style="margin: 20px">
         <b-spinner variant="primary" label="Spinning"></b-spinner>
+        <div>Loading...</div>
       </div>
     </div>
-    <div v-if="!successfulLogin" class="row">
-      <div id="col1" class="bg-image d-none d-sm-block">
+    <div v-if="!successfulLogin" id="row">
+      <div id="col1" class="bg-image d-none d-lg-block">
         <MswaliExplained />
       </div>
       <div id="col2">
@@ -107,17 +108,11 @@
                   Resend OTP
                 </button>
               </div>
-
-              <button
-                class="rounded-button-cyan"
+              <RoundedCyanArrowButton
                 @click="verifyOTP()"
+                buttonText="Verify"
                 style="width: 240px"
-              >
-                <div class="subheading4">
-                  Verify
-                  <font-awesome-icon :icon="['fas', 'arrow-right']" />
-                </div>
-              </button>
+              /> 
             </div>
           </div>
         </div>
@@ -129,6 +124,7 @@
 const TIME_LIMIT = 60;
 import axios from "axios";
 import { mapState, mapActions } from "vuex";
+import RoundedCyanArrowButton from "../../components/Buttons/RoundedCyanArrowButton.vue";
 export default {
   head: {
     title: "Verify phone",
@@ -155,7 +151,6 @@ export default {
       }
     },
   },
-
   mounted() {
     this.startTimer();
   },
@@ -165,20 +160,19 @@ export default {
       loggedinUserName: "loggedinUserName",
       loggedinUserPhone: "loggedinUserPhone",
       mswaliId: "mswaliId",
+      userCredits: "userCredits",
       walletBalance: "walletBalance",
+      sessionDetails: "sessionDetails",
     }),
     remainingTime() {
       const timeLeft = this.timeLeft;
       const minutes = Math.floor(timeLeft / 60);
       let seconds = timeLeft % 60;
-
       if (seconds < 10) {
         seconds = `0${seconds}`;
       }
-
       return `${minutes}:${seconds}`;
     },
-
     timeLeft() {
       return TIME_LIMIT - this.timePassed;
     },
@@ -190,6 +184,8 @@ export default {
       peristUserName: "peristUserName",
       persistMswaliId: "persistMswaliId",
       persistwalletBalance: "persistwalletBalance",
+      persistUserCredits: "persistUserCredits",
+      persistSessionDetails: "persistSessionDetails",
     }),
     startTimer() {
       this.timerInterval = setInterval(() => (this.timePassed += 1), 1000);
@@ -217,8 +213,8 @@ export default {
         },
       );
     },
-    goToHomePage() {
-      return this.$router.push("/home");
+    async goToHomePage() {
+      await this.$router.push("/home");
     },
     // resend OTP happens here
     async resendOTP() {
@@ -227,7 +223,6 @@ export default {
           Accept: "application/json",
         },
       };
-
       try {
         this.resendPhoneNumber = this.$store.state.signUpPhone;
         const res = await axios.get(
@@ -236,6 +231,7 @@ export default {
         );
         await this.$store.commit("updateSignUpOTP", res);
         this.showResendBtn = false;
+        window.location.reload();
       } catch (err) {
         this.resendOTPErrorToast();
       }
@@ -248,7 +244,14 @@ export default {
         solid: true,
       });
     },
-
+    emptyOTPFieldError(toaster) {
+      this.$bvToast.toast("Enter OTP field, it is required", {
+        title: `OTP field required`,
+        variant: "danger",
+        toaster: toaster,
+        solid: true,
+      });
+    },
     async getuserName() {
       this.phoneNumber = this.$store.state.signUpPhone;
       let userProfile = await this.$axios.get(
@@ -261,7 +264,6 @@ export default {
       // update mSwali user id to state
       let mswaliIdfromApi = userProfile.data.data.id;
       await this.persistMswaliId(mswaliIdfromApi);
-
       await this.fetchWalletBalance(mswaliIdfromApi);
       // split complete user name and use their last name
       let splitName = userName.indexOf(" ");
@@ -270,7 +272,6 @@ export default {
         .trim();
       // persist username to state
       await this.peristUserName(lastNameFromApi);
-
       this.lastName = this.$store.state.loggedinUserName;
       this.phoneNumber = this.$store.state.loggedinUserPhone;
     },
@@ -279,7 +280,9 @@ export default {
         `http://cms.mswali.co.ke/mswali/mswali_app/backend/web/index.php?r=api/get-balance&user_id=${mswaliUserId}`,
       );
       let walletBalanceFromAPI = await Math.trunc(response.data.data);
+      let walletCreditsFromAPI = await response.data.credit_balance;
       await this.persistwalletBalance(walletBalanceFromAPI);
+      await this.persistUserCredits(walletCreditsFromAPI);
       this.walletBalanceFromAPI = this.$store.state.walletBalance;
     },
     // verify OTP happens here
@@ -289,50 +292,53 @@ export default {
           Accept: "application/json",
         },
       };
-
-      try {
-        this.loading = true;
-        this.signUpPhone = this.$store.state.signUpPhone;
-        // verify OTP
-        const res = await axios.get(
-          `http://cms.mswali.co.ke/mswali/mswali_app/backend/web/index.php?r=api/verify-otp&msisdn=${this.signUpPhone}&code=${this.signUpOTP}`,
-
-          config,
-        );
-
-        // assign user name and phone from state
-        this.phoneNumber = await this.$store.state.signUpPhone;
-        this.userName = await this.$store.state.signUpName;
-        if (res.data.is_valid) {
-          // sign up new user using their phone and username
-          const result = await axios.get(
-            `http://cms.mswali.co.ke/mswali/mswali_app/backend/web/index.php?r=api/register-user&username=${this.userName}&account_number=${this.phoneNumber}`,
+      if (!!this.signUpOTP) {
+        try {
+          this.loading = true;
+          this.signUpPhone = this.$store.state.signUpPhone;
+          // verify OTP
+          const res = await axios.get(
+            `http://cms.mswali.co.ke/mswali/mswali_app/backend/web/index.php?r=api/verify-otp&msisdn=${this.signUpPhone}&code=${this.signUpOTP}`,
             config,
           );
-          this.loading = false;
-          // update user authentication status
-          await this.authenticateUser(true);
-          if (this.$store.state.isExistingUser) {
-            // if it is not a new user redirect to home
-            await this.getuserName();
-            await this.goToHomePage();
+          // assign user name and phone from state
+          this.phoneNumber = await this.$store.state.signUpPhone;
+          this.userName = await this.$store.state.signUpName;
+          if (res.data.is_valid) {
+            // sign up new user using their phone and username
+            const result = await axios.get(
+              `http://cms.mswali.co.ke/mswali/mswali_app/backend/web/index.php?r=api/register-user&username=${this.userName}&account_number=${this.phoneNumber}`,
+              config,
+            );
+            // update user authentication status
+            await this.authenticateUser(true);
+            if (this.$store.state.isExistingUser) {
+              // if it is not a new user redirect to home
+              await this.getuserName();
+              this.loading = false;
+              await this.goToHomePage();
+            } else {
+              // if it is first time user redirect to modal and continue from home
+              await this.getuserName();
+              this.loading = false;
+              this.successfulLogin = true;
+            }
           } else {
-            // if it is first time user redirect to modal and continue from home
-            await this.getuserName();
-            this.successfulLogin = true;
+            await this.app.$toast;
           }
-        } else {
-          await this.app.$toast;
+        } catch (err) {
+          this.loading = false;
+          this.verifyOTPError();
         }
-      } catch (err) {
-        this.loading = false;
-        this.verifyOTPError();
+      } else {
+        this.emptyOTPFieldError();
       }
     },
     async authenticateUser() {
       await this.peristAuthentication(true);
     },
   },
+  components: { RoundedCyanArrowButton },
 };
 </script>
 <style scoped>
