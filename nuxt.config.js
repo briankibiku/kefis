@@ -18,7 +18,7 @@ export default {
         href: "https://fonts.googleapis.com/css2?family=Nunito+Sans:400,500,600,700,800",
       },
     ],
-  },
+  }, 
   // Disable server side rendering
   // Global CSS: https://go.nuxtjs.dev/config-css
   css: ["~/assets/main.css"],
