@@ -1,7 +1,27 @@
 <template>
   <div style="text-align: left">
-    <b-button
+    <button
       class="rounded-button-transparent padding-top-20"
+      style="text-align: left; background-color: transparent"
+      @click="navigateToHome()"
+    >
+      <div class="menu">
+        <font-awesome-icon :icon="['fas', 'home']" />
+        Home
+      </div>
+    </button>
+    <button
+      class="rounded-button-transparent"
+      style="text-align: left; background-color: transparent"
+      @click="navigateToBuySubscription()"
+    >
+      <div class="menu">
+        <font-awesome-icon :icon="['fas', 'dollar-sign']" />
+        Buy Subscription
+      </div>
+    </button>
+    <button
+      class="rounded-button-transparent"
       style="text-align: left; background-color: transparent"
       @click="navigateToAnswers()"
     >
@@ -9,8 +29,8 @@
         <font-awesome-icon :icon="['fas', 'question-circle']" />
         My Answers
       </div>
-    </b-button>
-    <b-button
+    </button>
+    <button
       class="rounded-button-transparent"
       style="text-align: left; background-color: transparent"
       @click="navigateToWallet()"
@@ -19,8 +39,8 @@
         <font-awesome-icon :icon="['fas', 'wallet']" />
         Wallet
       </div>
-    </b-button>
-    <b-button
+    </button>
+    <button
       class="rounded-button-transparent"
       style="text-align: left; background-color: transparent"
       @click="navigateToRankings()"
@@ -29,8 +49,8 @@
         <font-awesome-icon :icon="['fas', 'trophy']" />
         Rankings
       </div>
-    </b-button>
-    <b-button
+    </button>
+    <button
       class="rounded-button-transparent"
       style="text-align: left; background-color: transparent"
       @click="navigateToSettings()"
@@ -39,8 +59,8 @@
         <font-awesome-icon :icon="['fas', 'cog']" />
         Settings
       </div>
-    </b-button>
-    <b-button
+    </button>
+    <button
       class="rounded-button-transparent"
       style="text-align: left; background-color: transparent"
       @click="navigateToNotifications()"
@@ -49,8 +69,8 @@
         <font-awesome-icon :icon="['fas', 'bell']" />
         Notifications
       </div>
-    </b-button>
-    <b-button
+    </button>
+    <button
       class="rounded-button-transparent"
       style="text-align: left; background-color: transparent"
       @click="navigateToSupport()"
@@ -59,8 +79,8 @@
         <font-awesome-icon :icon="['fas', 'headset']" />
         Support
       </div>
-    </b-button>
-    <b-button
+    </button>
+    <button
       class="rounded-button-transparent"
       style="text-align: left; background-color: transparent"
       @click="navigateToFAQ()"
@@ -69,8 +89,8 @@
         <font-awesome-icon :icon="['fas', 'question']" />
         FAQs
       </div>
-    </b-button>
-    <b-button
+    </button>
+    <button
       class="rounded-button-transparent"
       @click="sharemSwali()"
       style="text-align: left; background-color: transparent"
@@ -78,9 +98,9 @@
       <div class="menu">
         <font-awesome-icon :icon="['fas', 'share']" /> Share
       </div>
-    </b-button>
-    <b-button
-      @click="revokeAuthentication()"
+    </button>
+    <button
+      @click="logOut()"
       class="rounded-button-transparent"
       style="
         background-position: bottom;
@@ -96,12 +116,13 @@
 
           /* And if you want the div to be full-width: */
           right: 0;
+          padding-bottom: 20px;
         "
       >
         <font-awesome-icon :icon="['fa', 'sign-out-alt']" />
         Logout
       </div>
-    </b-button>
+    </button>
   </div>
 </template>
 
@@ -113,19 +134,28 @@ export default {
       isAuthenticated: "isAuthenticated",
       loggedinUserName: "loggedinUserName",
       loggedinUserPhone: "loggedinUserPhone",
+      sessionDetails: "sessionDetails",
     }),
   },
   methods: {
     ...mapActions({
-      peristAuthentication: "peristAuthentication",
-      peristUserPhone: "peristUserPhone",
       peristUserName: "peristUserName",
+      peristUserPhone: "peristUserPhone",
+      peristAuthentication: "peristAuthentication",
+      persistSessionDetails: "persistSessionDetails",
     }),
-    async revokeAuthentication() {
+    async logOut() {
       await this.peristAuthentication(false);
+      await this.persistSessionDetails("");
       await this.peristUserPhone("");
       await this.peristUserName("");
       return this.$router.push("/login");
+    },
+    navigateToHome() {
+      return this.$router.push("/home");
+    },
+    navigateToBuySubscription() {
+      return this.$router.push("/buy-subscription");
     },
     navigateToAnswers() {
       return this.$router.push("/my-answers");
@@ -149,8 +179,9 @@ export default {
       return this.$router.push("/faq");
     },
     sharemSwali() {
-      navigator.clipboard.writeText("apps.mwsali.co.ke");
-      this.copiedLinkToast();
+      return this.$router.push("/share");
+      // navigator.clipboard.writeText("apps.mwsali.co.ke");
+      // this.copiedLinkToast();
     },
     copiedLinkToast(toaster, variant = "success") {
       this.$bvToast.toast("Link has been copied to clipboard 📋.", {

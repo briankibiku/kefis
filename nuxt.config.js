@@ -21,7 +21,6 @@ export default {
   },
   // Disable server side rendering
   // ssr: false,
-
   // Global CSS: https://go.nuxtjs.dev/config-css
   css: ["~/assets/main.css"],
 
@@ -39,6 +38,7 @@ export default {
     // https://go.nuxtjs.dev/bootstrap
     "bootstrap-vue/nuxt",
     "@nuxtjs/axios",
+    '@nuxt/http',
     [
       "nuxt-fontawesome",
       {

@@ -1,7 +1,10 @@
 <template>
   <div>
-    <div class="overlay" v-if="loading">
-      <LoadingBar />
+    <div class="overlay-home" v-if="loading">
+      <div style="margin: 20px">
+        <b-spinner variant="primary" label="Spinning"></b-spinner>
+        <div>Loading...</div>
+      </div>
     </div>
     <!--Big screen device code begins here-->
     <div
@@ -41,16 +44,11 @@
                 />
               </div>
             </form>
-            <b-button
-              class="rounded-button-cyan"
-              @click="navigateToCategory()"
+            <RoundedCyanArrowButton
+              @click="navigateToQuiz()"
+              buttonText="Start Quiz"
               style="width: 150px"
-            >
-              <div class="subheading4">
-                Start Quiz
-                <font-awesome-icon :icon="['fas', 'arrow-right']" />
-              </div>
-            </b-button>
+            />
             <div class="d-flex align-items-center" style="flex-direction: row">
               <b-button class="text-button margin-horizontal-20" @click="">
                 <b-avatar variant="light"></b-avatar>
@@ -70,10 +68,13 @@
               <div class="row d-flex justify-content-start">
                 <div>
                   <div class="heading33 padding-right-20">
-                    Good morning {{ this.$store.state.loggedinUserName }}!
+                    {{ this.greetings }}
+                    {{ this.$store.state.loggedinUserName }}!
                   </div>
                   <div class="subheading22">
-                    {{ this.$store.state.loggedinUserPhone }}
+                    {{
+                      this.$store.state.loggedinUserPhone.replace(/^.{3}/g, "0")
+                    }}
                   </div>
                 </div>
                 <div
@@ -95,7 +96,7 @@
                     </div>
                   </div>
                   <div class="heading2" v-if="showBalance">
-                    KSH {{ this.walletBalanceFromAPI }}
+                    KES {{ this.walletBalanceFromAPI }}
                   </div>
                   <div v-if="!showBalance">
                     <div
@@ -107,8 +108,11 @@
                         color: #160d3d;
                       "
                     >
-                      *** ***
+                      ******
                     </div>
+                  </div>
+                  <div class="subheading4">
+                    Credits: {{ this.creditsBalanceFromState }}
                   </div>
                 </div>
               </div>
@@ -130,43 +134,54 @@
       <div class="painted-background" style="padding: 20px">
         <NavigationBar />
         <div class="row" style="vertical-align: top">
-          <div class="column left">
-            <b-avatar variant="light"></b-avatar>
-          </div>
+          <div class="d-flex justify-content-between">
+            <div class="column left">
+              <b-avatar variant="light"></b-avatar>
+            </div>
 
-          <div class="column middle" style="text-align: left">
-            <div class="heading3">
-              Good morning {{ this.$store.state.loggedinUserName }}!
+            <div class="column middle" style="text-align: left">
+              <div class="heading3">
+                {{ this.greetings }}{{ this.$store.state.loggedinUserName }}!
+              </div>
+              <div class="subheading2">
+                {{ this.$store.state.loggedinUserPhone.replace(/^.{3}/g, "0") }}
+              </div>
             </div>
-            <div class="subheading2">
-              {{ this.$store.state.loggedinUserPhone }}
-            </div>
+            <a href="/notifications">
+              <div
+                class="column right"
+                style="
+                  background-color: #160d3d;
+                  width: 50px;
+                  height: 50px;
+                  justify-content: center;
+                  align-items: center;
+                  text-align: center;
+                  display: flex;
+                  border-radius: 10px;
+                "
+              >
+                <font-awesome-icon
+                  :icon="['fas', 'bell']"
+                  style="color: #fff"
+                /></div
+            ></a>
           </div>
-          <a href="/notifications">
-            <div
-              class="column"
-              style="
-                background-color: #160d3d;
-                width: 50px;
-                height: 50px;
-                justify-content: center;
-                align-items: center;
-                text-align: center;
-                display: flex;
-                border-radius: 10px;
-              "
-            >
-              <font-awesome-icon
-                :icon="['fas', 'bell']"
-                style="color: #fff"
-              /></div
-          ></a>
           <div class="centered-container">
-            <div
-              class="row"
-              style="width: 100%; margin-right: 20px; margin-left: 20px"
-            >
-              <div class="col" style="text-align: left">
+            <div class="row" style="width: 100%; margin-inline: 20px">
+              <div class="col">
+                <div
+                  class="card padding-10"
+                  style="border-radius: 10px; margin-block: 10px"
+                >
+                  <div class="2">{{ this.banner }}</div>
+                  <div
+                    class="rounded-button heading1"
+                    style="border-radius: 4px"
+                  >
+                    {{ this.prize }}
+                  </div>
+                </div>
                 <!-- wallet card go here -->
                 <div
                   class="card padding-10"
@@ -177,7 +192,7 @@
                   "
                 >
                   <div class="d-flex justify-content-between">
-                    <div class="heading4">Wallet Balance</div>
+                    <div class="subheading1">Wallet Balance</div>
                     <div>
                       <b-button
                         style="background-color: transparent; border: none"
@@ -191,7 +206,7 @@
                     </div>
                   </div>
                   <div class="heading2" v-if="showBalance">
-                    KSH {{ this.walletBalanceFromAPI }}
+                    KES {{ this.walletBalanceFromAPI }}
                   </div>
                   <div v-if="!showBalance">
                     <div
@@ -203,21 +218,38 @@
                         color: #160d3d;
                       "
                     >
-                      *** ***
+                      ******
                     </div>
+                  </div>
+                  <div class="subheading4">
+                    Credits: {{ this.creditsBalanceFromState }}
                   </div>
                 </div>
                 <!-- start quiz button -->
-                <div style="margin-inline: 20px; padding-bottom: 10px">
-                  <button
-                    class="rounded-button-cyan"
-                    @click="navigateToCategory()"
-                  >
-                    <div class="subheading4">
-                      Start Quiz
-                      <font-awesome-icon :icon="['fas', 'arrow-right']" />
-                    </div>
-                  </button>
+                <div
+                  class="col"
+                  style="
+                    margin-inline: 20px;
+                    padding-top: 10px;
+                    padding-bottom: 10px;
+                  "
+                >
+                  <RoundedCyanArrowButton
+                    @click="navigateToQuiz()"
+                    buttonText="Start Quiz"
+                    style="
+                      margin-bottom: 420px;
+                      position: fixed;
+                      bottom: 0;
+                      margin-block: 20px;
+
+                      /* And if you want the div to be full-width: */
+                      right: 0;
+                      left: 0;
+                      z-index: 9999;
+                      padding: 15px;
+                    "
+                  />
                 </div>
 
                 <!-- stats card go here -->
@@ -248,6 +280,9 @@ import { mapState, mapActions } from "vuex";
 import NudgeArea from "../../components/NudgeArea.vue";
 import StatsCards from "../../components/StatsCards.vue";
 import LoadingBar from "../../components/LoadingBar.vue";
+import Outline from "../../components/Buttons/Outline.vue";
+import Flat from "../../components/Buttons/Flat.vue";
+import RoundedCyanArrowButton from "../../components/Buttons/RoundedCyanArrowButton.vue";
 export default {
   data() {
     return {
@@ -258,15 +293,20 @@ export default {
       showHideSpinner: true,
       largeScreen: true,
       loading: false,
+      greetings: "",
       showBalance: false,
       mswaliUserId: this.$store.state.mswaliId,
       walletBalanceFromAPI: this.$store.state.walletBalance,
+      creditsBalanceFromState: this.$store.state.userCredits,
+      banner: "",
+      prize: "",
     };
   },
   mounted() {
     if (this.$store.state.isAuthenticated) {
       this.loading = true;
-      // this.getuserName();
+      this.daySalutatuins();
+      this.fetchWalletBalance();
       this.loading = false;
     } else {
       this.navigateToLogin();
@@ -275,27 +315,33 @@ export default {
   computed: {
     ...mapState({
       isAuthenticated: "isAuthenticated",
-      loggedinUserName: "loggedinUserName",
-      loggedinUserPhone: "loggedinUserPhone",
       mswaliId: "mswaliId",
       walletBalance: "walletBalance",
+      sessionDetails: "sessionDetails",
+      triviaQuestions: "triviaQuestions",
+      userCredits: "userCredits",
+      canWinStatus: "canWinStatus",
     }),
   },
   methods: {
     ...mapActions({
       peristAuthentication: "peristAuthentication",
-      peristUserPhone: "peristUserPhone",
-      peristUserName: "peristUserName",
       persistMswaliId: "persistMswaliId",
       persistwalletBalance: "persistwalletBalance",
+      persistSessionDetails: "persistSessionDetails",
+      persistTriviaQuestions: "persistTriviaQuestions",
+      persistUserCredits: "persistUserCredits",
+      persistCanWinStatus: "persistCanWinStatus",
     }),
-    async revokeAuthentication() {
-      await this.peristAuthentication(false);
-      await this.peristUserPhone("");
-      await this.peristUserName("");
-      return this.$router.push("/login");
+    async updatefreeSession() {
+      let mswaliUserId = this.$store.state.mswaliId;
+      let response = await $http.$put(
+        `http://cms.mswali.co.ke/mswali/mswali_app/backend/web/index.php?r=api/reduce-free-games&user_id=${this.mswaliUserId}`,
+      );
+      console.log(mswaliUserId);
+      console.log(response);
+      console.log("EARTH HACKED:::::::::::::::::::::::::::::::::;");
     },
-
     toggleShowBalance() {
       if (this.showBalance) {
         this.showBalance = false;
@@ -306,11 +352,294 @@ export default {
     navigateToLogin() {
       return this.$router.push("/login");
     },
-    navigateToCategory() {
-      return this.$router.push("/category");
+
+    paidSessionToast(toaster) {
+      this.$bvToast.toast(`Buy credits to play`, {
+        title: `Credits Required`,
+        variant: "danger",
+        toaster: toaster,
+        solid: true,
+      });
+    },
+    problemPlayingWithCreditToast(toaster) {
+      this.$bvToast.toast(`We encountered an error while trying to startyou`, {
+        title: `Error`,
+        variant: "danger",
+        toaster: toaster,
+        solid: true,
+      });
+    },
+    paidSessionToast(toaster) {
+      this.$bvToast.toast(`Buy credits to play`, {
+        title: `Credits Required`,
+        variant: "danger",
+        toaster: toaster,
+        solid: true,
+      });
+    },
+    successBuyToast(toaster) {
+      this.$bvToast.toast(
+        `You have subscribed to regular game plan at 50 KES`,
+        {
+          title: `Subscription Successful`,
+          variant: "success",
+          toaster: toaster,
+          solid: true,
+        },
+      );
+    },
+    infoToast(toaster) {
+      this.$bvToast.toast(`Please wait as, game starts in a few seconds`, {
+        title: `Game starting shortly`,
+        variant: "info",
+        toaster: toaster,
+        solid: true,
+      });
+    },
+    sessionIsNotLiveToast(toaster) {
+      this.$bvToast.toast(`The game will be on from 10AM-10PM, check later`, {
+        title: `Session is not Live`,
+        variant: "danger",
+        toaster: toaster,
+        solid: true,
+      });
+    },
+    errorToast(toaster) {
+      this.$bvToast.toast(
+        `We encountered an error while processing your request, try again later`,
+        {
+          title: `Error`,
+          variant: "danger",
+          toaster: toaster,
+          solid: true,
+        },
+      );
+    },
+    loadAccountToast(toaster) {
+      this.$bvToast.toast(`Deposit to wallet to play mSwali`, {
+        title: `Insufficient Balance`,
+        variant: "danger",
+        toaster: toaster,
+        solid: true,
+      });
+    },
+    async daySalutatuins() {
+      var d = new Date();
+      var time = d.getHours();
+
+      if (time < 12) {
+        this.greetings = "Morning ";
+      }
+      if (time == 12) {
+        this.greetings = "Afternoon ";
+      }
+      if (time > 12) {
+        this.greetings = "Afternoon ";
+      }
+      return this.greetings;
+    },
+    async fetchWalletBalance() {
+      await this.persistwalletBalance("");
+      await this.persistUserCredits("");
+      let mswaliUserId = this.$store.state.mswaliId;
+      let response = await this.$axios.get(
+        `http://cms.mswali.co.ke/mswali/mswali_app/backend/web/index.php?r=api/get-balance&user_id=${mswaliUserId}`,
+      );
+      console.log("Fetching wallet balance");
+      console.log(response.data);
+      let walletBalanceFromAPI = await Math.trunc(response.data.data);
+      let walletCreditsFromAPI = await response.data.credit_balance;
+      await this.persistwalletBalance(walletBalanceFromAPI);
+      await this.persistUserCredits(walletCreditsFromAPI);
+      this.walletBalanceFromAPI = this.$store.state.walletBalance;
+    },
+    async fetchSessionQuestions(sessionID) {
+      let sessionQuestionsResponse = await this.$axios.get(
+        `http://cms.mswali.co.ke/mswali/mswali_app/backend/web/index.php?r=solo-play/fetch-questions&session_id=${sessionID}`,
+      );
+      await this.persistTriviaQuestions(sessionQuestionsResponse.data.data);
+    },
+    async deductGameSession() {
+      // deduct a session from the user
+      let deductGameSessionResponse = await this.$axios.post(
+        `http://cms.mswali.co.ke/mswali/mswali_app/backend/web/index.php?r=api/deduct-free-games&user_id=${this.mswaliUserId}`,
+      );
+      if (
+        deductGameSessionResponse.data.status_message ===
+        "daily plan balance updated"
+      ) {
+        console.log("Playing with existing subscription");
+        this.loading = true;
+        await this.infoToast();
+        await this.$store.dispatch("delayFiveSeconds");
+        this.loading = false;
+        await this.$router.push("/quiz");
+      } else {
+        await this.errorToast();
+        await this.$store.dispatch("delayFiveSeconds");
+        await this.$router.push("/home");
+      }
+    },
+    async navigateToQuiz() {
+      // step 1 fetch game session for this user ---> done on otp/index.vue ln 288 and stored in state
+      let mswaliUserId = this.$store.state.mswaliId;
+      this.loading = true;
+      try {
+        let sessionResponse = await this.$axios.get(
+          `http://cms.mswali.co.ke/mswali/mswali_app/backend/web/index.php?r=solo-play/get-solo-session&user_id=${this.mswaliUserId}`,
+        );
+        await this.persistSessionDetails(sessionResponse.data);
+        await this.persistCanWinStatus(
+          this.$store.state.sessionDetails.can_win,
+        );
+        this.banner = await this.$store.state.sessionDetails.banner;
+        this.prize = await this.$store.state.sessionDetails.rate;
+        let gameRate = this.$store.state.sessionDetails.session.rate;
+        let sessionID = this.$store.state.sessionDetails.session.id;
+        let isSessionLive = this.$store.state.sessionDetails.session.id;
+        // step 2 check if the game session is live for user to play
+        if (isSessionLive) {
+          // step 3 check if rate is > 0 or = 0
+          if (gameRate > 0) {
+            // step 4 check if user has active subscriptions
+            let userSubscriptionStatus = await this.$axios.get(
+              `http://cms.mswali.co.ke/mswali/mswali_app/backend/web/index.php?r=api/check-plan-status&user_id=${mswaliUserId}}`,
+            );
+            let userWalletBalance = await this.$axios.get(
+              `http://161.35.6.91/mswali/mswali_app/backend/web/index.php?r=api/get-balance&user_id=${mswaliUserId}`,
+            );
+            // step 5 play with credits logic starts here
+            if (userWalletBalance.data.credit_balance > 0) {
+              // subtract a credit from user balance
+              let creditDeduct = await this.$axios.post(
+                `http://cms.mswali.co.ke/mswali/mswali_app/backend/web/index.php?r=api/play-with-credit&user_id=${mswaliUserId}`,
+              );
+              if (creditDeduct.data.message == "credit redeemed successfully") {
+                // if user has credits serve the questions and deduct a credit
+                await this.fetchSessionQuestions(sessionID);
+                console.log("TRACKING EARTH HACKED ::::::::::::::::::");
+                await this.persistUserCredits(
+                  parseInt(this.$store.state.userCredits) - 1,
+                );
+                this.loading = false;
+                await this.$router.push("/quiz");
+                // save questions to serve in quiz page
+              } else {
+                console.log(
+                  "We encountered a problem while trying to redeem your credits, kindly try again later.",
+                );
+                this.problemPlayingWithCreditToast();
+              }
+            } else {
+              // step 6 if user has an active subscription serve the questions
+              if (userSubscriptionStatus.data) {
+                await this.fetchSessionQuestions(sessionID);
+                await this.fetchWalletBalance();
+                this.loading = false;
+                console.log("User has an active subscription");
+                // deduct a session from the user
+                await this.deductGameSession();
+              } else {
+                console.log("Starting to buy::::::::::::::::::;; subscription");
+                // step 7 if user has NO subscription check if user can afford buying a subscription starting with 200 else 100 else game rate. If true serve questions
+                // credit user for 10 games if bal >= 200 else credit for 4 games if bal >= 100 else credit gamerate
+                if (userWalletBalance.data.data >= 200) {
+                  // credit user 200
+                  let creditUserResponse = await this.$axios.post(
+                    `http://cms.mswali.co.ke/mswali/mswali_app/backend/web/index.php?r=api/game-play&user_id=${this.mswaliUserId}&msisdn=${this.loggedInUserNumber}&gateway=INTERNAL&amount=200`,
+                  );
+                  console.log(creditUserResponse);
+                  // subscribe to 10 sessions
+                  let premiumPlanResponse = await this.$axios.post(
+                    `http://cms.mswali.co.ke/mswali/mswali_app/backend/web/index.php?r=api/premium-daily-plan&user_id=${this.mswaliUserId}`,
+                  );
+                  console.log(premiumPlanResponse);
+                  if (
+                    basicPlanResponse.data.status_message ===
+                    "daily plan activated"
+                  ) {
+                    // after buying a subscription serve the questions
+                    await this.fetchSessionQuestions(sessionID);
+                    await this.fetchWalletBalance();
+                    this.loading = false;
+                    await this.deductGameSession();
+                  } else {
+                    this.errorBuyToast();
+                  }
+                } else if (userWalletBalance.data.data >= 100) {
+                  // credit user 100
+                  let gamePlayResponse = await this.$axios.post(
+                    `http://cms.mswali.co.ke/mswali/mswali_app/backend/web/index.php?r=api/game-play&user_id=${this.mswaliUserId}&msisdn=${this.loggedInUserNumber}&gateway=INTERNAL&amount=100`,
+                  );
+                  if (gamePlayResponse.data == null) {
+                    console.log("Buying 100 KES subscription");
+                    // subscribe to 4 sessions
+                    let basicPlanResponse = await this.$axios.post(
+                      `http://cms.mswali.co.ke/mswali/mswali_app/backend/web/index.php?r=api/daily-plan&user_id=${this.mswaliUserId}`,
+                    );
+                    console.log(basicPlanResponse);
+                    if (
+                      basicPlanResponse.data.status_message ===
+                      "daily plan activated"
+                    ) {
+                      // serve questions if daily plan was bought sucessfully
+                      await this.fetchSessionQuestions(sessionID);
+                      this.loading = false;
+                      await this.deductGameSession();
+                    } else {
+                      this.errorBuyToast();
+                    }
+                  } else {
+                    console.log("100 sub not bught");
+                    this.errorBuyToast();
+                  }
+                } else if (userWalletBalance.data.data > gameRate) {
+                  // step 6 if user has no credits and wallet balance >= rate notify user of insufficient balance
+                  // TODO: deduct the balance froom the wallet
+                  console.log("Buying 50 boob subscription");
+                  let dailyPlanResponse = await this.$axios.post(
+                    `http://cms.mswali.co.ke/mswali/mswali_app/backend/web/index.php?r=api/game-play&user_id=${this.mswaliUserId}&amount=50`,
+                  );
+                  if (dailyPlanResponse.data == null) {
+                    await this.fetchWalletBalance();
+                    await this.fetchSessionQuestions(sessionID);
+                    await this.deductGameSession();
+                  } else {
+                    await this.errorToast();
+                    console.log(
+                      "Problem faced while buying daily plan subscription",
+                    );
+                  }
+                } else if (userWalletBalance.data.data < gameRate) {
+                  this.loading = false;
+                  this.loadAccountToast();
+                }
+              }
+            }
+          } else if (gameRate == 0) {
+            await this.fetchSessionQuestions(sessionID);
+            console.log(freeSessionQuestions.data.data);
+            this.loading = false;
+            await this.$router.push("/quiz");
+          }
+        } else {
+          this.loading = false;
+          this.sessionIsNotLiveToast();
+        }
+      } catch (e) {
+        this.loading = false;
+        this.errorToast();
+      }
     },
   },
-  components: { NudgeArea, StatsCards, LoadingBar },
+  components: {
+    NudgeArea,
+    StatsCards,
+    LoadingBar,
+    Outline,
+    Flat,
+    RoundedCyanArrowButton,
+  },
 };
 </script>
 
@@ -338,17 +667,16 @@ export default {
 .scrollable {
   max-width: 100%;
   overflow-x: scroll;
-  /* white-space: nowrap; */
 }
 
 .left,
 .right {
-  padding-left: 40px;
-  width: 25%;
+  width: 30%;
 }
 
 .middle {
-  width: 50%;
+  width: 40%;
+  margin-inline: 5px;
 }
 
 .wallet-card {

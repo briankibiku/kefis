@@ -7,14 +7,23 @@
 
       <b-collapse id="nav-collapse" is-nav>
         <b-navbar-nav>
+          <b-nav-item href="/home"
+            ><span class="heading4" style="color: #160d3d">
+              Home</span
+            ></b-nav-item
+          ><b-nav-item href="/buy-subscription"
+            ><span class="heading4" style="color: #160d3d">
+              Buy Subscription
+            </span></b-nav-item
+          >
+          <b-nav-item href="/my-answers"
+            ><span class="heading4" style="color: #160d3d">My Answers </span>
+          </b-nav-item>
           <b-nav-item href="/wallet"
             ><span class="heading4" style="color: #160d3d"
               >Wallet</span
             ></b-nav-item
           >
-          <b-nav-item href="/my-answers"
-            ><span class="heading4" style="color: #160d3d">My Answers </span>
-          </b-nav-item>
           <b-nav-item href="/winners"
             ><span class="heading4" style="color: #160d3d"
               >Rankings</span
@@ -28,6 +37,11 @@
           <b-nav-item href="/notifications"
             ><span class="heading4" style="color: #160d3d"
               >Notifications</span
+            ></b-nav-item
+          >
+          <b-nav-item href="/support"
+            ><span class="heading4" style="color: #160d3d"
+              >Support</span
             ></b-nav-item
           >
           <b-nav-item href="/faq"
@@ -50,7 +64,7 @@
             >
           </b-nav-item>
           <b-button
-            @click="revokeAuthentication()"
+            @click="logOut()"
             style="background-color: transparent; color: #160d3d; border: none"
           >
             <span class="heading4"> Logout </span>
@@ -93,6 +107,7 @@ export default {
 
   computed: {
     ...mapState({
+      sessionDetails: "sessionDetails",
       isAuthenticated: "isAuthenticated",
       loggedinUserName: "loggedinUserName",
       loggedinUserPhone: "loggedinUserPhone",
@@ -100,9 +115,10 @@ export default {
   },
   methods: {
     ...mapActions({
-      peristAuthentication: "peristAuthentication",
-      peristUserPhone: "peristUserPhone",
       peristUserName: "peristUserName",
+      peristUserPhone: "peristUserPhone",
+      persistSessionDetails: "persistSessionDetails",
+      peristAuthentication: "peristAuthentication",
     }),
     sharemSwali() {
       navigator.clipboard.writeText("apps.mwsali.co.ke");
@@ -116,8 +132,9 @@ export default {
         solid: true,
       });
     },
-    async revokeAuthentication() {
+    async logOut() {
       await this.peristAuthentication(false);
+      await this.persistSessionDetails("");
       await this.peristUserPhone("");
       await this.peristUserName("");
       return this.$router.push("/login");

@@ -7,6 +7,7 @@
       <div class="overlay" v-if="loading">
         <div style="margin: 20px">
           <b-spinner variant="primary" label="Spinning"></b-spinner>
+          <div>Loading...</div>
         </div>
       </div>
       <div class="overlay-home">
@@ -36,12 +37,10 @@
             </div>
             <div>M-pesa</div>
           </div>
-          <button class="rounded-button-cyan" @click="processDeposit()">
-            <div class="subheading4">
-              Continue
-              <font-awesome-icon :icon="['fas', 'arrow-right']" />
-            </div>
-          </button>
+          <RoundedCyanArrowButton
+            @click="processDeposit()"
+            buttonText="Continue"
+          />
           <div class="subheading3" style="margin-top: 20px">
             <a href="/wallet" style="color: #bbb">Back</a>
           </div>
@@ -98,13 +97,10 @@
               <div class="subheading3">M-Pesa</div>
             </div>
             <br /><br />
-            <button class="rounded-button-cyan" @click="processDeposit()">
-              <div class="subheading4">
-                Continue
-
-                <font-awesome-icon :icon="['fas', 'arrow-right']" />
-              </div>
-            </button>
+            <RoundedCyanArrowButton
+              @click="processDeposit()"
+              buttonText="Continue"
+            />
             <div class="subheading3" style="margin-top: 20px">
               <a href="/wallet" style="color: #bbb">Back</a>
             </div>
@@ -118,6 +114,7 @@
 <script>
 import axios from "axios";
 import { mapState, mapActions } from "vuex";
+import RoundedCyanArrowButton from "../../components/Buttons/RoundedCyanArrowButton.vue";
 export default {
   data() {
     return {
@@ -146,11 +143,8 @@ export default {
     }),
     async navigate() {
       let makeDepositResponse = await this.$store.dispatch("makeDeposit");
-
       console.log(makeDepositResponse);
-
       return this.makeDepositResponse;
-
       // return this.$router.push("/category");
     },
     navigateToLogin() {
@@ -176,9 +170,7 @@ export default {
             );
             console.log("Deposit ongoing.....");
             console.log(res.data);
-            const delay = (ms) =>
-              new Promise((resolve) => setTimeout(resolve, ms));
-            await delay(15000);
+            await this.$store.dispatch("delayThirtySeconds");
             let mswaliUserId = this.$store.state.mswaliId;
             let response = await this.$axios.get(
               `http://cms.mswali.co.ke/mswali/mswali_app/backend/web/index.php?r=api/get-balance&user_id=${mswaliUserId}`,
@@ -195,19 +187,18 @@ export default {
                 "  " +
                 this.depositAmount,
             );
-
             if (balance == totalAfterDeposit) {
               let walletBalanceFromAPI = await Math.trunc(balance);
               await this.persistwalletBalance(walletBalanceFromAPI);
               this.walletBalanceFromAPI = this.$store.state.walletBalance;
-
-              await this.withdepositSuccessfulToast();
+              await this.depositSuccessfulToast();
+              await this.$store.dispatch("delayFiveSeconds");
               await this.$router.push("/wallet");
             } else {
               await this.depositErrorToast();
+              await this.$store.dispatch("delayFiveSeconds");
               await this.$router.push("/wallet");
             }
-
             this.loading = false;
           } catch (err) {
             console.log(err);
@@ -244,7 +235,7 @@ export default {
         },
       );
     },
-    withdepositSuccessfulToast(toaster) {
+    depositSuccessfulToast(toaster) {
       this.$bvToast.toast(`Deposit transaction successful`, {
         title: `Deposit successful`,
         variant: "success",
@@ -253,5 +244,6 @@ export default {
       });
     },
   },
+  components: { RoundedCyanArrowButton },
 };
 </script>

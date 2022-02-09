@@ -3,6 +3,7 @@
     <!--Big screen device code begins here-->
     <div
       class="d-none d-md-block d-lg-none d-none d-lg-block d-xl-none d-none d-xl-block"
+      style="padding: 40px"
     >
       <div class="row" style="padding-left: 50px">
         <!--Big screen sidebar navigation starts here-->
@@ -25,62 +26,25 @@
 
         <div id="col2">
           <!-- salutations, wallet card, statistics cards go here -->
-          <div class="d-flex flex-row" style="padding-top: 0em">
+          <div class="d-flex flex-row">
             <div class="col padding-left-60 d-flex justify-content-around">
               <div class="row" style="flex-direction: column">
                 <div class="heading3 padding-right-20">Notifications</div>
-                <div class="subheading3">Message goes here</div>
-                <div class="accordion" role="tablist">
-                  <b-card no-body class="mb-1">
-                    <b-card-header header-tag="header" class="p-1" role="tab">
-                      <b-button block v-b-toggle.accordion-1 variant="info"
-                        >mSwali top up</b-button
-                      >
-                    </b-card-header>
-                    <b-collapse
-                      id="accordion-1"
-                      accordion="my-accordion"
-                      role="tabpanel"
-                    >
-                      <b-card-body>
-                        <b-card-text>{{ text }}</b-card-text>
-                      </b-card-body>
-                    </b-collapse>
-                  </b-card>
-
-                  <b-card no-body class="mb-1">
-                    <b-card-header header-tag="header" class="p-1" role="tab">
-                      <b-button block v-b-toggle.accordion-2 variant="info"
-                        >mSwali withdraw request</b-button
-                      >
-                    </b-card-header>
-                    <b-collapse
-                      id="accordion-2"
-                      accordion="my-accordion"
-                      role="tabpanel"
-                    >
-                      <b-card-body>
-                        <b-card-text>{{ text }}</b-card-text>
-                      </b-card-body>
-                    </b-collapse>
-                  </b-card>
-
-                  <b-card no-body class="mb-1">
-                    <b-card-header header-tag="header" class="p-1" role="tab">
-                      <b-button block v-b-toggle.accordion-3 variant="info"
-                        >Accordion 3</b-button
-                      >
-                    </b-card-header>
-                    <b-collapse
-                      id="accordion-3"
-                      accordion="my-accordion"
-                      role="tabpanel"
-                    >
-                      <b-card-body>
-                        <b-card-text>{{ text }}</b-card-text>
-                      </b-card-body>
-                    </b-collapse>
-                  </b-card>
+                <div class="subheading3">Your notifications</div>
+                <div v-for="notification in notifications">
+                  <div class="row d-flex justify-content-between">
+                    <div class="notification-card">
+                      <div class="heading4">{{ notification.heading }}</div>
+                      <div class="subheading3">{{ notification.message }}</div>
+                    </div>
+                    <a href="/notifications">
+                      <font-awesome-icon
+                        :icon="['fas', 'chevron-right']"
+                        style="color: #160d3d"
+                      />
+                    </a>
+                  </div>
+                  <div class="divider"></div>
                 </div>
                 <br />
               </div>
@@ -92,11 +56,28 @@
     </div>
     <div class="d-block d-sm-none d-none d-sm-block d-md-none">
       <div>
-        <div class="centered-container">
-          <div>
-            <font-awesome-icon :icon="['fas', 'cog']" />
-            <div class="heading3">Notifications</div>
-            <a href="/home">Home</a>
+        <div class="d-flex flex-row">
+          <div class="col d-flex justify-content-around">
+            <div class="row" style="flex-direction: column">
+              <div class="heading3 padding-right-20">Notifications</div>
+              <div class="subheading3">Your notifications</div>
+              <div v-for="notification in notifications">
+                <div class="row d-flex justify-content-between">
+                  <div class="notification-card">
+                    <div class="heading4">{{ notification.heading }}</div>
+                    <div class="subheading3">{{ notification.message }}</div>
+                  </div>
+                  <a href="/notifications">
+                    <font-awesome-icon
+                      :icon="['fas', 'chevron-right']"
+                      style="color: #160d3d"
+                    />
+                  </a>
+                </div>
+              </div>
+              <a href="/notifications" style="color: #bbb"> Home </a>
+              <br />
+            </div>
           </div>
         </div>
       </div>
@@ -111,6 +92,26 @@ export default {
       text: `
           You have deposited Kshs 100.00
         `,
+      notifications: [
+        {
+          heading: "Uko na form kesho?",
+          message:
+            "Tokelezea iBerry Lounge, cheze mSwali and get a chance to win BIG!!!!",
+        },
+        {
+          heading: "Insufficient balance",
+          message:
+            "You have insufficient balance to play mSwali. Load your account to enjoy limitless plays.",
+        },
+        {
+          heading: "Game play is on",
+          message: "mSwali is now LIVE, play to win",
+        },
+        {
+          heading: "You won",
+          message: "You won top score on 12/12/2022",
+        },
+      ],
     };
   },
 };

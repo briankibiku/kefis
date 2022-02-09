@@ -1,5 +1,5 @@
 <template>
-  <div class="row">
+  <div>
     <div class="overlay" v-if="showOverlay">
       <div style="margin: 20px">
         <div class="custom-modal">
@@ -7,20 +7,19 @@
           <div class="subheading5">You do not have an account</div>
           <div class="heading5">Would you like to Sign up?</div>
         </div>
-        <button class="rounded-button-cyan" @click="goToSignup()">
-          <div class="subheading4">
-            Proceed to sign up
-            <font-awesome-icon :icon="['fas', 'arrow-right']" />
-          </div>
-        </button>
+        <RoundedCyanArrowButton
+          @click="goToSignup()"
+          buttonText="Proceed to sign up"
+        />
       </div>
     </div>
     <div class="overlay" v-if="loading">
       <div style="margin: 20px">
         <b-spinner variant="primary" label="Spinning"></b-spinner>
+        <div>Loading...</div>
       </div>
     </div>
-    <div v-if="!showOverlay" class="row">
+    <div v-if="!showOverlay" id="row">
       <div id="col1" class="bg-image d-none d-lg-block">
         <MswaliExplained />
       </div>
@@ -42,7 +41,7 @@
                   <input
                     class="rounded-border-input"
                     type="number"
-                    placeholder="+25470 12 123 456"
+                    placeholder="0712 345 678"
                     v-model="phoneNumber"
                     required
                     style="margin-bottom: 10px"
@@ -68,6 +67,7 @@ import axios from "axios";
 import { mapGetters } from "vuex";
 import { mapState, mapActions } from "vuex";
 import MswaliExplained from "../../components/MswaliExplained.vue";
+import RoundedCyanArrowButton from "../../components/Buttons/RoundedCyanArrowButton.vue";
 export default {
   head: {
     title: "Login",
@@ -155,7 +155,7 @@ export default {
       }
     },
   },
-  components: { MswaliExplained },
+  components: { MswaliExplained, RoundedCyanArrowButton },
 };
 </script>
 

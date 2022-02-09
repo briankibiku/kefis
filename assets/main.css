@@ -183,7 +183,7 @@
   opacity: 68%;
   background: url(data:;base64,iVBORw0KGgoAAAANSUhEUgAAAAIAAAACCAYAAABytg0kAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAgY0hSTQAAeiYAAICEAAD6AAAAgOgAAHUwAADqYAAAOpgAABdwnLpRPAAAABl0RVh0U29mdHdhcmUAUGFpbnQuTkVUIHYzLjUuNUmK/OAAAAATSURBVBhXY2RgYNgHxGAAYuwDAA78AjwwRoQYAAAAAElFTkSuQmCC)
     repeat scroll transparent\9; /* ie fallback png background image */
-  z-index: 9999;
+  /* z-index: 9999; */
   color: white;
   display: flex;
   justify-content: center;
@@ -191,7 +191,7 @@
   text-align: center;
 }
 .overlay-home {
-  background-image: url("~/assets/home.png");
+  background-image: url("~/assets/overlay_bg.png");
   background-repeat: no-repeat;
   background-size: cover;
   position: absolute;
@@ -283,7 +283,7 @@
 }
 .menu {
   font-size: 1.2vw;
-  font-weight: 600;
+  font-weight: 500;
   font-family: "Nunito Sans", sans-serif;
   color: #160d3d;
 }
@@ -369,7 +369,12 @@ p {
   bottom: 10px;
   text-align: center;
 }
-
+.notification-card {
+  height: 50px;
+  margin-bottom: 10px;
+  width: 100%;
+  border-bottom: solid 1px #bbb;
+}
 /* Spacing  */
 .padding-bottom-10 {
   padding-bottom: 10px;
@@ -455,4 +460,11 @@ p {
 }
 #col2 {
   width: 50%;
+}
+
+/* direction */
+.scrollable {
+  max-width: 100%;
+  overflow-x: scroll;
+  white-space: nowrap;
 }

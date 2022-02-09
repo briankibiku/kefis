@@ -118,6 +118,7 @@ export default {
             `http://cms.mswali.co.ke/mswali/mswali_app/backend/web/index.php?r=api/generate-otp&msisdn=${this.phoneNumber}`,
             config,
           );
+          console.log(result);
           await this.$store.commit("updateSignUpPhone", this.phoneNumber);
           await this.$store.commit("updateSignUpName", this.userName);
           await this.$store.commit("updateSignUpOTP", result);

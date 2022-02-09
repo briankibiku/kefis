@@ -7,6 +7,7 @@
       <div class="overlay" v-if="loading">
         <div style="margin: 20px">
           <b-spinner variant="primary" label="Spinning"></b-spinner>
+          <div>Loading...</div>
         </div>
       </div>
       <div class="overlay-home">
@@ -16,7 +17,7 @@
               Hi {{ this.userName }}
             </div>
             <div class="subheading3" style="color: #fff; padding-bottom: 20px">
-              How much would you wish to withdraw?
+              How much do you wish to withdraw?
             </div>
           </div>
           <div class="custom-modal">
@@ -36,12 +37,10 @@
             </div>
             <div>M-pesa</div>
           </div>
-          <button class="rounded-button-cyan" @click="processWithdrawal()">
-            <div class="subheading4">
-              Continue
-              <font-awesome-icon :icon="['fas', 'arrow-right']" />
-            </div>
-          </button>
+          <RoundedCyanArrowButton
+            @click="processWithdrawal()"
+            buttonText="Continue"
+          />
           <div class="subheading3" style="margin-top: 20px">
             <a href="/wallet" style="color: #bbb">Back</a>
           </div>
@@ -98,13 +97,10 @@
               <div class="subheading3">M-Pesa</div>
             </div>
             <br /><br />
-            <button class="rounded-button-cyan" @click="processWithdrawal()">
-              <div class="subheading4">
-                Continue
-
-                <font-awesome-icon :icon="['fas', 'arrow-right']" />
-              </div>
-            </button>
+          <RoundedCyanArrowButton
+            @click="processWithdrawal()"
+            buttonText="Continue"
+          />
             <div class="subheading3" style="margin-top: 20px">
               <a href="/wallet" style="color: #bbb">Back</a>
             </div>
@@ -118,6 +114,7 @@
 <script>
 import axios from "axios";
 import { mapState, mapActions } from "vuex";
+import RoundedCyanArrowButton from "../../components/Buttons/RoundedCyanArrowButton.vue";
 
 export default {
   data() {
@@ -149,17 +146,13 @@ export default {
     }),
     async navigate() {
       let makeDepositResponse = await this.$store.dispatch("makeDeposit");
-
       console.log(makeDepositResponse);
-
       return this.makeDepositResponse;
-
       // return this.$router.push("/category");
     },
     navigateToLogin() {
       return this.$router.push("/login");
     },
-
     async processWithdrawal() {
       // check if user has input amount they want to withdraw
       if (!!this.withdrawAmount) {
@@ -170,18 +163,19 @@ export default {
             // withdrawal costs KSH 16
             // get wallet balance
             this.walletBalanceFromState = this.$store.state.walletBalance;
-
             // subtract amount they wish to withdraw + KSH 16 for the transaction and make sure the account does run a negative
             this.balanceAfterWithdraw =
               parseInt(this.walletBalanceFromState) -
               parseInt(this.transactionCost) -
               parseInt(this.withdrawAmount);
             // check if balanceAfterWithdraw is a negative and proceed with withdrawal
-
             // check for maximum amount user can withdraw
-            this.maximumWithdrawable =
-              this.walletBalanceFromState - this.transactionCost;
-
+            if (this.walletBalanceFromState > this.transactionCost) {
+              this.maximumWithdrawable =
+                this.walletBalanceFromState - this.transactionCost;
+            } else {
+              this.maximumWithdrawable = "0";
+            }
             this.balanceAfterWithdraw = parseInt(this.balanceAfterWithdraw);
             if (this.balanceAfterWithdraw < 0) {
               // decline  withdrawal request
@@ -197,6 +191,7 @@ export default {
               console.log(res.data);
               if (res.data == "Successful") {
                 await this.persistwalletBalance(this.balanceAfterWithdraw);
+                await this.$store.dispatch("delay");
                 await this.withdrawSuccessfulToast();
                 await this.$router.push("/wallet");
               } else {
@@ -207,7 +202,6 @@ export default {
             this.loading = false;
             console.log(err);
             this.withdrawErrorToast();
-
             console.log("error occured while trying to deposit...");
           }
         } else {
@@ -257,5 +251,6 @@ export default {
       );
     },
   },
+  components: { RoundedCyanArrowButton },
 };
 </script>
