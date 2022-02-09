@@ -21,6 +21,7 @@ export default {
   },
   // Disable server side rendering
   // ssr: false,
+  target: 'static',
   // Global CSS: https://go.nuxtjs.dev/config-css
   css: ["~/assets/main.css"],
 
