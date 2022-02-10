@@ -112,7 +112,7 @@
                 @click="verifyOTP()"
                 buttonText="Verify"
                 style="width: 240px"
-              /> 
+              />
             </div>
           </div>
         </div>
@@ -294,7 +294,8 @@ export default {
       };
       if (!!this.signUpOTP) {
         try {
-          this.loading = true;
+          // start loading
+          this.$nuxt.$loading.start();
           this.signUpPhone = this.$store.state.signUpPhone;
           // verify OTP
           const res = await axios.get(
@@ -315,19 +316,22 @@ export default {
             if (this.$store.state.isExistingUser) {
               // if it is not a new user redirect to home
               await this.getuserName();
-              this.loading = false;
+              // stop loading
+              this.$nuxt.$loading.finish();
               await this.goToHomePage();
             } else {
               // if it is first time user redirect to modal and continue from home
               await this.getuserName();
-              this.loading = false;
+              // stop loading
+              this.$nuxt.$loading.finish();
               this.successfulLogin = true;
             }
           } else {
             await this.app.$toast;
           }
         } catch (err) {
-          this.loading = false;
+          // stop loading
+          this.$nuxt.$loading.finish();
           this.verifyOTPError();
         }
       } else {
