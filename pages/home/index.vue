@@ -483,7 +483,8 @@ export default {
     async navigateToQuiz() {
       // step 1 fetch game session for this user ---> done on otp/index.vue ln 288 and stored in state
       let mswaliUserId = this.$store.state.mswaliId;
-      this.loading = true;
+      // start loading
+      this.$nuxt.$loading.start();
       try {
         let sessionResponse = await this.$axios.get(
           `http://cms.mswali.co.ke/mswali/mswali_app/backend/web/index.php?r=solo-play/get-solo-session&user_id=${this.mswaliUserId}`,
@@ -521,7 +522,8 @@ export default {
                 await this.persistUserCredits(
                   parseInt(this.$store.state.userCredits) - 1,
                 );
-                this.loading = false;
+                // finish loading
+                this.$nuxt.$loading.finish();
                 await this.$router.push("/quiz");
                 // save questions to serve in quiz page
               } else {
@@ -584,7 +586,8 @@ export default {
                     ) {
                       // serve questions if daily plan was bought sucessfully
                       await this.fetchSessionQuestions(sessionID);
-                      this.loading = false;
+                      // stop loading
+                      this.$nuxt.$loading.finish();
                       await this.deductGameSession();
                     } else {
                       this.errorBuyToast();
@@ -611,7 +614,8 @@ export default {
                     );
                   }
                 } else if (userWalletBalance.data.data < gameRate) {
-                  this.loading = false;
+                  // stop loading
+                  this.$nuxt.$loading.finish();
                   this.loadAccountToast();
                 }
               }
@@ -619,16 +623,19 @@ export default {
           } else if (gameRate == 0) {
             await this.fetchSessionQuestions(sessionID);
             console.log(freeSessionQuestions.data.data);
-            this.loading = false;
+            // stop loading
+            this.$nuxt.$loading.finish();
             await this.$router.push("/quiz");
           }
         } else {
-          this.loading = false;
+          // stop loading
+          this.$nuxt.$loading.finish();
           this.sessionIsNotLiveToast();
         }
       } catch (e) {
-        this.loading = false;
-        this.errorToast();
+        // stop loading
+        this.$nuxt.$loading.finish();
+        this.sessionIsNotLiveToast();
       }
     },
   },

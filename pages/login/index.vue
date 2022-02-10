@@ -123,14 +123,16 @@ export default {
       console.log();
       if (!!this.phoneNumber && this.validatePhoneNumber(this.phoneNumber)) {
         try {
-          this.loading = true;
+          // start loading
+          this.$nuxt.$loading.start();
           const res = await axios.get(
             `http://cms.mswali.co.ke/mswali/mswali_app/backend/web/index.php?r=api/get-user&username=mast&account_number=${this.phoneNumber}`,
             config,
           );
           // check if user already exists
           if (!res.data.status) {
-            this.loading = false;
+            // stop loading
+            this.$nuxt.$loading.finish();
             this.showOverlay = true;
             await this.$store.commit("updateSignUpPhone", this.phoneNumber);
           } else {
@@ -142,7 +144,8 @@ export default {
               config,
             );
             console.log(result);
-            this.loading = false;
+            // stop loading
+            this.$nuxt.$loading.finish();
             await this.$store.commit("updateSignUpPhone", this.phoneNumber);
             await this.$store.commit("updateSignUpOTP", res);
             await this.$router.push("/otp");
