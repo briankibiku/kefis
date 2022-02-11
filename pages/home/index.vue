@@ -170,18 +170,6 @@
           <div class="centered-container">
             <div class="row" style="width: 100%; margin-inline: 20px">
               <div class="col">
-                <div
-                  class="card padding-10"
-                  style="border-radius: 10px; margin-block: 10px"
-                >
-                  <div class="2">{{ this.banner }}</div>
-                  <div
-                    class="rounded-button heading1"
-                    style="border-radius: 4px"
-                  >
-                    {{ this.prize }}
-                  </div>
-                </div>
                 <!-- wallet card go here -->
                 <div
                   class="card padding-10"

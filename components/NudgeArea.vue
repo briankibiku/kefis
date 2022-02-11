@@ -4,46 +4,41 @@
     <div
       class="d-none d-md-block d-lg-none d-none d-lg-block d-xl-none d-none d-xl-block"
     >
-      <div class="promo-card">
-        <div class="row">
-          <div class="col-8">
-            <div class="promo-heading">Register your team today</div>
+      <div class="nudge-card">
+        <div class="d-flex flex-column align-content-between">
+          <div class="promo-heading">Register your team today</div>
+          <div style="width: 10vw">
             <div class="subheading5nudge">
               Dial *397# to register your team or click button below
             </div>
-            <button class="rounded-button-cyan" style="margin-top: 10px">
-              <div class="subheading4nudge">
-                Register team
-                <font-awesome-icon :icon="['fas', 'arrow-right']" />
-              </div>
-            </button>
           </div>
-          <div class="col-4">
-            <div class="bg-image-nudge"></div>
-          </div>
+          <button
+            class="rounded-button-cyan"
+            style="margin-top: 10px; position: right bottom"
+          >
+            <div class="subheading4nudge">
+              Register team
+              <font-awesome-icon :icon="['fas', 'arrow-right']" />
+            </div>
+          </button>
         </div>
       </div>
     </div>
 
     <!--Small screen device component starts here-->
     <div class="d-block d-sm-none d-none d-sm-block d-md-none">
-      <div class="promo-card-mobile">
-        <div class="row">
-          <div class="col-7">
-            <div class="promo-heading-mobile">Register your team today</div>
-            <div class="subheading5nudge-mobile">
-              Dial *397# to register your team or click button below
+      <div class="nudge-card-mobile">
+        <div class="d-flex flex-column align-content-between">
+          <div class="promo-heading-mobile">Register your team today</div>
+          <div class="subheading5nudge-mobile">
+            Dial *397# to register your team or click button below
+          </div>
+          <button class="rounded-button-cyan" style="margin-top: 10px">
+            <div class="subheading4nudge-mobile">
+              Register team
+              <font-awesome-icon :icon="['fas', 'arrow-right']" />
             </div>
-            <button class="rounded-button-cyan" style="margin-top: 10px">
-              <div class="subheading4nudge-mobile">
-                Register team
-                <font-awesome-icon :icon="['fas', 'arrow-right']" />
-              </div>
-            </button>
-          </div>
-          <div class="col-5">
-            <div class="bg-image-nudge-mobile"></div>
-          </div>
+          </button>
         </div>
       </div>
     </div>
@@ -60,6 +55,10 @@
   font-weight: 500;
   font-family: "Nunito Sans", sans-serif;
   color: #160d3d;
+  white-space: wrap;
+  text-overflow: show;
+  word-break: break-word;
+  width: 100px;
 }
 .subheading4nudge {
   font-size: 0.9vw;
@@ -100,17 +99,21 @@
   height: 200px;
 }
 
-.promo-card-mobile {
-  color: #160d3d;
-  padding: 10px;
-  margin-left: 10px;
-  margin-top: 10px;
-  width: 240px;
-  height: 160px;
-  margin-bottom: 20px;
-  box-sizing: border-box;
+.nudge-card-mobile {
+  background: linear-gradient(
+      to right bottom,
+      rgb(28, 237, 237, 0.8),
+      rgb(22, 13, 61, 0.8)
+    ),
+    url("~/assets/win_big.png");
+  background-repeat: no-repeat;
+  background-position: right bottom;
+  background-size: contain;
+  margin-right: 20px;
+  width: 74vw;
+  height: 43vw;
+  padding: 20px;
+  margin-bottom: 5em;
   border-radius: 6px;
-  object-fit: fill;
-  background: linear-gradient(to right bottom, #1ceded 20%, #160d3d 95%);
 }
 </style>

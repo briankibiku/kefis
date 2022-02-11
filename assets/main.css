@@ -123,17 +123,22 @@
   align-items: center;
   text-align: center;
 }
-
-.promo-card {
-  color: #160d3d;
-  padding: 1vw;
-  margin-left: 30px;
-  width: 24vw;
+.nudge-card {
+  background: linear-gradient(
+      to right bottom,
+      rgb(28, 237, 237, 0.8),
+      rgb(22, 13, 61, 0.8)
+    ),
+    url("~/assets/win_big.png");
+  background-repeat: no-repeat;
+  background-position: right bottom;
+  background-size: contain;
+  margin-right: 20px;
+  width: 26vw;
   height: 13vw;
-  margin-bottom: 20px;
-  box-sizing: border-box;
+  padding: 20px;
+  margin-bottom: 5px;
   border-radius: 6px;
-  background: linear-gradient(to right bottom, #1ceded 20%, #160d3d 95%);
 }
 .bg-image {
   background: linear-gradient(rgb(22, 13, 61, 0.7), rgb(22, 13, 61, 0.7)),
