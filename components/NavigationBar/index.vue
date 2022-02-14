@@ -49,20 +49,11 @@
               >FAQs</span
             ></b-nav-item
           >
-          <b-nav-item>
-            <b-button
-              @click="sharemSwali()"
-              style="
-                background-color: transparent;
-                color: #160d3d;
-                border: none;
-              "
-            >
-              <span class="heading4" style="color: #160d3d">
-                Share</span
-              ></b-button
-            >
-          </b-nav-item>
+          <b-nav-item href="/share"
+            ><span class="heading4" style="color: #160d3d"
+              >Share</span
+            ></b-nav-item
+          >
           <b-button
             @click="logOut()"
             style="background-color: transparent; color: #160d3d; border: none"

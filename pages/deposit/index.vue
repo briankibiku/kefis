@@ -2,7 +2,6 @@
   <div>
     <div
       class="d-none d-md-block d-lg-none d-none d-lg-block d-xl-none d-none d-xl-block"
-      style="padding: 40px"
     >
       <div class="overlay" v-if="loading">
         <div style="margin: 20px">
@@ -10,7 +9,7 @@
           <div>Loading...</div>
         </div>
       </div>
-      <div class="overlay-home">
+      <div class="colored-center-align-container">
         <div style="margin: 20px">
           <div style="text-align: center">
             <div class="heading2" style="color: #fff">
@@ -162,7 +161,7 @@ export default {
       if (!!this.depositAmount) {
         if (this.depositAmount > 0) {
           try {
-            this.loading = true;
+            this.$nuxt.$loading.start();
             let userProfile = await this.$store.dispatch("getuserProfile");
             this.phoneNumber = this.$store.state.loggedinUserPhone;
             const res = await this.$axios.get(
@@ -199,10 +198,10 @@ export default {
               await this.$store.dispatch("delayFiveSeconds");
               await this.$router.push("/wallet");
             }
-            this.loading = false;
+            this.$nuxt.$loading.finish();
           } catch (err) {
             console.log(err);
-            this.loading = false;
+            this.$nuxt.$loading.finish();
             console.log("error occured while trying to deposit...");
           }
         } else {

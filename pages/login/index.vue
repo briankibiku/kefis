@@ -80,6 +80,13 @@ export default {
       loading: false,
     };
   },
+  mounted() {
+    if (this.$store.state.isAuthenticated) {
+      this.$router.push("/home");
+    } else {
+      this.navigateToLogin();
+    }
+  },
   computed: {
     ...mapGetters("products", ["maskedPhone"]),
     ...mapState({
