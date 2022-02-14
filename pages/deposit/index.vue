@@ -3,12 +3,6 @@
     <div
       class="d-none d-md-block d-lg-none d-none d-lg-block d-xl-none d-none d-xl-block"
     >
-      <div class="overlay" v-if="loading">
-        <div style="margin: 20px">
-          <b-spinner variant="primary" label="Spinning"></b-spinner>
-          <div>Loading...</div>
-        </div>
-      </div>
       <div class="colored-center-align-container">
         <div style="margin: 20px">
           <div style="text-align: center">
@@ -36,10 +30,11 @@
             </div>
             <div>M-pesa</div>
           </div>
-          <RoundedCyanArrowButton
-            @click="processDeposit()"
+          <RoundedCyanLoadingButton
             buttonText="Continue"
+            @click="processDeposit()"
           />
+
           <div class="subheading3" style="margin-top: 20px">
             <a href="/wallet" style="color: #bbb">Back</a>
           </div>
@@ -96,9 +91,10 @@
               <div class="subheading3">M-Pesa</div>
             </div>
             <br /><br />
-            <RoundedCyanArrowButton
-              @click="processDeposit()"
+
+            <RoundedCyanLoadingButton
               buttonText="Continue"
+              @click="processDeposit()"
             />
             <div class="subheading3" style="margin-top: 20px">
               <a href="/wallet" style="color: #bbb">Back</a>
@@ -114,6 +110,7 @@
 import axios from "axios";
 import { mapState, mapActions } from "vuex";
 import RoundedCyanArrowButton from "../../components/Buttons/RoundedCyanArrowButton.vue";
+import RoundedCyanLoadingButton from "../../components/Buttons/RoundedCyanLoadingButton.vue";
 export default {
   data() {
     return {
@@ -140,6 +137,12 @@ export default {
     ...mapActions({
       persistwalletBalance: "persistwalletBalance",
     }),
+    clearTimeout() {
+      if (this.timeout) {
+        clearTimeout(this.timeout);
+        this.timeout = null;
+      }
+    },
     async navigate() {
       let makeDepositResponse = await this.$store.dispatch("makeDeposit");
       console.log(makeDepositResponse);
@@ -161,7 +164,7 @@ export default {
       if (!!this.depositAmount) {
         if (this.depositAmount > 0) {
           try {
-            this.$nuxt.$loading.start();
+            this.busy = true;
             let userProfile = await this.$store.dispatch("getuserProfile");
             this.phoneNumber = this.$store.state.loggedinUserPhone;
             const res = await this.$axios.get(
@@ -198,10 +201,10 @@ export default {
               await this.$store.dispatch("delayFiveSeconds");
               await this.$router.push("/wallet");
             }
-            this.$nuxt.$loading.finish();
+            this.busy = false;
           } catch (err) {
             console.log(err);
-            this.$nuxt.$loading.finish();
+            this.busy = false;
             console.log("error occured while trying to deposit...");
           }
         } else {
@@ -243,6 +246,6 @@ export default {
       });
     },
   },
-  components: { RoundedCyanArrowButton },
+  components: { RoundedCyanLoadingButton },
 };
 </script>

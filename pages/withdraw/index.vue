@@ -3,13 +3,7 @@
     <div
       class="d-none d-md-block d-lg-none d-none d-lg-block d-xl-none d-none d-xl-block"
       style="padding: 40px"
-    >
-      <div class="overlay" v-if="loading">
-        <div style="margin: 20px">
-          <b-spinner variant="primary" label="Spinning"></b-spinner>
-          <div>Loading...</div>
-        </div>
-      </div>
+    > 
       <div class="colored-center-align-container">
         <div style="margin: 20px">
           <div style="text-align: center">
@@ -37,9 +31,9 @@
             </div>
             <div>M-pesa</div>
           </div>
-          <RoundedCyanArrowButton
-            @click="processWithdrawal()"
+          <RoundedCyanLoadingButton
             buttonText="Continue"
+            @click="processWithdrawal()"
           />
           <div class="subheading3" style="margin-top: 20px">
             <a href="/wallet" style="color: #bbb">Back</a>
@@ -97,9 +91,9 @@
               <div class="subheading3">M-Pesa</div>
             </div>
             <br /><br />
-            <RoundedCyanArrowButton
-              @click="processWithdrawal()"
+            <RoundedCyanLoadingButton
               buttonText="Continue"
+              @click="processWithdrawal()"
             />
             <div class="subheading3" style="margin-top: 20px">
               <a href="/wallet" style="color: #bbb">Back</a>
@@ -115,6 +109,7 @@
 import axios from "axios";
 import { mapState, mapActions } from "vuex";
 import RoundedCyanArrowButton from "../../components/Buttons/RoundedCyanArrowButton.vue";
+import RoundedCyanLoadingButton from "../../components/Buttons/RoundedCyanLoadingButton.vue";
 
 export default {
   data() {
@@ -251,6 +246,6 @@ export default {
       );
     },
   },
-  components: { RoundedCyanArrowButton },
+  components: { RoundedCyanArrowButton, RoundedCyanLoadingButton },
 };
 </script>
