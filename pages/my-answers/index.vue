@@ -1,59 +1,70 @@
 <template>
-  <div class="container">
-    <div class="centered-container" v-if="userHasNeverPlayed">
-      <div>
-        <img src="~/assets/win_big.png" alt="" />
-        <div class="heading3">
-          You have not played mSwali yet. play to view your answers
+  <div>
+    <div class="row">
+      <div class="col-3" style="padding-left: 90px; padding-top: 60px">
+        <div style="text-align: left">
+          <NuxtLink to="/home">
+            <LogoPurple style="height: 27px; width: 120px" />
+          </NuxtLink>
         </div>
-        <RoundedCyanArrowButton
-          @click="navigateToQuiz()"
-          buttonText="Play Quiz"
-        />
-        <div>
-          <a href="/home" style="color: #bbb">Back</a>
-        </div>
+        <LargeScreenNavBar />
       </div>
-    </div>
-    <div v-if="!userHasNeverPlayed">
-      <p class="centered-container" v-if="$fetchState.pending">
-        <b-spinner label="Spinning"></b-spinner>
-      </p>
-      <p v-else-if="$fetchState.error">An error occurred while fetching data</p>
-      <div v-else>
-        <div class="heading3" style="margin-top: 30px; margin-bottom: 10px">
-          <a href="/home">
-            <font-awesome-icon
-              :icon="['fas', 'chevron-left']"
-              style="color: #160d3d; margin-left: 20px; margin-right: 40px"
+      <div class="col-9">
+        <div v-if="userHasNeverPlayed" style="width: 240px">
+          <div>
+            <img src="~/assets/win_big.png" alt="" />
+            <div class="heading3 text-center">
+              You have not played mSwali yet. play to view your answers
+            </div>
+            <RoundedCyanArrowButton
+              @click="navigateToHome()"
+              buttonText="Play Quiz"
             />
-          </a>
-          Your Answers
-          <b-button
-            class="primary-button"
-            style="width: 100px; height: 40px"
-            @click="refreshPage()"
-          >
-            Refresh
-          </b-button>
+          </div>
         </div>
-        <b-table
-          striped
-          hover
-          :items="this.userAnswers.resp"
-          :fields="fields"
-          :per-page="perPage"
-          :current-page="currentPage"
-        ></b-table>
+        <div v-if="!userHasNeverPlayed">
+          <p class="centered-container" v-if="$fetchState.pending">
+            <b-spinner label="Spinning"></b-spinner>
+          </p>
+          <p v-else-if="$fetchState.error">
+            An error occurred while fetching data
+          </p>
+          <div v-else>
+            <div class="heading3" style="margin-top: 30px; margin-bottom: 10px">
+              <a href="/home">
+                <font-awesome-icon
+                  :icon="['fas', 'chevron-left']"
+                  style="color: #160d3d; margin-left: 20px; margin-right: 40px"
+                />
+              </a>
+              Your Answers
+              <b-button
+                class="primary-button"
+                style="width: 100px; height: 40px"
+                @click="refreshPage()"
+              >
+                Refresh
+              </b-button>
+            </div>
+            <b-table
+              striped
+              hover
+              :items="this.userAnswers.resp"
+              :fields="fields"
+              :per-page="perPage"
+              :current-page="currentPage"
+            ></b-table>
 
-        <b-pagination
-          v-model="currentPage"
-          :total-rows="rows"
-          :per-page="perPage"
-          aria-controls="my-table"
-        ></b-pagination>
+            <b-pagination
+              v-model="currentPage"
+              :total-rows="rows"
+              :per-page="perPage"
+              aria-controls="my-table"
+            ></b-pagination>
 
-        <a href="/home" style="color: #bbb">Back</a>
+            <a href="/home" style="color: #bbb">Back</a>
+          </div>
+        </div>
       </div>
     </div>
   </div>
@@ -88,7 +99,7 @@ export default {
         "question",
         "answer",
         { key: "label", label: "Correct Choice" },
-        { key: "picked", label: "Your Choice" },
+        // { key: "picked", label: "Your Choice" },
       ],
     };
   },
@@ -103,17 +114,24 @@ export default {
   },
   async fetch() {
     let loggedINPhone = this.$store.state.loggedinUserPhone;
-    // "0721619818";
+    // "0722377917";
     this.userAnswers = await fetch(
       `http://cms.mswali.co.ke/mswali/mswali_app/backend/web/index.php?r=solo-play/show-my-answers&msisdn=${loggedINPhone}`,
     ).then((res) => res.json());
-    this.questionAnswers2 = this.userAnswers.resp;
-    this.fillItemsList();
+    if (this.userAnswers.has_played) {
+      this.questionAnswers2 = this.userAnswers.resp;
+      this.fillItemsList();
+    } else {
+      this.userHasNeverPlayed = true;
+    }
   },
   methods: {
     ...mapActions({ startPersistance: "startPersistance" }),
     refreshPage() {
       window.location.reload();
+    },
+    async navigateToHome() {
+      this.$router.push("/home");
     },
     async fillItemsList() {
       for (let i = 0; i < this.userAnswers.choices_picked.length; i++) {

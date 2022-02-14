@@ -10,7 +10,7 @@
           <div>Loading...</div>
         </div>
       </div>
-      <div class="overlay-home">
+      <div class="colored-center-align-container">
         <div style="margin: 20px">
           <div style="text-align: center">
             <div class="heading2" style="color: #fff">
@@ -97,10 +97,10 @@
               <div class="subheading3">M-Pesa</div>
             </div>
             <br /><br />
-          <RoundedCyanArrowButton
-            @click="processWithdrawal()"
-            buttonText="Continue"
-          />
+            <RoundedCyanArrowButton
+              @click="processWithdrawal()"
+              buttonText="Continue"
+            />
             <div class="subheading3" style="margin-top: 20px">
               <a href="/wallet" style="color: #bbb">Back</a>
             </div>

@@ -51,16 +51,7 @@
               <span class="loading"></span>
             </p>
             <p v-else-if="$fetchState.error">An error occurred :(</p>
-            <div v-else class="card-content">
-              <div class="center-align-content">
-                <img
-                  src="~/assets/music.jpeg"
-                  width="200"
-                  height="100"
-                  alt="quiz image"
-                  style="padding-top: 10px"
-                />
-              </div>
+            <div v-else class="card-content"> 
               <div class="question-item">
                 <p class="question-title text-center">
                   {{ this.quiz[this.counter].question }}
@@ -94,7 +85,7 @@
                 <a
                   @click="showMsgBoxTwo"
                   style="color: #bbb; padding-bottom: 20px"
-                  >Quit</a
+                  >Pause</a
                 >
               </div>
             </div>

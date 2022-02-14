@@ -41,12 +41,11 @@
                   </div>
                 </div>
                 <br />
-
                 <div
                   class="card padding-10"
                   style="margin-bottom: 20px; padding-left: 40px"
                 >
-                  <div class="row d-flex justify-content-between">
+                  <div class="d-flex justify-content-between">
                     <div class="heading4">Wallet Balance</div>
                     <div>
                       <b-button
@@ -75,6 +74,9 @@
                     >
                       ******
                     </div>
+                  </div>
+                  <div class="subheading4">
+                    Credits: {{ this.creditsBalanceFromState }}
                   </div>
                 </div>
 

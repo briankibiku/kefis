@@ -214,6 +214,23 @@
   align-items: center;
   text-align: center;
 }
+.colored-center-align-container {
+  background-image: url("~/assets/overlay_bg.png");
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-color: #160d3d;
+  min-height: 100%;
+  height: 100%;
+  position: absolute;
+  top: 0px;
+  right: 0px;
+  bottom: 0px;
+  left: 0px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+}
 .painted-background-header {
   width: 100%;
   height: 50px;
