@@ -44,10 +44,9 @@
                 />
               </div>
             </form>
-            <RoundedCyanArrowButton
+            <RoundedCyanLoadingButton
               @click="navigateToQuiz()"
               buttonText="Start Quiz"
-              style="width: 150px"
             />
             <div class="d-flex align-items-center" style="flex-direction: row">
               <b-button class="text-button margin-horizontal-20" @click="">
@@ -226,7 +225,6 @@
                     @click="navigateToQuiz()"
                     buttonText="Start Quiz"
                     style="
-                      margin-bottom: 420px;
                       position: fixed;
                       bottom: 0;
                       margin-block: 20px;
@@ -271,6 +269,7 @@ import LoadingBar from "../../components/LoadingBar.vue";
 import Outline from "../../components/Buttons/Outline.vue";
 import Flat from "../../components/Buttons/Flat.vue";
 import RoundedCyanArrowButton from "../../components/Buttons/RoundedCyanArrowButton.vue";
+import RoundedCyanLoadingButton from "../../components/Buttons/RoundedCyanLoadingButton.vue";
 export default {
   data() {
     return {
@@ -634,6 +633,7 @@ export default {
     Outline,
     Flat,
     RoundedCyanArrowButton,
+    RoundedCyanLoadingButton,
   },
 };
 </script>

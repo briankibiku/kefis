@@ -194,11 +194,11 @@ export default {
               await this.persistwalletBalance(walletBalanceFromAPI);
               this.walletBalanceFromAPI = this.$store.state.walletBalance;
               await this.depositSuccessfulToast();
-              await this.$store.dispatch("delayFiveSeconds");
+              await this.$store.dispatch("delayTwoSeconds");
               await this.$router.push("/wallet");
             } else {
               await this.depositErrorToast();
-              await this.$store.dispatch("delayFiveSeconds");
+              await this.$store.dispatch("delayTwoSeconds");
               await this.$router.push("/wallet");
             }
             this.busy = false;
