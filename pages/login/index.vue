@@ -48,12 +48,11 @@
                   />
                 </div>
               </form>
-              <button class="rounded-button-cyan" @click="checkUserExists()">
-                <div class="subheading4">
-                  Proceed
-                  <font-awesome-icon :icon="['fas', 'arrow-right']" />
-                </div>
-              </button>
+              <RoundedCyanLoadingButton
+                buttonText="Proceed"
+                showIcon="true"
+                @click="checkUserExists()"
+              />
             </div>
           </div>
         </div>
@@ -68,6 +67,7 @@ import { mapGetters } from "vuex";
 import { mapState, mapActions } from "vuex";
 import MswaliExplained from "../../components/MswaliExplained.vue";
 import RoundedCyanArrowButton from "../../components/Buttons/RoundedCyanArrowButton.vue";
+import RoundedCyanLoadingButton from "../../components/Buttons/RoundedCyanLoadingButton.vue";
 export default {
   head: {
     title: "Login",
@@ -115,6 +115,9 @@ export default {
     },
     goToSignup() {
       return this.$router.push("/signup");
+    },
+    navigateToLogin() {
+      return this.$router.push("/login");
     },
     validatePhoneNumber(input_str) {
       var re = /^[\+]?[(]?[0-9]{3}[)]?[-\s\.]?[0-9]{3}[-\s\.]?[0-9]{4,6}$/im;
@@ -165,7 +168,11 @@ export default {
       }
     },
   },
-  components: { MswaliExplained, RoundedCyanArrowButton },
+  components: {
+    MswaliExplained,
+    RoundedCyanArrowButton,
+    RoundedCyanLoadingButton,
+  },
 };
 </script>
 

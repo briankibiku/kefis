@@ -416,12 +416,14 @@ export default {
 
       if (time < 12) {
         this.greetings = "Morning ";
-      }
-      if (time == 12) {
+      } else if (time == 12) {
         this.greetings = "Afternoon ";
-      }
-      if (time > 12) {
+      } else if (time > 13 && time < 18) {
         this.greetings = "Afternoon ";
+      } else if (time == 18) {
+        this.greetings = "Evening ";
+      } else if (time > 18) {
+        this.greetings = "Evening ";
       }
       return this.greetings;
     },
@@ -485,6 +487,7 @@ export default {
         let gameRate = this.$store.state.sessionDetails.session.rate;
         let sessionID = this.$store.state.sessionDetails.session.id;
         let isSessionLive = this.$store.state.sessionDetails.session.id;
+      console.log("sessionID " + sessionID);
         // step 2 check if the game session is live for user to play
         if (isSessionLive) {
           // step 3 check if rate is > 0 or = 0
@@ -618,11 +621,13 @@ export default {
           // stop loading
           this.$nuxt.$loading.finish();
           this.sessionIsNotLiveToast();
+          window.location.reload();
         }
       } catch (e) {
         // stop loading
         this.$nuxt.$loading.finish();
         this.sessionIsNotLiveToast();
+        window.location.reload();
       }
     },
   },
