@@ -51,7 +51,7 @@
               <span class="loading"></span>
             </p>
             <p v-else-if="$fetchState.error">An error occurred :(</p>
-            <div v-else class="card-content"> 
+            <div v-else class="card-content">
               <div class="question-item">
                 <p class="question-title text-center">
                   {{ this.quiz[this.counter].question }}
@@ -208,26 +208,20 @@ export default {
     },
     // Logic to loop through questions goes here
     async goToNextQuestion(correct) {
+      console.log(correct);
       let nextQuestion = (this.counter += 1);
-      if (correct) {
+      // update individual question score 
+      // let questionID = this.quiz[this.counter].question_id;
+      if (correct) { 
         this.correctScore = this.correctScore + 1;
         this.$store.commit("updateQuizScore", this.correctScore);
         console.log("Correct answers" + this.$store.state.trivia_score.correct);
-      } else {
+      } else if (!correct) {
         this.wrong = this.wrong + 1;
         this.$store.commit("updateQuizWrongs", this.wrong);
         console.log("Wrong answers" + this.$store.state.trivia_score.wrong);
         this.persistCanWinStatus(false);
-      }
-      // update individual question score
-      //let sessionID = this.$store.state.sessionDetails.session.id;
-      //let questionID = this.quiz[this.counter].question_id;
-      //let questionNO = this.counter + 1;
-
-      //let updateQuestionScoreResponse = await this.$axios.get(
-      //  `http://cms.mswali.co.ke/mswali/mswali_app/backend/web/index.php?r=solo-play/update-session-score&session_id=${sessionID}&question_id=${questionID}&user_id=${this.mswaliUserId}&user_response=timeout&user_text=A&question=${questionNO}&timeout=1&correct=1`,
-      //);
-      //console.log(updateQuestionScoreResponse);
+      } 
 
       if (nextQuestion < this.quiz.length) {
         this.counter = nextQuestion;

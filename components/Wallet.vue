@@ -108,14 +108,7 @@
     <!--Small screen begins here-->
     <div class="d-block d-sm-none d-none d-sm-block d-md-none">
       <div class="painted-background" style="padding: 20px">
-        <div style="text-align: left">
-          <a href="/home">
-            <font-awesome-icon
-              :icon="['fas', 'chevron-left']"
-              style="color: #160d3d"
-            />
-          </a>
-        </div>
+        <NavigationBar />
         <div class="row" style="vertical-align: top">
           <div class="column left">
             <b-avatar variant="light"></b-avatar>
