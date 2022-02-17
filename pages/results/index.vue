@@ -26,37 +26,20 @@
       </p>
 
       <div class="t-section">
-        <b-overlay
-          :show="busy"
-          rounded
-          opacity="0.6"
-          spinner-small
-          spinner-variant="primary"
-          class="d-inline-block"
-          @hidden="onHidden"
+        <button
+          type="submit"
+          @click.stop.prevent="onSubmit()"
+          form="otp-form"
+          class="outline-button-cyan ml-10 mr-10"
         >
-          <b-button
-            type="submit"
-            @click.stop.prevent="
-              onSubmit();
-              onClick();
-            "
-            ref="button"
-            :disabled="busy"
-            form="otp-form"
-            style="width: 300px"
-            class="outline-button-cyan ml-10 mr-10"
-          >
-            <span class="btn-label"><center>Continue</center></span>
-          </b-button></b-overlay
-        >
+          <span class="btn-label"><center>Continue</center></span>
+        </button>
       </div>
     </div>
   </section>
 </template>
 
 <script>
-import RoundedCyanLoadingButton from "./Buttons/RoundedCyanLoadingButton.vue";
 export default {
   head() {
     return {
@@ -66,7 +49,6 @@ export default {
   },
   data() {
     return {
-      busy: false,
       myScore: this.$store.getters.calculteScore,
       correctAttempts: this.$store.state.trivia_score.correct,
       totalFailed: this.$store.state.trivia_score.wrong,
@@ -75,34 +57,8 @@ export default {
       // token: nuxtStorage.localStorage.getItem('Token')
     };
   },
-  beforeDestroy() {
-    this.clearTimeout();
-  },
+
   methods: {
-    clearTimeout() {
-      if (this.timeout) {
-        clearTimeout(this.timeout);
-        this.timeout = null;
-      }
-    },
-    onHidden() {
-      // Return focus to the button
-      this.$refs.button.focus();
-    },
-    setTimeout(callback) {
-      this.clearTimeout();
-      this.timeout = setTimeout(() => {
-        this.clearTimeout();
-        callback();
-      }, 60000);
-    },
-    onClick() {
-      this.busy = true;
-      // Simulate an async request
-      this.setTimeout(() => {
-        this.busy = false;
-      });
-    },
     async onSubmit() {
       if (this.correctAttempts == 9) {
         let awardPrize = this.$store.state.sessionDetails.session.prize;
@@ -117,21 +73,21 @@ export default {
         let awardUserResponse = await this.$axios.post(
           `http://cms.mswali.co.ke/mswali/mswali_app/backend/web/index.php?r=api/give-prize&user_id=${mswaliUserId}&amount=${awardPrize}`,
         );
-        console.log(awardPrize);
+        console.log(awardPrize)
         console.log(awardUserResponse);
-        this.$store.commit("updateQuizScore", "");
-        this.$store.commit("updateQuizWrongs", "");
-        this.$store.commit("updateQuizTimeouts", "");
-        this.makeToast(), await this.$store.dispatch("delayTwoSeconds");
-        this.$router.push("/home");
       } else {
         this.$store.commit("updateQuizScore", "");
         this.$store.commit("updateQuizWrongs", "");
         this.$store.commit("updateQuizTimeouts", "");
+        // track user
+        // let trackUserResponse = await this.$axios.post(
+        //   `http://cms.mswali.co.ke/mswali/mswali_app/backend/web/index.php?r=solo-play/post-winner&user_id=${mswaliUserId}&session_id=${sessionID}`,
+        // );
         this.makeToast(), await this.$store.dispatch("delayTwoSeconds");
         this.$router.push("/home");
       }
     },
+
     makeToast(toaster) {
       this.$bvToast.toast("Thanks and see you again.", {
         title: `Come again`,
@@ -141,7 +97,6 @@ export default {
       });
     },
   },
-  components: { RoundedCyanLoadingButton },
 };
 </script>
 

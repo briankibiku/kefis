@@ -53,10 +53,9 @@
                   required
                   style="margin-bottom: 10px"
                 />
-                <RoundedCyanArrowButton
+                <RoundedCyanLoadingButton
                   @click="submit()"
-                  buttonText="Proceed"
-                  style="width: 240px"
+                  buttonText="Share"
                 />
                 <br />
               </div>
@@ -103,6 +102,7 @@
 
 <script>
 import RoundedCyanArrowButton from "../../components/Buttons/RoundedCyanArrowButton.vue";
+import RoundedCyanLoadingButton from "../../components/Buttons/RoundedCyanLoadingButton.vue";
 export default {
   data() {
     return {
@@ -113,21 +113,23 @@ export default {
   methods: {
     async submit() {
       if (!!this.referralNumber && this.referralNumber.length >= 10) {
-        this.loading = true;
         let referralResponse = await this.$axios.post(
           `http://cms.mswali.co.ke/mswali/mswali_app/backend/web/index.php?r=api/refer-player&user_id=96601&phone_number=${this.referralNumber}`,
         );
         // check if player is already referred
         if (referralResponse.data.is_refered) {
           await this.failureReferalToast();
-          this.loading = false;
+          await this.$store.dispatch("delayTwoSeconds");
+          window.location.reload();
         } else {
           await this.successReferalToast();
-          this.loading = false;
-          await this.$store.dispatch("delayFiveSeconds");
+          await this.$store.dispatch("delayTwoSeconds");
+          window.location.reload();
         }
       } else {
         this.referralNumberRequiredToast();
+        await this.$store.dispatch("delayTwoSeconds");
+        window.location.reload();
       }
     },
     referralNumberRequiredToast(toaster) {
@@ -158,7 +160,7 @@ export default {
       });
     },
   },
-  components: { RoundedCyanArrowButton },
+  components: { RoundedCyanArrowButton, RoundedCyanLoadingButton },
 };
 </script>
 

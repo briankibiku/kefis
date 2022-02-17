@@ -108,10 +108,9 @@
                   Resend OTP
                 </button>
               </div>
-              <RoundedCyanArrowButton
-                @click="verifyOTP()"
+              <RoundedCyanLoadingButton
                 buttonText="Verify"
-                style="width: 240px"
+                @click="verifyOTP()"
               />
             </div>
           </div>
@@ -125,6 +124,7 @@ const TIME_LIMIT = 60;
 import axios from "axios";
 import { mapState, mapActions } from "vuex";
 import RoundedCyanArrowButton from "../../components/Buttons/RoundedCyanArrowButton.vue";
+import RoundedCyanLoadingButton from "../../components/Buttons/RoundedCyanLoadingButton.vue";
 export default {
   head: {
     title: "Verify phone",
@@ -342,7 +342,7 @@ export default {
       await this.peristAuthentication(true);
     },
   },
-  components: { RoundedCyanArrowButton },
+  components: { RoundedCyanArrowButton, RoundedCyanLoadingButton },
 };
 </script>
 <style scoped>

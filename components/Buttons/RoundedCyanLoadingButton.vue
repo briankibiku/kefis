@@ -19,6 +19,7 @@
       style="width: 240px"
     >
       {{ buttonText }}
+      <font-awesome-icon v-if="show" :icon="['fas', 'arrow-right']" />
     </b-button>
   </b-overlay>
 </template>
@@ -29,12 +30,20 @@ export default {
     return {
       busy: false,
       timeout: null,
+      show: false,
     };
   },
   props: {
     buttonText: String,
     showIcon: String,
     showloading: String,
+  },
+  mounted() {
+    if (this.showIcon == "true") {
+      this.show = true;
+    } else {
+      this.show = false;
+    }
   },
   beforeDestroy() {
     this.clearTimeout();

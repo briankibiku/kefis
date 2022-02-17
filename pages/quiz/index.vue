@@ -10,6 +10,7 @@
           Question {{ this.counter + 1 }} of
           {{ this.quiz.length }}
         </div>
+        <span id="timernow">05:00</span>
         <!-- base timer goes here  -->
         <div class="center">
           <div class="base-timer">
@@ -117,7 +118,7 @@ const COLOR_CODES = {
   },
 };
 
-const TIME_LIMIT = 10;
+const TIME_LIMIT = 20;
 
 export default {
   data() {
@@ -126,13 +127,15 @@ export default {
       mswaliUserId: this.$store.state.mswaliId,
       number: 1,
       quiz_score: 0,
-      wrong: 0,
       canWin: true,
       error: null,
       dummyQuiz: [],
+      userAnswersList: [],
       quiz: [],
       boxTwo: "",
+      wrongScore: 0,
       correctScore: 0,
+      timeouts: 0,
       showResults: false,
       timePassed: 0,
       timerInterval: null,
@@ -165,31 +168,24 @@ export default {
     circleDasharray() {
       return `${(this.timeFraction * FULL_DASH_ARRAY).toFixed(0)} 283`;
     },
-
     formattedTimeLeft() {
       const timeLeft = this.timeLeft;
       const minutes = Math.floor(timeLeft / 60);
       let seconds = timeLeft % 60;
-
       if (seconds < 10) {
         seconds = `0${seconds}`;
       }
-
       return `${minutes}:${seconds}`;
     },
-
     timeLeft() {
       return TIME_LIMIT - this.timePassed;
     },
-
     timeFraction() {
       const rawTimeFraction = this.timeLeft / TIME_LIMIT;
       return rawTimeFraction - (1 / TIME_LIMIT) * (1 - rawTimeFraction);
     },
-
     remainingPathColor() {
       const { alert, warning, info } = COLOR_CODES;
-
       if (this.timeLeft <= alert.threshold) {
         return alert.color;
       } else if (this.timeLeft <= warning.threshold) {
@@ -208,28 +204,56 @@ export default {
     },
     // Logic to loop through questions goes here
     async goToNextQuestion(correct) {
-      console.log(correct);
-      let nextQuestion = (this.counter += 1);
-      // update individual question score 
-      // let questionID = this.quiz[this.counter].question_id;
-      if (correct) { 
-        this.correctScore = this.correctScore + 1;
-        this.$store.commit("updateQuizScore", this.correctScore);
-        console.log("Correct answers" + this.$store.state.trivia_score.correct);
-      } else if (!correct) {
-        this.wrong = this.wrong + 1;
-        this.$store.commit("updateQuizWrongs", this.wrong);
-        console.log("Wrong answers" + this.$store.state.trivia_score.wrong);
-        this.persistCanWinStatus(false);
-      } 
-
-      if (nextQuestion < this.quiz.length) {
-        this.counter = nextQuestion;
+      // update answer using API
+      await this.updateAnswerOnBackend(this.counter + 1, correct);
+      // prevent counter from incrementing to 10
+      if (this.counter < 8) {
+        this.counter += 1;
       } else {
         this.showResults = true;
-        console.log("Hello world");
       }
     },
+    async updateAnswerOnBackend(questionNumber, answer) {
+      let sessionID = this.$store.state.sessionDetails.session.id;
+      let mswaliUserId = this.$store.state.mswaliId;
+      let questionId = this.quiz[this.counter].question_id;
+      let answerValue;
+      let timeoutValue;
+      if (answer === 1) {
+        answerValue = 1;
+        timeoutValue = 0;
+        this.correctScore += 1;
+        await this.$store.commit("updateQuizScore", this.correctScore);
+        console.log("CORRECT ANSWER " + this.$store.state.trivia_score.correct);
+      } else if (answer === 0) {
+        answerValue = 0;
+        timeoutValue = 0;
+        this.wrongScore += 1;
+        await this.$store.commit("updateQuizWrongs", this.wrongScore);
+        console.log("WRONG ANSWER " + this.$store.state.trivia_score.wrong);
+      } else if (answer === "timeout") {
+        answerValue = 0;
+        timeoutValue = 1;
+        this.timeouts += 1;
+        await this.$store.commit("updateQuizTimeouts", this.timeouts);
+      }
+      let updateQuestionAnswer = await this.$axios.post(
+        `http://cms.mswali.co.ke/mswali/mswali_app/backend/web/index.php?r=solo-play/update-session-score&session_id=${sessionID}&question_id=${questionId}&user_id=${mswaliUserId}&user_response=timeout&user_text=A&question=${questionNumber}&timeout=${timeoutValue}&correct=${answerValue}`,
+      );
+      console.log("Answer API response" + questionNumber);
+      console.log(updateQuestionAnswer);
+    },
+    // async startTimerNow() {
+    //   var timeLeft = 20;
+    //   setInterval(() => {
+    //     if (timeLeft == -1) {
+    //       // set timeoutfor specificqustion
+    //       this.goToNextQuestion("timeout");
+    //     } else {
+    //       timeLeft--;
+    //     }
+    //   }, 1000);
+    // },
     showMsgBoxTwo() {
       this.boxTwo = "";
       this.$bvModal
@@ -256,8 +280,14 @@ export default {
     onTimesUp() {
       clearInterval(this.timerInterval);
     },
-    startTimer() {
-      this.timerInterval = setInterval(() => (this.timePassed += 1), 1000);
+    startTimer(timelapsed) {
+      this.timerInterval = setInterval(
+        () =>
+          timelapsed
+            ? this.timePassed - this.timePassed
+            : (this.timePassed += 1),
+        1000,
+      );
     },
   },
 };
