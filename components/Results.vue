@@ -69,6 +69,7 @@ export default {
       busy: false,
       myScore: this.$store.getters.calculteScore,
       correctAttempts: this.$store.state.trivia_score.correct,
+      wrongAttempts: this.$store.state.trivia_score.wrong,
       totalFailed: this.$store.state.trivia_score.wrong,
       totalTimeouts: this.$store.state.trivia_score.timeouts,
       unAttempted: 0,
@@ -104,21 +105,21 @@ export default {
       });
     },
     async onSubmit() {
-      if (this.correctAttempts == 9) {
+      if (this.correctAttempts === 9 && this.wrongAttempts === 0) {
         let awardPrize = this.$store.state.sessionDetails.session.prize;
         let mswaliUserId = this.$store.state.mswaliId;
         let sessionID = this.$store.state.sessionDetails.session.id;
         // update trackwinner
-        let trackUserResponse = await this.$axios.post(
-          `http://cms.mswali.co.ke/mswali/mswali_app/backend/web/index.php?r=solo-play/post-winner&user_id=${mswaliUserId}&session_id=${sessionID}`,
-        );
+        //let trackUserResponse = await this.$axios.post(
+        //   `http://cms.mswali.co.ke/mswali/mswali_app/backend/web/index.php?r=solo-play/post-winner&user_id=${mswaliUserId}&session_id=${sessionID}`,
+        // );
         console.log(trackUserResponse);
         // award winner game play amount of the session
-        let awardUserResponse = await this.$axios.post(
-          `http://cms.mswali.co.ke/mswali/mswali_app/backend/web/index.php?r=api/give-prize&user_id=${mswaliUserId}&amount=${awardPrize}`,
-        );
-        console.log(awardPrize);
-        console.log(awardUserResponse);
+        // let awardUserResponse = await this.$axios.post(
+        // `http://cms.mswali.co.ke/mswali/mswali_app/backend/web/index.php?r=api/give-prize&user_id=${mswaliUserId}&amount=${awardPrize}`,
+        //  );
+        // console.log(awardPrize);
+        //console.log(awardUserResponse);
         this.$store.commit("updateQuizScore", "");
         this.$store.commit("updateQuizWrongs", "");
         this.$store.commit("updateQuizTimeouts", "");

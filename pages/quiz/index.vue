@@ -12,37 +12,7 @@
         </div>
         <span id="timernow">05:00</span>
         <!-- base timer goes here  -->
-        <div class="center">
-          <div class="base-timer">
-            <svg
-              class="base-timer__svg"
-              viewBox="0 0 100 100"
-              xmlns="http://www.w3.org/2000/svg"
-            >
-              <g class="base-timer__circle">
-                <circle
-                  class="base-timer__path-elapsed"
-                  cx="50"
-                  cy="50"
-                  r="45"
-                ></circle>
-                <path
-                  :stroke-dasharray="circleDasharray"
-                  class="base-timer__path-remaining"
-                  :class="remainingPathColor"
-                  d="
-            M 50, 50
-            m -45, 0
-            a 45,45 0 1,0 90,0
-            a 45,45 0 1,0 -90,0
-          "
-                ></path>
-              </g>
-            </svg>
-            <span class="base-timer__label">{{ formattedTimeLeft }}</span>
-          </div>
-        </div>
-
+        <BaseTimer class="center" :key="rebuildbasetimer" />
         <b-row style="margin-top: 180px">
           <b-col>
             <p
@@ -68,8 +38,10 @@
                   <center>
                     <p class="field">
                       <button
-                        class="outline-button-cyan"
-                        v-on:click="goToNextQuestion(item.correct)"
+                        class="outline-button-cyan click"
+                        v-on:click="
+                          showCorrectAnswer(item.correct, item.choice)
+                        "
                       >
                         <span v-if="item.correct" class="text-choice">
                           {{ item.choice }} . {{ item.answer_text }}</span
@@ -82,6 +54,19 @@
                   </center>
                 </div>
               </div>
+              <br />
+              <div
+                v-if="showFeedback"
+                class="position-bottom subheading4"
+                style="color: #fff"
+              >
+                <div v-if="!isCorrect">
+                  You seleceted the wrong answer, the correct answer is
+                  {{ this.correctChoice }}
+                </div>
+                <div v-if="isCorrect">You seleceted the correct answer</div>
+              </div>
+              <br />
               <div class="position-bottom">
                 <a
                   @click="showMsgBoxTwo"
@@ -99,6 +84,8 @@
 
 <script>
 import { mapState, mapActions } from "vuex";
+import RoundedCyanLoadingButton from "../../components/Buttons/RoundedCyanLoadingButton.vue";
+import BaseTimer from "../../components/BaseTimer.vue";
 
 const FULL_DASH_ARRAY = 283;
 const WARNING_THRESHOLD = 7;
@@ -131,11 +118,15 @@ export default {
       error: null,
       dummyQuiz: [],
       userAnswersList: [],
+      correctChoice: "",
       quiz: [],
       boxTwo: "",
       wrongScore: 0,
       correctScore: 0,
+      showFeedback: false,
+      isCorrect: false,
       timeouts: 0,
+      rebuildbasetimer: 0,
       showResults: false,
       timePassed: 0,
       timerInterval: null,
@@ -150,6 +141,8 @@ export default {
       if (newValue === 0) {
         this.onTimesUp();
         this.timePassed = 0;
+        this.goToNextQuestion("timeout");
+        this.timeoutToast();
         this.startTimer();
       }
     },
@@ -195,12 +188,52 @@ export default {
       }
     },
   },
+  deforeDestroy() {
+    this.disableButtonFunc(true);
+  },
   methods: {
     ...mapActions({
       persistCanWinStatus: "persistCanWinStatus",
     }),
     navigateToLogin() {
       return this.$router.push("/login");
+    },
+    forceRerender() {
+      this.rebuildbasetimer += 1;
+    },
+
+    timeoutToast(toaster) {
+      this.$bvToast.toast(`You ran out of time while answering the question`, {
+        title: `Times Up!`,
+        variant: "danger",
+        toaster: toaster,
+        solid: true,
+      });
+    },
+    // show answer function
+    async showCorrectAnswer(answer, selectedchoice) {
+      console.log(answer);
+      console.log(selectedchoice);
+      console.log(this.quiz[this.counter].choices);
+      this.showFeedback = true;
+      // register correct choice before hand
+      for (var i = 0; i < 4; i++) {
+        if (this.quiz[this.counter].choices[i].correct === 1) {
+          this.correctChoice = this.quiz[this.counter].choices[i].choice;
+          console.log(this.correctChoice + "correct answer label");
+        }
+      }
+      if (answer === 0) {
+        // user selected wrong answer
+        this.isCorrect = false;
+      } else if (answer === 1) {
+        // user selected correct answer
+        this.isCorrect = true;
+      }
+      await this.$store.dispatch("delayTwoSeconds"),
+        await this.goToNextQuestion(answer);
+      this.forceRerender();
+      this.showFeedback = false;
     },
     // Logic to loop through questions goes here
     async goToNextQuestion(correct) {
@@ -236,6 +269,8 @@ export default {
         timeoutValue = 1;
         this.timeouts += 1;
         await this.$store.commit("updateQuizTimeouts", this.timeouts);
+      } else if (answer == "") {
+        console.log("Select answer to proceed");
       }
       let updateQuestionAnswer = await this.$axios.post(
         `http://cms.mswali.co.ke/mswali/mswali_app/backend/web/index.php?r=solo-play/update-session-score&session_id=${sessionID}&question_id=${questionId}&user_id=${mswaliUserId}&user_response=timeout&user_text=A&question=${questionNumber}&timeout=${timeoutValue}&correct=${answerValue}`,
@@ -243,17 +278,6 @@ export default {
       console.log("Answer API response" + questionNumber);
       console.log(updateQuestionAnswer);
     },
-    // async startTimerNow() {
-    //   var timeLeft = 20;
-    //   setInterval(() => {
-    //     if (timeLeft == -1) {
-    //       // set timeoutfor specificqustion
-    //       this.goToNextQuestion("timeout");
-    //     } else {
-    //       timeLeft--;
-    //     }
-    //   }, 1000);
-    // },
     showMsgBoxTwo() {
       this.boxTwo = "";
       this.$bvModal
@@ -290,6 +314,7 @@ export default {
       );
     },
   },
+  components: { RoundedCyanLoadingButton, BaseTimer },
 };
 </script>
 

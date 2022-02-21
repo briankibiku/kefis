@@ -2,131 +2,13 @@
   <div class="row" style="flex-direction: column">
     <div class="heading3 padding-right-20">FAQS</div>
     <div class="subheading3">Frequently asked questions</div>
-    <div class="accordion" role="tablist">
-      <b-card no-body class="mb-1">
-        <b-card-header header-tag="header" class="p-1" role="tab">
-          <b-button block v-b-toggle.accordion-1 variant="info">{{
-            mswaliFaqs[0].question
-          }}</b-button>
-        </b-card-header>
-        <b-collapse id="accordion-1" accordion="my-accordion" role="tabpanel">
-          <b-card-body>
-            <b-card-text> {{ mswaliFaqs[0].answer }}</b-card-text>
-          </b-card-body>
-        </b-collapse>
-      </b-card>
-    </div>
-    <div class="accordion" role="tablist">
-      <b-card no-body class="mb-1">
-        <b-card-header header-tag="header" class="p-1" role="tab">
-          <b-button block v-b-toggle.accordion-2 variant="info">{{
-            mswaliFaqs[1].question
-          }}</b-button>
-        </b-card-header>
-        <b-collapse id="accordion-2" accordion="my-accordion" role="tabpanel">
-          <b-card-body>
-            <b-card-text> {{ mswaliFaqs[1].answer }}</b-card-text>
-          </b-card-body>
-        </b-collapse>
-      </b-card>
-    </div>
-    <div class="accordion" role="tablist">
-      <b-card no-body class="mb-1">
-        <b-card-header header-tag="header" class="p-1" role="tab">
-          <b-button block v-b-toggle.accordion-3 variant="info">{{
-            mswaliFaqs[2].question
-          }}</b-button>
-        </b-card-header>
-        <b-collapse id="accordion-3" accordion="my-accordion" role="tabpanel">
-          <b-card-body>
-            <b-card-text> {{ mswaliFaqs[2].answer }}</b-card-text>
-          </b-card-body>
-        </b-collapse>
-      </b-card>
-    </div>
-    <div class="accordion" role="tablist">
-      <b-card no-body class="mb-1">
-        <b-card-header header-tag="header" class="p-1" role="tab">
-          <b-button block v-b-toggle.accordion-4 variant="info">{{
-            mswaliFaqs[3].question
-          }}</b-button>
-        </b-card-header>
-        <b-collapse id="accordion-4" accordion="my-accordion" role="tabpanel">
-          <b-card-body>
-            <b-card-text> {{ mswaliFaqs[3].answer }}</b-card-text>
-          </b-card-body>
-        </b-collapse>
-      </b-card>
-    </div>
-    <div class="accordion" role="tablist">
-      <b-card no-body class="mb-1">
-        <b-card-header header-tag="header" class="p-1" role="tab">
-          <b-button block v-b-toggle.accordion-5 variant="info">{{
-            mswaliFaqs[4].question
-          }}</b-button>
-        </b-card-header>
-        <b-collapse id="accordion-5" accordion="my-accordion" role="tabpanel">
-          <b-card-body>
-            <b-card-text> {{ mswaliFaqs[4].answer }}</b-card-text>
-          </b-card-body>
-        </b-collapse>
-      </b-card>
-    </div>
-    <div class="accordion" role="tablist">
-      <b-card no-body class="mb-1">
-        <b-card-header header-tag="header" class="p-1" role="tab">
-          <b-button block v-b-toggle.accordion-6 variant="info">{{
-            mswaliFaqs[5].question
-          }}</b-button>
-        </b-card-header>
-        <b-collapse id="accordion-6" accordion="my-accordion" role="tabpanel">
-          <b-card-body>
-            <b-card-text> {{ mswaliFaqs[5].answer }}</b-card-text>
-          </b-card-body>
-        </b-collapse>
-      </b-card>
-    </div>
-    <div class="accordion" role="tablist">
-      <b-card no-body class="mb-1">
-        <b-card-header header-tag="header" class="p-1" role="tab">
-          <b-button block v-b-toggle.accordion-7 variant="info">{{
-            mswaliFaqs[6].question
-          }}</b-button>
-        </b-card-header>
-        <b-collapse id="accordion-7" accordion="my-accordion" role="tabpanel">
-          <b-card-body>
-            <b-card-text> {{ mswaliFaqs[6].answer }}</b-card-text>
-          </b-card-body>
-        </b-collapse>
-      </b-card>
-    </div>
-    <div class="accordion" role="tablist">
-      <b-card no-body class="mb-1">
-        <b-card-header header-tag="header" class="p-1" role="tab">
-          <b-button block v-b-toggle.accordion-8 variant="info">{{
-            mswaliFaqs[7].question
-          }}</b-button>
-        </b-card-header>
-        <b-collapse id="accordion-8" accordion="my-accordion" role="tabpanel">
-          <b-card-body>
-            <b-card-text> {{ mswaliFaqs[7].answer }}</b-card-text>
-          </b-card-body>
-        </b-collapse>
-      </b-card>
-    </div>
-    <div class="accordion" role="tablist">
-      <b-card no-body class="mb-1">
-        <b-card-header header-tag="header" class="p-1" role="tab">
-          <b-button block v-b-toggle.accordion-9 variant="info">{{
-            mswaliFaqs[8].question
-          }}</b-button>
-        </b-card-header>
-        <b-collapse id="accordion-9" accordion="my-accordion" role="tabpanel">
-          <b-card-body>
-            <b-card-text> {{ mswaliFaqs[8].answer }}</b-card-text>
-          </b-card-body>
-        </b-collapse>
-      </b-card>
+    <div v-for="faq in mswaliFaqs">
+      <details
+        style="background-color: #bbb; margin-block: 10px; padding: 10px"
+      >
+        <summary>{{ faq.question }}</summary>
+        {{ faq.answer }}
+      </details>
     </div>
     <br />
   </div>
