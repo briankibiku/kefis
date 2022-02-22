@@ -25,7 +25,7 @@
         ></path>
       </g>
     </svg>
-    <span class="base-timer__label">{{ formattedTimeLeft }}</span>
+    <span class="base-timer__label" style="color: #fff;">{{ formattedTimeLeft }}</span>
   </div>
 </template>
 

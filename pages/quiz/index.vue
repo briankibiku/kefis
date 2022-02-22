@@ -10,7 +10,6 @@
           Question {{ this.counter + 1 }} of
           {{ this.quiz.length }}
         </div>
-        <span id="timernow">05:00</span>
         <!-- base timer goes here  -->
         <BaseTimer class="center" :key="rebuildbasetimer" />
         <b-row style="margin-top: 180px">
@@ -70,7 +69,7 @@
               <div class="position-bottom">
                 <a
                   @click="showMsgBoxTwo"
-                  style="color: #bbb; padding-bottom: 20px"
+                  style=" padding-bottom: 20px"
                   >Pause</a
                 >
               </div>

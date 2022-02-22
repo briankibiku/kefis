@@ -461,6 +461,22 @@ p {
   height: 60px;
   width: 60px;
 }
+.promo-card {
+  background-image: url("~/assets/promo.svg");
+  background-repeat: no-repeat;
+  background-size: contain;
+  border-radius: 14px;
+  width: 100%;
+  margin: 0 auto;
+  min-height: 100vh;
+}
+.wallet-card {
+  margin-bottom: 20px;
+  padding: 20px;
+  width: 84vw;
+  border-radius: 15px;
+  box-shadow: 0 0 50px #ccc;
+}
 
 .custom-modal {
   padding: 40px;

@@ -11,6 +11,7 @@ export default {
       { hid: "description", name: "description", content: "" },
       { name: "format-detection", content: "telephone=no" },
     ],
+    css: ["~/assets/main.css"],
     link: [
       { rel: "icon", type: "image/x-icon", href: "/favicon.ico" },
       {

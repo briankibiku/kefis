@@ -77,8 +77,13 @@
                   </div>
                 </div>
                 <div
-                  class="card padding-10"
-                  style="margin-bottom: 20px; padding-left: 40px"
+                  style="
+                    margin-bottom: 20px;
+                    padding: 20px;
+                    width: 50vw;
+                    border-radius: 15px;
+                    box-shadow: 0 0 50px #ccc;
+                  "
                 >
                   <div class="d-flex justify-content-between">
                     <div class="heading4">Wallet Balance</div>
@@ -121,7 +126,9 @@
           </div>
           <!--Nudge area promotions go here-->
           <div class="scrollable" style="display: flex; flex-direction: row">
-            <NudgeArea /><NudgeArea /><NudgeArea />
+            <img src="~/assets/promo.svg" height="320px" />
+            <img src="~/assets/promo_two.svg" height="320px" />
+            <img src="~/assets/promo_three.svg" height="320px" />
           </div>
         </div>
         <!--Search bar / Start quiz button / Profile  Ends here-->
@@ -170,14 +177,7 @@
             <div class="row" style="width: 100%; margin-inline: 20px">
               <div class="col">
                 <!-- wallet card go here -->
-                <div
-                  class="card padding-10"
-                  style="
-                    margin-bottom: 20px;
-                    border-radius: 10px;
-                    padding-left: 40px;
-                  "
-                >
+                <div class="wallet-card">
                   <div class="d-flex justify-content-between">
                     <div class="subheading1">Wallet Balance</div>
                     <div>
@@ -250,7 +250,9 @@
                   class="scrollable"
                   style="display: flex; flex-direction: row"
                 >
-                  <NudgeArea /><NudgeArea /><NudgeArea />
+                  <img src="~/assets/promo.svg" height="220px" />
+                  <img src="~/assets/promo_two.svg" height="220px" />
+                  <img src="~/assets/promo_three.svg" height="220px" />
                 </div>
               </div>
             </div>
