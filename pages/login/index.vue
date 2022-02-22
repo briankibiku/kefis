@@ -162,9 +162,13 @@ export default {
           }
         } catch (err) {
           this.sendOTPErrorToast();
+          await this.$store.dispatch("delayTwoSeconds");
+          window.location.reload();
         }
       } else {
         this.showMissingFieldsToast();
+        await this.$store.dispatch("delayTwoSeconds");
+        window.location.reload();
       }
     },
   },

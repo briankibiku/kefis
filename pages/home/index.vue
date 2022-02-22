@@ -487,7 +487,7 @@ export default {
         let gameRate = this.$store.state.sessionDetails.session.rate;
         let sessionID = this.$store.state.sessionDetails.session.id;
         let isSessionLive = this.$store.state.sessionDetails.session.id;
-      console.log("sessionID " + sessionID);
+        console.log("sessionID " + sessionID);
         // step 2 check if the game session is live for user to play
         if (isSessionLive) {
           // step 3 check if rate is > 0 or = 0
@@ -619,14 +619,14 @@ export default {
           }
         } else {
           // stop loading
-          this.$nuxt.$loading.finish();
           this.sessionIsNotLiveToast();
+          await this.$store.dispatch("delayTwoSeconds");
           window.location.reload();
         }
       } catch (e) {
         // stop loading
-        this.$nuxt.$loading.finish();
         this.sessionIsNotLiveToast();
+        await this.$store.dispatch("delayTwoSeconds");
         window.location.reload();
       }
     },

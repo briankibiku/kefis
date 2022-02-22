@@ -8,9 +8,28 @@
             <br />
             <br />
             <p class="heading1" style="color: #160d3d">
-              Select category you want to play
+              Select/search category you want to play
             </p>
 
+            <input
+              list="programming-languages"
+              id="car-make"
+              name="car-makes"
+              placeholder="Select/search category.."
+            />
+
+            <datalist id="programming-languages">
+              <option value="Politics"></option>
+
+              <option value="Music"></option>
+
+              <option value="Sports"></option>
+
+              <option value="Geography"></option>
+
+              <option value="Physics"></option>
+            </datalist>
+            <br />
             <div class="grid-container resize-choices">
               <div
                 class="choices"

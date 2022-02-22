@@ -46,13 +46,13 @@
                   <b-button
                     class="rounded-button-cyan"
                     style="margin-right: 20px"
-                    @click="buyBasicPlan()"
+                    @click="showMsgBoxTwo(100)"
                   >
                     <div class="subheading4">Buy 4 sessions for KES 100/=</div>
                   </b-button>
                   <b-button
                     class="rounded-button-cyan"
-                    @click="buyPremiumPlan()"
+                    @click="showMsgBoxTwo(200)"
                   >
                     <div class="subheading4">Buy 8 sessions for KES 200/=</div>
                   </b-button>
@@ -79,13 +79,13 @@
                 style="margin-bottom: 10px"
               >
                 <RoundedCyanArrowButton
-                  @click="buyBasicPlan()"
+                  @click="showMsgBoxTwo(100)"
                   buttonText="Buy 4 sessions for KES 100/="
                   showIcon="false"
                   style="margin-right: 20px; padding: 15px"
                 />
                 <RoundedCyanArrowButton
-                  @click="buyPremiumPlan()"
+                  @click="showMsgBoxTwo(200)"
                   buttonText="Buy 8 sessions for KES 200/="
                   showIcon="false"
                   style="padding: 15px"
@@ -121,6 +121,32 @@ export default {
   methods: {
     navigateToLogin() {
       return this.$router.push("/login");
+    },
+    showMsgBoxTwo(prize) {
+      this.boxTwo = "";
+      this.$bvModal
+        .msgBoxConfirm(`Are you sure you want to buy ${prize} subscription?`, {
+          title: "Quit quiz?",
+          size: "sm",
+          buttonSize: "sm",
+          okVariant: "danger",
+          okTitle: "YES",
+          cancelTitle: "NO",
+          cancelVariant: "light",
+          footerClass: "p-2",
+          hideHeaderClose: false,
+          centered: true,
+        })
+        .then((value) => {
+          if (prize === 100) {
+            this.buyBasicPlan();
+          } else if (prize === 200) {
+            this.buyPremiumPlan();
+          }
+        })
+        .catch((err) => {
+          // An error occurred
+        });
     },
     async buyBasicPlan() {
       let userWalletBalance = this.$store.state.walletBalance;
