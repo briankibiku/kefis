@@ -57,7 +57,16 @@ export default {
       // token: nuxtStorage.localStorage.getItem('Token')
     };
   },
-
+  mounted() {
+    console.log(this.totalFailed);
+    if (
+      this.totalFailed == 0 ||
+      this.totalTimeouts == 0 ||
+      this.correctAttempts == 0
+    ) {
+      this.$router.push("/home");
+    }
+  },
   methods: {
     async onSubmit() {
       if (this.correctAttempts == 9) {
@@ -66,14 +75,14 @@ export default {
         let sessionID = this.$store.state.sessionDetails.session.id;
         // update trackwinner
         let trackUserResponse = await this.$axios.post(
-          `http://cms.mswali.co.ke/mswali/mswali_app/backend/web/index.php?r=solo-play/post-winner&user_id=${mswaliUserId}&session_id=${sessionID}`,
+          `http://161.35.6.91/mswali/mswali_app/backend/web/index.php?r=solo-play/post-winner&user_id=${mswaliUserId}&session_id=${sessionID}`,
         );
         console.log(trackUserResponse);
         // award winner game play amount of the session
         let awardUserResponse = await this.$axios.post(
-          `http://cms.mswali.co.ke/mswali/mswali_app/backend/web/index.php?r=api/give-prize&user_id=${mswaliUserId}&amount=${awardPrize}`,
+          `http://161.35.6.91/mswali/mswali_app/backend/web/index.php?r=api/give-prize&user_id=${mswaliUserId}&amount=${awardPrize}`,
         );
-        console.log(awardPrize)
+        console.log(awardPrize);
         console.log(awardUserResponse);
       } else {
         this.$store.commit("updateQuizScore", "");
@@ -81,7 +90,7 @@ export default {
         this.$store.commit("updateQuizTimeouts", "");
         // track user
         // let trackUserResponse = await this.$axios.post(
-        //   `http://cms.mswali.co.ke/mswali/mswali_app/backend/web/index.php?r=solo-play/post-winner&user_id=${mswaliUserId}&session_id=${sessionID}`,
+        //   `http://161.35.6.91/mswali/mswali_app/backend/web/index.php?r=solo-play/post-winner&user_id=${mswaliUserId}&session_id=${sessionID}`,
         // );
         this.makeToast(), await this.$store.dispatch("delayTwoSeconds");
         this.$router.push("/home");

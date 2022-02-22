@@ -65,26 +65,8 @@
           >
             <div class="row" style="flex-direction: column">
               <div class="row d-flex justify-content-start">
-                <div>
-                  <div class="heading33 padding-right-20">
-                    {{ this.greetings }}
-                    {{ this.$store.state.loggedinUserName }}!
-                  </div>
-                  <div class="subheading22">
-                    {{
-                      this.$store.state.loggedinUserPhone.replace(/^.{3}/g, "0")
-                    }}
-                  </div>
-                </div>
-                <div
-                  style="
-                    margin-bottom: 20px;
-                    padding: 20px;
-                    width: 50vw;
-                    border-radius: 15px;
-                    box-shadow: 0 0 50px #ccc;
-                  "
-                >
+                <Salutations />
+                <div class="wallet-card">
                   <div class="d-flex justify-content-between">
                     <div class="heading4">Wallet Balance</div>
                     <div>
@@ -146,12 +128,7 @@
             </div>
 
             <div class="column middle" style="text-align: left">
-              <div class="heading3">
-                {{ this.greetings }}{{ this.$store.state.loggedinUserName }}!
-              </div>
-              <div class="subheading2">
-                {{ this.$store.state.loggedinUserPhone.replace(/^.{3}/g, "0") }}
-              </div>
+              <Salutations />
             </div>
             <a href="/notifications">
               <div
@@ -177,7 +154,7 @@
             <div class="row" style="width: 100%; margin-inline: 20px">
               <div class="col">
                 <!-- wallet card go here -->
-                <div class="wallet-card">
+                <div class="wallet-card" style="width: 80vw">
                   <div class="d-flex justify-content-between">
                     <div class="subheading1">Wallet Balance</div>
                     <div>
@@ -272,6 +249,7 @@ import Outline from "../../components/Buttons/Outline.vue";
 import Flat from "../../components/Buttons/Flat.vue";
 import RoundedCyanArrowButton from "../../components/Buttons/RoundedCyanArrowButton.vue";
 import RoundedCyanLoadingButton from "../../components/Buttons/RoundedCyanLoadingButton.vue";
+import Salutations from "../../components/Salutations.vue";
 export default {
   data() {
     return {
@@ -325,7 +303,7 @@ export default {
     async updatefreeSession() {
       let mswaliUserId = this.$store.state.mswaliId;
       let response = await $http.$put(
-        `http://cms.mswali.co.ke/mswali/mswali_app/backend/web/index.php?r=api/reduce-free-games&user_id=${this.mswaliUserId}`,
+        `http://161.35.6.91/mswali/mswali_app/backend/web/index.php?r=api/reduce-free-games&user_id=${this.mswaliUserId}`,
       );
       console.log(mswaliUserId);
       console.log(response);
@@ -412,6 +390,14 @@ export default {
         solid: true,
       });
     },
+    networkErrorToast(toaster) {
+      this.$bvToast.toast(`Check your internet connection and try again`, {
+        title: `No internet`,
+        variant: "danger",
+        toaster: toaster,
+        solid: true,
+      });
+    },
     async daySalutatuins() {
       var d = new Date();
       var time = d.getHours();
@@ -434,7 +420,7 @@ export default {
       await this.persistUserCredits("");
       let mswaliUserId = this.$store.state.mswaliId;
       let response = await this.$axios.get(
-        `http://cms.mswali.co.ke/mswali/mswali_app/backend/web/index.php?r=api/get-balance&user_id=${mswaliUserId}`,
+        `http://161.35.6.91/mswali/mswali_app/backend/web/index.php?r=api/get-balance&user_id=${mswaliUserId}`,
       );
       console.log("Fetching wallet balance");
       console.log(response.data);
@@ -446,14 +432,14 @@ export default {
     },
     async fetchSessionQuestions(sessionID) {
       let sessionQuestionsResponse = await this.$axios.get(
-        `http://cms.mswali.co.ke/mswali/mswali_app/backend/web/index.php?r=solo-play/fetch-questions&session_id=${sessionID}`,
+        `http://161.35.6.91/mswali/mswali_app/backend/web/index.php?r=solo-play/fetch-questions&session_id=${sessionID}`,
       );
       await this.persistTriviaQuestions(sessionQuestionsResponse.data.data);
     },
     async deductGameSession() {
       // deduct a session from the user
       let deductGameSessionResponse = await this.$axios.post(
-        `http://cms.mswali.co.ke/mswali/mswali_app/backend/web/index.php?r=api/deduct-free-games&user_id=${this.mswaliUserId}`,
+        `http://161.35.6.91/mswali/mswali_app/backend/web/index.php?r=api/deduct-free-games&user_id=${this.mswaliUserId}`,
       );
       if (
         deductGameSessionResponse.data.status_message ===
@@ -478,7 +464,7 @@ export default {
       this.$nuxt.$loading.start();
       try {
         let sessionResponse = await this.$axios.get(
-          `http://cms.mswali.co.ke/mswali/mswali_app/backend/web/index.php?r=solo-play/get-solo-session&user_id=${this.mswaliUserId}`,
+          `http://161.35.6.91/mswali/mswali_app/backend/web/index.php?r=solo-play/get-solo-session&user_id=${this.mswaliUserId}`,
         );
         await this.persistSessionDetails(sessionResponse.data);
         await this.persistCanWinStatus(
@@ -496,7 +482,7 @@ export default {
           if (gameRate > 0) {
             // step 4 check if user has active subscriptions
             let userSubscriptionStatus = await this.$axios.get(
-              `http://cms.mswali.co.ke/mswali/mswali_app/backend/web/index.php?r=api/check-plan-status&user_id=${mswaliUserId}}`,
+              `http://161.35.6.91/mswali/mswali_app/backend/web/index.php?r=api/check-plan-status&user_id=${mswaliUserId}}`,
             );
             let userWalletBalance = await this.$axios.get(
               `http://161.35.6.91/mswali/mswali_app/backend/web/index.php?r=api/get-balance&user_id=${mswaliUserId}`,
@@ -505,7 +491,7 @@ export default {
             if (userWalletBalance.data.credit_balance > 0) {
               // subtract a credit from user balance
               let creditDeduct = await this.$axios.post(
-                `http://cms.mswali.co.ke/mswali/mswali_app/backend/web/index.php?r=api/play-with-credit&user_id=${mswaliUserId}`,
+                `http://161.35.6.91/mswali/mswali_app/backend/web/index.php?r=api/play-with-credit&user_id=${mswaliUserId}`,
               );
               if (creditDeduct.data.message == "credit redeemed successfully") {
                 // if user has credits serve the questions and deduct a credit
@@ -540,12 +526,12 @@ export default {
                 if (userWalletBalance.data.data >= 200) {
                   // credit user 200
                   let creditUserResponse = await this.$axios.post(
-                    `http://cms.mswali.co.ke/mswali/mswali_app/backend/web/index.php?r=api/game-play&user_id=${this.mswaliUserId}&msisdn=${this.loggedInUserNumber}&gateway=INTERNAL&amount=200`,
+                    `http://161.35.6.91/mswali/mswali_app/backend/web/index.php?r=api/game-play&user_id=${this.mswaliUserId}&msisdn=${this.loggedInUserNumber}&gateway=INTERNAL&amount=200`,
                   );
                   console.log(creditUserResponse);
                   // subscribe to 10 sessions
                   let premiumPlanResponse = await this.$axios.post(
-                    `http://cms.mswali.co.ke/mswali/mswali_app/backend/web/index.php?r=api/premium-daily-plan&user_id=${this.mswaliUserId}`,
+                    `http://161.35.6.91/mswali/mswali_app/backend/web/index.php?r=api/premium-daily-plan&user_id=${this.mswaliUserId}`,
                   );
                   console.log(premiumPlanResponse);
                   if (
@@ -563,13 +549,13 @@ export default {
                 } else if (userWalletBalance.data.data >= 100) {
                   // credit user 100
                   let gamePlayResponse = await this.$axios.post(
-                    `http://cms.mswali.co.ke/mswali/mswali_app/backend/web/index.php?r=api/game-play&user_id=${this.mswaliUserId}&msisdn=${this.loggedInUserNumber}&gateway=INTERNAL&amount=100`,
+                    `http://161.35.6.91/mswali/mswali_app/backend/web/index.php?r=api/game-play&user_id=${this.mswaliUserId}&msisdn=${this.loggedInUserNumber}&gateway=INTERNAL&amount=100`,
                   );
                   if (gamePlayResponse.data == null) {
                     console.log("Buying 100 KES subscription");
                     // subscribe to 4 sessions
                     let basicPlanResponse = await this.$axios.post(
-                      `http://cms.mswali.co.ke/mswali/mswali_app/backend/web/index.php?r=api/daily-plan&user_id=${this.mswaliUserId}`,
+                      `http://161.35.6.91/mswali/mswali_app/backend/web/index.php?r=api/daily-plan&user_id=${this.mswaliUserId}`,
                     );
                     console.log(basicPlanResponse);
                     if (
@@ -593,7 +579,7 @@ export default {
                   // TODO: deduct the balance froom the wallet
                   console.log("Buying 50 boob subscription");
                   let dailyPlanResponse = await this.$axios.post(
-                    `http://cms.mswali.co.ke/mswali/mswali_app/backend/web/index.php?r=api/game-play&user_id=${this.mswaliUserId}&amount=50`,
+                    `http://161.35.6.91/mswali/mswali_app/backend/web/index.php?r=api/game-play&user_id=${this.mswaliUserId}&amount=50`,
                   );
                   if (dailyPlanResponse.data == null) {
                     await this.fetchWalletBalance();
@@ -627,7 +613,7 @@ export default {
         }
       } catch (e) {
         // stop loading
-        this.sessionIsNotLiveToast();
+        this.networkErrorToast();
         await this.$store.dispatch("delayTwoSeconds");
         window.location.reload();
       }
@@ -641,6 +627,7 @@ export default {
     Flat,
     RoundedCyanArrowButton,
     RoundedCyanLoadingButton,
+    Salutations,
   },
 };
 </script>
@@ -744,5 +731,12 @@ export default {
   background-color: #160d3d;
   background-position: bottom;
   background-size: contain;
+}
+.wallet-card {
+  margin-bottom: 20px;
+  padding: 20px;
+  width: 50vw;
+  border-radius: 15px;
+  box-shadow: 0 0 50px #ccc;
 }
 </style>

@@ -25,7 +25,9 @@
         ></path>
       </g>
     </svg>
-    <span class="base-timer__label" style="color: #fff;">{{ formattedTimeLeft }}</span>
+    <span class="base-timer__label" style="color: #fff">{{
+      formattedTimeLeft
+    }}</span>
   </div>
 </template>
 
@@ -57,7 +59,6 @@ export default {
       timerInterval: null,
     };
   },
-
   computed: {
     circleDasharray() {
       return `${(this.timeFraction * FULL_DASH_ARRAY).toFixed(0)} 283`;

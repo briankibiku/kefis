@@ -3,14 +3,14 @@
     <div
       class="d-none d-md-block d-lg-none d-none d-lg-block d-xl-none d-none d-xl-block"
       style="padding: 40px"
-    > 
+    >
       <div class="colored-center-align-container">
         <div style="margin: 20px">
           <div style="text-align: center">
             <div class="heading2" style="color: #fff">
               Hi {{ this.userName }}
             </div>
-            <div class="subheading3" style="color: #fff; padding-bottom: 20px">
+            <div class="subheading" style="color: #fff; padding-bottom: 20px">
               How much do you wish to withdraw?
             </div>
           </div>
@@ -31,8 +31,12 @@
             </div>
             <div>M-pesa</div>
           </div>
-          <RoundedCyanLoadingButton
+          <ConfirmationModal
             buttonText="Continue"
+            title="Confirm withdraw"
+            body="Are you sure you want to withdraw"
+            :extra="withdrawAmount"
+            action="success"
             @click="processWithdrawal()"
           />
           <div class="subheading3" style="margin-top: 20px">
@@ -91,8 +95,12 @@
               <div class="subheading3">M-Pesa</div>
             </div>
             <br /><br />
-            <RoundedCyanLoadingButton
+            <ConfirmationModal
               buttonText="Continue"
+              title="Confirm withdraw"
+              body="Are you sure you want to withdraw"
+              :extra="withdrawAmount"
+              action="success"
               @click="processWithdrawal()"
             />
             <div class="subheading3" style="margin-top: 20px">
@@ -110,6 +118,7 @@ import axios from "axios";
 import { mapState, mapActions } from "vuex";
 import RoundedCyanArrowButton from "../../components/Buttons/RoundedCyanArrowButton.vue";
 import RoundedCyanLoadingButton from "../../components/Buttons/RoundedCyanLoadingButton.vue";
+import ConfirmationModal from "../../components/ConfirmationModal.vue";
 
 export default {
   data() {
@@ -175,7 +184,9 @@ export default {
             if (this.balanceAfterWithdraw < 0) {
               // decline  withdrawal request
               this.loading = false;
-              this.withdrawErrorToast();
+              await this.withdrawErrorToast();
+              await this.$store.dispatch("delayTwoSeconds");
+              await this.$router.push("/wallet");
             } else {
               // allow withdrawl request
               this.phoneNumber = this.$store.state.loggedinUserPhone;
@@ -191,13 +202,16 @@ export default {
                 await this.$router.push("/wallet");
               } else {
                 await this.withdrawErrorToast();
+                await this.$store.dispatch("delayTwoSeconds");
+                await this.$router.push("/wallet");
               }
             }
           } catch (err) {
             this.loading = false;
             console.log(err);
-            this.withdrawErrorToast();
-            console.log("error occured while trying to deposit...");
+            await this.withdrawErrorToast();
+            await this.$store.dispatch("delayTwoSeconds");
+            await this.$router.push("/wallet");
           }
         } else {
           this.amountErrorToast();
@@ -246,6 +260,10 @@ export default {
       );
     },
   },
-  components: { RoundedCyanArrowButton, RoundedCyanLoadingButton },
+  components: {
+    RoundedCyanArrowButton,
+    RoundedCyanLoadingButton,
+    ConfirmationModal,
+  },
 };
 </script>

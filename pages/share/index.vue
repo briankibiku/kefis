@@ -114,7 +114,7 @@ export default {
     async submit() {
       if (!!this.referralNumber && this.referralNumber.length >= 10) {
         let referralResponse = await this.$axios.post(
-          `http://cms.mswali.co.ke/mswali/mswali_app/backend/web/index.php?r=api/refer-player&user_id=96601&phone_number=${this.referralNumber}`,
+          `http://161.35.6.91/mswali/mswali_app/backend/web/index.php?r=api/refer-player&user_id=96601&phone_number=${this.referralNumber}`,
         );
         // check if player is already referred
         if (referralResponse.data.is_refered) {

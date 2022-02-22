@@ -109,6 +109,7 @@
                 </button>
               </div>
               <RoundedCyanLoadingButton
+                :key="rebuildverifybutton"
                 buttonText="Verify"
                 @click="verifyOTP()"
               />
@@ -140,6 +141,7 @@ export default {
       phoneNumber: "",
       successfulLogin: false,
       loading: false,
+      rebuildverifybutton: 0,
     };
   },
   watch: {
@@ -187,20 +189,16 @@ export default {
       persistUserCredits: "persistUserCredits",
       persistSessionDetails: "persistSessionDetails",
     }),
+
+    forceRerender() {
+      this.rebuildverifybutton += 1;
+    },
     startTimer() {
       this.timerInterval = setInterval(() => (this.timePassed += 1), 1000);
     },
     onTimesUp() {
       this.showResendBtn = true;
       return this.showResendBtn;
-    },
-    makeToast(toaster, variant = null) {
-      this.$bvToast.toast("You entered an incorrect OTP, please retry.", {
-        title: `Wrong OTP`,
-        variant: variant,
-        toaster: toaster,
-        solid: true,
-      });
     },
     resendOTPErrorToast(toaster, variant = null) {
       this.$bvToast.toast(
@@ -226,7 +224,7 @@ export default {
       try {
         this.resendPhoneNumber = this.$store.state.signUpPhone;
         const res = await axios.get(
-          `http://cms.mswali.co.ke/mswali/mswali_app/backend/web/index.php?r=api/generate-otp&msisdn=${this.resendPhoneNumber}`,
+          `http://161.35.6.91/mswali/mswali_app/backend/web/index.php?r=api/generate-otp&msisdn=${this.resendPhoneNumber}`,
           config,
         );
         await this.$store.commit("updateSignUpOTP", res);
@@ -255,7 +253,7 @@ export default {
     async getuserName() {
       this.phoneNumber = this.$store.state.signUpPhone;
       let userProfile = await this.$axios.get(
-        `http://cms.mswali.co.ke/mswali/mswali_app/backend/web/index.php?r=api/get-user&username=mast&account_number=${this.phoneNumber}`,
+        `http://161.35.6.91/mswali/mswali_app/backend/web/index.php?r=api/get-user&username=mast&account_number=${this.phoneNumber}`,
       );
       let userName = userProfile.data.data.name;
       // persist phone number to state
@@ -277,7 +275,7 @@ export default {
     },
     async fetchWalletBalance(mswaliUserId) {
       let response = await this.$axios.get(
-        `http://cms.mswali.co.ke/mswali/mswali_app/backend/web/index.php?r=api/get-balance&user_id=${mswaliUserId}`,
+        `http://161.35.6.91/mswali/mswali_app/backend/web/index.php?r=api/get-balance&user_id=${mswaliUserId}`,
       );
       let walletBalanceFromAPI = await Math.trunc(response.data.data);
       let walletCreditsFromAPI = await response.data.credit_balance;
@@ -299,7 +297,7 @@ export default {
           this.signUpPhone = this.$store.state.signUpPhone;
           // verify OTP
           const res = await axios.get(
-            `http://cms.mswali.co.ke/mswali/mswali_app/backend/web/index.php?r=api/verify-otp&msisdn=${this.signUpPhone}&code=${this.signUpOTP}`,
+            `http://161.35.6.91/mswali/mswali_app/backend/web/index.php?r=api/verify-otp&msisdn=${this.signUpPhone}&code=${this.signUpOTP}`,
             config,
           );
           // assign user name and phone from state
@@ -308,7 +306,7 @@ export default {
           if (res.data.is_valid) {
             // sign up new user using their phone and username
             const result = await axios.get(
-              `http://cms.mswali.co.ke/mswali/mswali_app/backend/web/index.php?r=api/register-user&username=${this.userName}&account_number=${this.phoneNumber}`,
+              `http://161.35.6.91/mswali/mswali_app/backend/web/index.php?r=api/register-user&username=${this.userName}&account_number=${this.phoneNumber}`,
               config,
             );
             // update user authentication status
@@ -331,11 +329,12 @@ export default {
           }
         } catch (err) {
           // stop loading
-          this.$nuxt.$loading.finish();
           this.verifyOTPError();
+          this.forceRerender();
         }
       } else {
         this.emptyOTPFieldError();
+        this.forceRerender();
       }
     },
     async authenticateUser() {

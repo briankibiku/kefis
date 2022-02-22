@@ -216,7 +216,7 @@ export default {
       console.log(this.$store.state.topScoreSet);
       console.log("Didn't fetched top scores from state!!");
       this.topScores = await fetch(
-        "http://cms.mswali.co.ke/mswali/mswali_app/backend/web/index.php?r=team-play/get-top-performers",
+        "http://161.35.6.91/mswali/mswali_app/backend/web/index.php?r=team-play/get-top-performers",
       ).then((res) => res.json());
       // this.topScores = this.topScores.data;
       //   getting of user answers payload to state
@@ -225,7 +225,7 @@ export default {
       this.topScores = this.$store.state.topScores.data;
 
       this.topTeams = await fetch(
-        "http://cms.mswali.co.ke/mswali/mswali_app/backend/web/index.php?r=team-play/get-top-teams",
+        "http://161.35.6.91/mswali/mswali_app/backend/web/index.php?r=team-play/get-top-teams",
       ).then((res) => res.json());
       this.$store.commit("updateTopScoreSet", true);
       console.log("updateTopScoreSet set to TRUE");

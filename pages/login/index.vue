@@ -136,7 +136,7 @@ export default {
           // start loading
           this.$nuxt.$loading.start();
           const res = await axios.get(
-            `http://cms.mswali.co.ke/mswali/mswali_app/backend/web/index.php?r=api/get-user&username=mast&account_number=${this.phoneNumber}`,
+            `http://161.35.6.91/mswali/mswali_app/backend/web/index.php?r=api/get-user&username=mast&account_number=${this.phoneNumber}`,
             config,
           );
           // check if user already exists
@@ -150,7 +150,7 @@ export default {
             await this.peristIsExistingUSer(true);
             // send user an OTP and direct them to verify
             const result = await axios.get(
-              `http://cms.mswali.co.ke/mswali/mswali_app/backend/web/index.php?r=api/generate-otp&msisdn=${this.phoneNumber}`,
+              `http://161.35.6.91/mswali/mswali_app/backend/web/index.php?r=api/generate-otp&msisdn=${this.phoneNumber}`,
               config,
             );
             console.log(result);

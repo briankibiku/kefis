@@ -36,8 +36,15 @@
           <div class="d-flex flex-row" style="margin-inline: 10em">
             <div class="col centered-container d-flex justify-content-around">
               <div class="row" style="flex-direction: column">
-                <div class="heading3 padding-right-20">Buy Subscription</div>
-                <div class="subheading3">Select plan you wish to buy today</div>
+                <img
+                  class="center-align-content"
+                  src="~/assets/subscription.png"
+                  alt="buy subscription"
+                  height="120"
+                  width="120"
+                />
+                <div class="heading2 padding-right-20">Buy Subscription</div>
+                <div class="subheading">Select plan you wish to buy today</div>
 
                 <div
                   class="d-flex flex-row padding-10 justify-content-between"
@@ -71,8 +78,15 @@
         <div class="d-flex flex-row">
           <div class="col centered-container d-flex justify-content-around">
             <div class="row" style="flex-direction: column">
-              <div class="heading3 padding-right-20">Buy Subscription</div>
-              <div class="subheading3">Select plan you wish to buy today</div>
+              <img
+                class="center-align-content"
+                src="~/assets/subscription.png"
+                alt="buy subscription"
+                height="120"
+                width="120"
+              />
+              <div class="heading2 padding-right-20">Buy Subscription</div>
+              <div class="subheading">Select plan you wish to buy today</div>
 
               <div
                 class="d-flex flex-row padding-10 justify-content-between"
@@ -155,12 +169,12 @@ export default {
           this.loading = true;
           // credit user 100
           let creditUserResponse = await this.$axios.post(
-            `http://cms.mswali.co.ke/mswali/mswali_app/backend/web/index.php?r=api/game-play&user_id=${this.mswaliUserId}&msisdn=${this.loggedInUserNumber}&gateway=INTERNAL&amount=100`,
+            `http://161.35.6.91/mswali/mswali_app/backend/web/index.php?r=api/game-play&user_id=${this.mswaliUserId}&msisdn=${this.loggedInUserNumber}&gateway=INTERNAL&amount=100`,
           );
           console.log(creditUserResponse);
           // subscribe to 4 sessions
           let basicPlanResponse = await this.$axios.post(
-            `http://cms.mswali.co.ke/mswali/mswali_app/backend/web/index.php?r=api/daily-plan&user_id=${this.mswaliUserId}`,
+            `http://161.35.6.91/mswali/mswali_app/backend/web/index.php?r=api/daily-plan&user_id=${this.mswaliUserId}`,
           );
           console.log(basicPlanResponse);
           if (basicPlanResponse.data.status_message == "daily plan activated") {
@@ -183,12 +197,12 @@ export default {
           this.loading = true;
           // credit user 200
           let creditUserResponse = await this.$axios.post(
-            `http://cms.mswali.co.ke/mswali/mswali_app/backend/web/index.php?r=api/game-play&user_id=${this.mswaliUserId}&msisdn=${this.loggedInUserNumber}&gateway=INTERNAL&amount=200`,
+            `http://161.35.6.91/mswali/mswali_app/backend/web/index.php?r=api/game-play&user_id=${this.mswaliUserId}&msisdn=${this.loggedInUserNumber}&gateway=INTERNAL&amount=200`,
           );
           console.log(creditUserResponse);
           // subscribe to 10 sessions
           let premiumPlanResponse = await this.$axios.post(
-            `http://cms.mswali.co.ke/mswali/mswali_app/backend/web/index.php?r=api/premium-daily-plan&user_id=${this.mswaliUserId}`,
+            `http://161.35.6.91/mswali/mswali_app/backend/web/index.php?r=api/premium-daily-plan&user_id=${this.mswaliUserId}`,
           );
           console.log(premiumPlanResponse);
           if (

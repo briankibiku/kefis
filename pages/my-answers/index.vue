@@ -116,7 +116,7 @@ export default {
     let loggedINPhone = this.$store.state.loggedinUserPhone;
     // "0722377917";
     this.userAnswers = await fetch(
-      `http://cms.mswali.co.ke/mswali/mswali_app/backend/web/index.php?r=solo-play/show-my-answers&msisdn=${loggedINPhone}`,
+      `http://161.35.6.91/mswali/mswali_app/backend/web/index.php?r=solo-play/show-my-answers&msisdn=${loggedINPhone}`,
     ).then((res) => res.json());
     if (this.userAnswers.has_played) {
       this.questionAnswers2 = this.userAnswers.resp;
@@ -128,7 +128,7 @@ export default {
   methods: {
     ...mapActions({ startPersistance: "startPersistance" }),
     refreshPage() {
-      window.location.reload();
+      this.$router.push("/my-answers");
     },
     async navigateToHome() {
       this.$router.push("/home");
