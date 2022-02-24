@@ -6,18 +6,46 @@
       {{ this.quiz.length }}
     </div>
     <!-- base timer goes here  -->
-    <BaseTimer class="center" :key="rebuildbasetimer" />
-    <b-row style="margin-top: 50px">
+    <div style="margin-top: 60px">
+      <BaseTimer class="center" :key="rebuildbasetimer" />
+    </div>
+    <div v-if="showFeedback" class="subheading4" style="color: #fff">
+      <div
+        v-if="!isCorrect"
+        class="text-center"
+        align-v="center"
+        style="color: #fff"
+      >
+        <img src="~/assets/cancel.png" alt="" height="40" width="40" />
+        Wrong answer, the correct answer is
+        {{ this.correctChoice }}.
+        <img src="~/assets/loading.gif" alt="" height="70" width="80" />Loading
+        next question...
+      </div>
+      <div
+        v-if="isCorrect"
+        class="text-center"
+        align-v="center"
+        style="color: #fff"
+      >
+        <img src="~/assets/correct.png" alt="" height="40" width="40" />
+        You seleceted the correct answer.<img
+          src="~/assets/loading.gif"
+          alt=""
+          height="70"
+          width="80"
+        />Loading next question...
+      </div>
+    </div>
+    <b-row>
       <b-col>
         <p v-if="$fetchState.pending" class="container center-align-content">
           <span class="loading"></span>
         </p>
         <p v-else-if="$fetchState.error">An error occurred :(</p>
         <div v-else class="card-content">
-          <div class="question-item">
-            <p class="question-title text-center">
-              {{ this.quiz[this.counter].question }}
-            </p>
+          <div class="question-title">
+            {{ this.quiz[this.counter].question }}
           </div>
           <div class="grid-container resize-choices">
             <div
@@ -43,7 +71,7 @@
             </div>
           </div>
           <br />
-          <div
+          <!-- <div
             v-if="showFeedback"
             class="position-bottom subheading4"
             style="color: #fff"
@@ -78,7 +106,7 @@
                 width="80"
               />Loading next question...
             </div>
-          </div>
+          </div> -->
           <br />
         </div>
       </b-col>
@@ -240,7 +268,7 @@ export default {
         // user selected correct answer
         this.isCorrect = true;
       }
-      await this.$store.dispatch("delayTwoSeconds"),
+      await this.$store.dispatch("delayFiveSeconds"),
         await this.goToNextQuestion(answer);
       this.forceRerender();
       this.resetTimer();
@@ -256,10 +284,22 @@ export default {
       } else {
         let sessionID = this.$store.state.sessionDetails.session.id;
         let mswaliUserId = this.$store.state.mswaliId;
-        // let markSessionComplete = await this.$axios.post(
-        //   `http://161.35.6.91/mswali/mswali_app/backend/web/index.php?r=solo-play/mark-finished-game&user_id=${mswaliUserId}&session_id=${sessionID}`,
-        // );
-        // console.log(markSessionComplete);
+        let markplayedsessionurl = `solo-play/mark-played-session&user_id=${mswaliUserId}&session_id=${sessionID}`;
+        let markPlayedSession = await this.$axios.post(
+          `/apiproxy/${markplayedsessionurl}`,
+        );
+        console.log("Session tracking goes here");
+        console.log(markPlayedSession);
+        let postplayerinsessionurl = `solo-play/post-player-in-session&user_id=${mswaliUserId}&session_id=${sessionID}`;
+        let trackPlayerSession = await this.$axios.post(
+          `/apiproxy/${postplayerinsessionurl}`,
+        );
+        console.log(trackPlayerSession);
+        let markfinishdgameurl = `solo-play/mark-finished-game&user_id=${mswaliUserId}&session_id=${sessionID}`;
+        let markFinishedGame = await this.$axios.post(
+          `/apiproxy/${markfinishdgameurl}`,
+        );
+        console.log(markFinishedGame);
         this.$router.push("/results");
       }
     },
@@ -289,8 +329,9 @@ export default {
       } else if (answer == "") {
         console.log("Select answer to proceed");
       }
+      let updatequestionurl = `solo-play/update-session-score&session_id=${sessionID}&question_id=${questionId}&user_id=${mswaliUserId}&user_response=timeout&user_text=A&question=${questionNumber}&timeout=${timeoutValue}&correct=${answerValue}`;
       let updateQuestionAnswer = await this.$axios.post(
-        `http://161.35.6.91/mswali/mswali_app/backend/web/index.php?r=solo-play/update-session-score&session_id=${sessionID}&question_id=${questionId}&user_id=${mswaliUserId}&user_response=timeout&user_text=A&question=${questionNumber}&timeout=${timeoutValue}&correct=${answerValue}`,
+        `/apiproxy/${updatequestionurl}`,
       );
       console.log("Answer API response" + questionNumber);
       console.log(updateQuestionAnswer);

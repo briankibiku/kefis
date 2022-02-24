@@ -1,14 +1,7 @@
 <template>
   <div>
-    <div class="overlay-home" v-if="loading">
-      <div style="margin: 20px">
-        <b-spinner variant="primary" label="Spinning"></b-spinner>
-        <div>Loading...</div>
-      </div>
-    </div>
     <!--Big screen device code begins here-->
     <div
-      v-if="!loading"
       class="d-none d-md-block d-lg-none d-none d-lg-block d-xl-none d-none d-xl-block"
       style="padding: 40px"
     >
@@ -46,7 +39,7 @@
             </form>
             <RoundedCyanLoadingButton
               @click="navigateToQuiz()"
-              buttonText="Play NOW to WIN"
+              buttonText="Start Quiz"
             />
             <div class="d-flex align-items-center" style="flex-direction: row">
               <b-button class="text-button margin-horizontal-20" @click="">
@@ -60,57 +53,15 @@
           </div>
 
           <!-- salutations, wallet card, statistics cards go here -->
-          <div
-            class="padding-top-20 padding-left-60 d-flex justify-content-around"
-          >
+          <div class="padding-top-20">
             <div class="row" style="flex-direction: column">
-              <div class="row d-flex justify-content-start">
-                <Salutations />
-                <div class="wallet-card">
-                  <div class="d-flex justify-content-between">
-                    <div class="heading4">
-                      Wallet Balance
-                      <b-button
-                        style="background-color: transparent; border: none"
-                        @click="toggleShowBalance()"
-                      >
-                        <font-awesome-icon
-                          :icon="['fas', 'eye']"
-                          style="color: #91919f"
-                        />
-                      </b-button>
-                    </div>
-                    <div class="subheading4">
-                      Credits: {{ this.creditsBalanceFromState }}
-                    </div>
-                  </div>
-                  <div class="heading2" v-if="showBalance">
-                    KES {{ this.walletBalanceFromAPI }}
-                  </div>
-                  <div v-if="!showBalance">
-                    <div
-                      class="heading4"
-                      style="
-                        font-size: 24px;
-                        font-weight: 800;
-                        font-family: 'Nunito Sans', sans-serif;
-                        color: #160d3d;
-                      "
-                    >
-                      ******
-                    </div>
-                  </div>
-                </div>
-              </div>
+              <template>
+                <!-- We want header content here -->
+                <slot name="large-screen"></slot>
+              </template>
+
               <!--Statistics area, quiz passed, fastest times go here-->
-              <StatsCards />
             </div>
-          </div>
-          <!--Nudge area promotions go here-->
-          <div class="scrollable" style="display: flex; flex-direction: row">
-            <img src="~/assets/promo.svg" height="320px" />
-            <img src="~/assets/promo_two.svg" height="320px" />
-            <img src="~/assets/promo_three.svg" height="320px" />
           </div>
         </div>
         <!--Search bar / Start quiz button / Profile  Ends here-->
@@ -118,113 +69,40 @@
     </div>
 
     <!--Small screen device code begins here-->
-    <div class="d-block d-sm-none d-none d-sm-block d-md-none" v-if="!loading">
+    <div class="d-block d-sm-none d-none d-sm-block d-md-none">
       <div class="painted-background" style="padding: 20px">
         <NavigationBar />
-        <div>
-          <div class="row" style="padding-left: 20px">
-            <div class="col-3">
-              <b-avatar variant="light"></b-avatar>
-            </div>
-
-            <div class="col-6" style="text-align: left">
-              <Salutations />
-            </div>
-            <div
-              class="col-3"
-              style="
-                width: 50px;
-                height: 50px;
-                justify-content: center;
-                align-items: center;
-                text-align: center;
-                display: flex;
-                border-radius: 10px;
-              "
-            >
-              <font-awesome-icon
-                :icon="['fas', 'bell']"
-                style="color: #160d3d"
-              />
-            </div>
-          </div>
+        <div v-if="!smallandbigrequired">
+          <template>
+            <slot name="large-screen"></slot>
+          </template>
         </div>
-        <div class="row">
-          <div class="center-align-content">
-            <div class="col">
-              <!--Day quiz info-->
-              <div class="wallet-card" style="width: 80vw">
-                <div>
-                  <div class="subheading2">
-                    {{ banner }}
-                  </div>
-                  <div class="center-align-content heading2 prize-card">
-                    {{ prize }}
-                  </div>
-                </div>
-              </div>
-              <!-- start quiz button -->
-              <div class="col" style="margin-inline: 20px; width: 100%">
-                <RoundedCyanLoadingButton
-                  @click="navigateToQuiz()"
-                  buttonText="Play NOW to WIN"
-                  showIcon="true"
-                />
-              </div>
-              <!-- wallet card go here -->
-              <div class="wallet-card" style="width: 80vw">
-                <div class="d-flex justify-content-between">
-                  <div class="subheading1">Wallet Balance</div>
-                  <div>
-                    <b-button
-                      style="background-color: transparent; border: none"
-                      @click="toggleShowBalance()"
-                    >
-                      <font-awesome-icon
-                        :icon="['fas', 'eye']"
-                        style="color: #91919f"
-                      />
-                    </b-button>
-                  </div>
-                </div>
-                <div class="heading2" v-if="showBalance">
-                  KES {{ this.walletBalanceFromAPI }}
-                </div>
-                <div v-if="!showBalance">
-                  <div
-                    class="heading4"
-                    style="
-                      font-size: 24px;
-                      font-weight: 800;
-                      font-family: 'Nunito Sans', sans-serif;
-                      color: #160d3d;
-                    "
-                  >
-                    ******
-                  </div>
-                </div>
-                <div class="subheading4">
-                  Credits: {{ this.creditsBalanceFromState }}
-                </div>
-              </div>
+        <div v-if="smallandbigrequired">
+          <template>
+            <!-- We want header content here -->
+            <slot name="small-screen"></slot>
+          </template>
 
-              <!-- stats card go here -->
-              <div
-                class="scrollable"
-                style="display: flex; flex-direction: row"
-              >
-                <StatsCards />
-              </div>
-              <!-- promo & ads card go here -->
-              <div
-                class="scrollable"
-                style="display: flex; flex-direction: row"
-              >
-                <img src="~/assets/promo.svg" height="220px" />
-                <img src="~/assets/promo_two.svg" height="220px" />
-                <img src="~/assets/promo_three.svg" height="220px" />
-              </div>
-            </div>
+          <!-- start quiz button -->
+          <div
+            class="col"
+            style="margin-inline: 20px; padding-top: 10px; padding-bottom: 10px"
+          >
+            <RoundedCyanArrowButton
+              @click="navigateToQuiz()"
+              buttonText="Start Quiz"
+              style="
+                position: fixed;
+                bottom: 0;
+                margin-block: 20px;
+
+                /* And if you want the div to be full-width: */
+                right: 0;
+                left: 0;
+                z-index: 9999;
+                padding: 15px;
+              "
+            />
           </div>
         </div>
       </div>
@@ -234,14 +112,7 @@
 
 <script>
 import { mapState, mapActions } from "vuex";
-import NudgeArea from "../../components/NudgeArea.vue";
-import StatsCards from "../../components/StatsCards.vue";
-import LoadingBar from "../../components/LoadingBar.vue";
-import Outline from "../../components/Buttons/Outline.vue";
-import Flat from "../../components/Buttons/Flat.vue";
-import RoundedCyanArrowButton from "../../components/Buttons/RoundedCyanArrowButton.vue";
-import RoundedCyanLoadingButton from "../../components/Buttons/RoundedCyanLoadingButton.vue";
-import Salutations from "../../components/Salutations.vue";
+import RoundedCyanLoadingButton from "./Buttons/RoundedCyanLoadingButton.vue";
 export default {
   data() {
     return {
@@ -256,22 +127,24 @@ export default {
       showBalance: false,
       mswaliUserId: this.$store.state.mswaliId,
       walletBalanceFromAPI: this.$store.state.walletBalance,
-      creditsBalanceFromState: this.$store.state.userCredits,
       banner: "",
       prize: "",
+      smallandbigrequired: false,
     };
   },
   mounted() {
     if (this.$store.state.isAuthenticated) {
-      this.loading = true;
-      this.daySalutatuins();
       this.fetchWalletBalance();
-      this.getSessionDetails();
-      this.loading = false;
+      if (this.requiresSmallAndLargeScreenViews == "true") {
+        this.smallandbigrequired = true;
+      } else {
+        this.smallandbigrequired = false;
+      }
     } else {
       this.navigateToLogin();
     }
   },
+  props: { requiresSmallAndLargeScreenViews: String },
   computed: {
     ...mapState({
       isAuthenticated: "isAuthenticated",
@@ -441,19 +314,6 @@ export default {
         await this.$store.dispatch("delayFiveSeconds");
         await this.$router.push("/home");
       }
-    },
-    async getSessionDetails() {
-      let sessionresponseurl = `solo-play/get-solo-session&user_id=${this.mswaliUserId}`;
-      let sessionResponse = await this.$axios.get(
-        `/apiproxy/${sessionresponseurl}`,
-      );
-      console.log("EARTH HACKED BY UKRAINE.............");
-      await this.persistSessionDetails(sessionResponse.data);
-      await this.persistCanWinStatus(this.$store.state.sessionDetails.can_win);
-      this.banner = await this.$store.state.sessionDetails.banner;
-      this.prize = await this.$store.state.sessionDetails.session.prize;
-      console.log("sessionResponse.data");
-      console.log(sessionResponse.data);
     },
     async navigateToQuiz() {
       // step 1 fetch game session for this user ---> done on otp/index.vue ln 288 and stored in state
@@ -628,56 +488,21 @@ export default {
     },
   },
   components: {
-    NudgeArea,
-    StatsCards,
-    LoadingBar,
-    Outline,
-    Flat,
-    RoundedCyanArrowButton,
     RoundedCyanLoadingButton,
-    Salutations,
   },
 };
 </script>
 
 <style scoped>
-.centered-container {
-  width: 100%;
-  max-width: 600px;
-  background-size: contain;
-  margin: 0 auto;
-  min-height: 10vh;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  text-align: center;
-}
-.container-fluid-edited {
-  width: auto;
-  padding: 20px;
-}
 .column {
   float: left;
   padding: 10px;
   height: 150px; /* Should be removed. Only for demonstration */
 }
-.scrollable {
-  max-width: 100%;
-  overflow-x: scroll;
-}
 
 .left,
 .right {
   width: 30%;
-}
-.prize-card {
-  height: 40px;
-  width: 60vw;
-  color: #fff;
-  border-radius: 10px;
-  justify-content: center;
-  align-items: center;
-  background-color: #160d3d;
 }
 
 .middle {
@@ -685,22 +510,6 @@ export default {
   margin-inline: 5px;
 }
 
-.wallet-card {
-  background: #fff;
-  padding: 10px;
-  margin: 20px;
-  box-sizing: border-box;
-  border-radius: 6px;
-}
-.stats-card {
-  background: #fff;
-  padding: 10px;
-  margin-left: 30px;
-  border-radius: 6px;
-  text-align: center;
-  justify-content: center;
-  align-items: center;
-}
 .row {
   width: 100%;
   display: flex;
@@ -725,35 +534,5 @@ export default {
   font-weight: 600;
   font-family: "Nunito Sans", sans-serif;
   color: #160d3d;
-}
-/* Small Devices, Phones and Desktop screens*/
-@media only screen and (min-width: 780px) {
-  .container-fluid-edited {
-    padding-left: 200px;
-    padding-right: 200px;
-  }
-}
-@media only screen and (min-width: 1024px) {
-  .container-fluid-edited {
-    padding-left: 300px;
-    padding-right: 300px;
-  }
-}
-
-.winner-container {
-  background-image: url("~/assets/win.png");
-  background-repeat: no-repeat;
-  width: 200px;
-  height: 200px;
-  background-color: #160d3d;
-  background-position: bottom;
-  background-size: contain;
-}
-.wallet-card {
-  margin-bottom: 20px;
-  padding: 20px;
-  width: 50vw;
-  border-radius: 15px;
-  box-shadow: 0 0 50px #ccc;
 }
 </style>

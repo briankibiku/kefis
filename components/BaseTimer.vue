@@ -127,8 +127,8 @@ export default {
 <style scoped>
 .base-timer {
   position: relative;
-  width: 100px;
-  height: 100px;
+  width: 60px;
+  height: 60px;
 }
 
 .base-timer__svg {

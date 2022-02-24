@@ -49,27 +49,7 @@
         <font-awesome-icon :icon="['fas', 'trophy']" />
         Rankings
       </div>
-    </button>
-    <button
-      class="rounded-button-transparent"
-      style="text-align: left; background-color: transparent"
-      @click="navigateToSettings()"
-    >
-      <div class="menu">
-        <font-awesome-icon :icon="['fas', 'cog']" />
-        Settings
-      </div>
-    </button>
-    <button
-      class="rounded-button-transparent"
-      style="text-align: left; background-color: transparent"
-      @click="navigateToNotifications()"
-    >
-      <div class="menu">
-        <font-awesome-icon :icon="['fas', 'bell']" />
-        Notifications
-      </div>
-    </button>
+    </button> 
     <button
       class="rounded-button-transparent"
       style="text-align: left; background-color: transparent"

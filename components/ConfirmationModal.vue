@@ -75,6 +75,10 @@ export default {
         callback();
       }, 60000);
     },
+    onHidden() {
+      // Return focus to the button
+      this.$refs.button.focus();
+    },
     showModal() {
       this.$refs["my-modal"].show();
     },

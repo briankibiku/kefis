@@ -39,7 +39,7 @@
             @click="processDeposit()"
           />
           <div class="subheading3" style="margin-top: 20px">
-            <a href="/wallet" style="color: #bbb">Back</a>
+            <a @click="$router.back()" style="color: #bbb">Back</a>
           </div>
         </div>
       </div>
@@ -96,9 +96,9 @@
             <br /><br />
             <ConfirmationModal
               buttonText="Continue"
-              title="Confirm withdraw"
-              body="Are you sure you want to withdraw"
-              :extra="withdrawAmount"
+              title="Confirm deposit"
+              body="Are you sure you want to deposit"
+              :extra="depositAmount"
               action="success"
               @click="processDeposit()"
             />
@@ -161,9 +161,8 @@ export default {
     },
     async fecthUserBalance() {
       let mswaliUserId = this.$store.state.mswaliId;
-      let response = await this.$axios.get(
-        `http://161.35.6.91/mswali/mswali_app/backend/web/index.php?r=api/get-balance&user_id=${mswaliUserId}`,
-      );
+      let getbalanceurl = `api/get-balance&user_id=${mswaliUserId}`;
+      let response = await this.$axios.get(`/apiproxy/${getbalanceurl}`);
       let balance = response.data.data;
       return balance;
     },
@@ -174,16 +173,14 @@ export default {
             this.busy = true;
             let userProfile = await this.$store.dispatch("getuserProfile");
             this.phoneNumber = this.$store.state.loggedinUserPhone;
-            const res = await this.$axios.get(
-              `http://161.35.6.91/mswali/mswali_app/backend/web/index.php?r=api/initiate-payment&account_number=${this.phoneNumber}&amount=${this.depositAmount}`,
-            );
+            let depositurl = `api/initiate-payment&account_number=${this.phoneNumber}&amount=${this.depositAmount}`;
+            const res = await this.$axios.get(`/apiproxy/${depositurl}`);
             console.log("Deposit ongoing.....");
             console.log(res.data);
             await this.$store.dispatch("delayThirtySeconds");
             let mswaliUserId = this.$store.state.mswaliId;
-            let response = await this.$axios.get(
-              `http://161.35.6.91/mswali/mswali_app/backend/web/index.php?r=api/get-balance&user_id=${mswaliUserId}`,
-            );
+            let getbalanceurl = `api/get-balance&user_id=${mswaliUserId}`;
+            let response = await this.$axios.get(`/apiproxy/${getbalanceurl}`);
             let balance = response.data.data;
             let initialBalance = this.$store.state.walletBalance;
             let totalAfterDeposit =

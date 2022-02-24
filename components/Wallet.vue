@@ -45,10 +45,9 @@
                 <div
                   class="wallet-card"
                   style="margin-bottom: 20px; padding-left: 40px; width: 50vw"
-                >
-                  <div class="d-flex justify-content-between">
-                    <div class="heading4">Wallet Balance</div>
-                    <div>
+                ><div class="d-flex justify-content-between">
+                    <div class="heading4">
+                      Wallet Balance
                       <b-button
                         style="background-color: transparent; border: none"
                         @click="toggleShowBalance()"
@@ -59,9 +58,10 @@
                         />
                       </b-button>
                     </div>
+                    <div class="subheading4">Credits: {{ this.creditsBalanceFromState }}</div>
                   </div>
                   <div class="heading2" v-if="showBalance">
-                    KES {{ this.walletBalanceFromState }}
+                    KES {{ this.walletBalanceFromState}}
                   </div>
                   <div v-if="!showBalance">
                     <div
@@ -75,9 +75,6 @@
                     >
                       ******
                     </div>
-                  </div>
-                  <div class="subheading4">
-                    Credits: {{ this.creditsBalanceFromState }}
                   </div>
                 </div>
 
@@ -117,10 +114,10 @@
 
           <div class="column middle" style="text-align: left">
             <div>
-              <div class="heading3 ">
+              <div class="heading3">
                 {{ this.greetings }}
                 {{ this.$store.state.loggedinUserName }}!
-              </div> 
+              </div>
             </div>
           </div>
           <div
@@ -145,15 +142,7 @@
           </div>
           <hr />
 
-          <div
-            class="card"
-            style="
-              height: 30vh;
-              width: 80vw;
-              border-radius: 10px;
-              padding: 20px;
-            "
-          >
+          <div class="wallet-card">
             <div
               class="d-flex flex-row padding-10 justify-content-between"
               style="margin-bottom: 10px"
@@ -289,7 +278,7 @@ export default {
       // fetch user balance from db to check if amount was deposited successfully
       let mswaliUserId = this.$store.state.mswaliId;
       let response = await this.$axios.get(
-        `http://161.35.6.91/mswali/mswali_app/backend/web/index.php?r=api/get-balance&user_id=${mswaliUserId}`,
+        `/apiproxy/api/get-balance&user_id=${mswaliUserId}`,
       );
       let walletBalanceFromAPI = await Math.trunc(response.data.data);
       await this.persistwalletBalance(walletBalanceFromAPI);

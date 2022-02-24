@@ -1,50 +1,15 @@
 <template>
   <div>
-    <!--Big screen device code begins here-->
-    <div
-      class="d-none d-md-block d-lg-none d-none d-lg-block d-xl-none d-none d-xl-block"
-      style="padding: 40px"
-    >
-      <div class="row" style="padding-left: 50px">
-        <!--Big screen sidebar navigation starts here-->
-        <div
-          id="col1"
-          style="
-            justify-content: center;
-            align-items: center;
-            text-align: center;
-          "
-        >
-          <div style="text-align: left">
-            <NuxtLink to="/home">
-              <LogoPurple style="height: 27px; width: 120px" />
-            </NuxtLink>
-          </div>
-          <LargeScreenNavBar />
-        </div>
-        <!--Big screen sidebar navigation starts here-->
-
-        <div id="col2">
-          <!-- salutations, wallet card, statistics cards go here -->
-          <div class="d-flex flex-row" style="padding-top: 0em">
-            <div class="col padding-left-60 d-flex justify-content-around">
-              <Faq />
-            </div>
-          </div>
-        </div>
-        <!--Search bar / Start quiz button / Profile  Ends here-->
-      </div>
-    </div>
-    <div class="d-block d-sm-none d-none d-sm-block d-md-none">
-      <div class="painted-background" style="padding: 20px">
-        <Faq />
-      </div>
-    </div>
+    <AppWrapper requiresSmallAndLargeScreenViews="false">
+      <template v-slot:large-screen>
+        <Faq /> </template
+    ></AppWrapper>
   </div>
 </template>
 
 <script>
 import Faq from "../../components/Faq.vue";
+import AppWrapper from "../../components/AppWrapper.vue";
 export default {
   data() {
     return {
@@ -108,7 +73,7 @@ export default {
       ],
     };
   },
-  components: { Faq },
+  components: { Faq, AppWrapper },
 };
 </script>
 

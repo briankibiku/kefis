@@ -40,7 +40,7 @@
             @click="processWithdrawal()"
           />
           <div class="subheading3" style="margin-top: 20px">
-            <a href="/wallet" style="color: #bbb">Back</a>
+            <a @click="$router.back()" style="color: #bbb">Back</a>
           </div>
         </div>
       </div>
@@ -190,9 +190,8 @@ export default {
             } else {
               // allow withdrawl request
               this.phoneNumber = this.$store.state.loggedinUserPhone;
-              let res = await this.$axios.post(
-                `http://161.35.6.91/mswali/mswali_app/backend/web/index.php?r=api/log-payment-request&msisdn=${this.phoneNumber}&amount=${this.withdrawAmount}&type=WITHDRAWAL`,
-              );
+              let withdrawurl = `api/log-payment-request&msisdn=${this.phoneNumber}&amount=${this.withdrawAmount}&type=WITHDRAWAL`;
+              let res = await this.$axios.post(`/apiproxy/${withdrawurl}`);
               console.log("Withdraw successful");
               console.log(res.data);
               if (res.data == "Successful") {
