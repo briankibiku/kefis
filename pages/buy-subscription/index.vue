@@ -1,107 +1,108 @@
 <template>
   <div>
-    <div class="overlay-home" v-if="loading">
-      <div style="margin: 20px">
-        <b-spinner variant="primary" label="Spinning"></b-spinner>
-        <div>Loading...</div>
-      </div>
-    </div>
-    <!--Big screen device code begins here-->
-    <div
-      v-if="!loading"
-      class="d-none d-md-block d-lg-none d-none d-lg-block d-xl-none d-none d-xl-block"
-      style="padding: 40px"
-    >
-      <div class="row" style="padding-left: 50px">
-        <!--Big screen sidebar navigation starts here-->
+    <AppWrapper requiresSmallAndLargeScreenViews="false">
+      <template v-slot:large-screen>
+        <!--Big screen device code begins here-->
         <div
-          id="col1"
-          style="
-            justify-content: center;
-            align-items: center;
-            text-align: center;
-          "
+          class="d-none d-md-block d-lg-none d-none d-lg-block d-xl-none d-none d-xl-block"
+          style="padding: 40px"
         >
-          <div style="text-align: left">
-            <NuxtLink to="/home">
-              <LogoPurple style="height: 27px; width: 120px" />
-            </NuxtLink>
-          </div>
-          <LargeScreenNavBar />
-        </div>
-        <!--Big screen sidebar navigation starts here-->
+          <div class="row" style="padding-left: 0px">
+            <div>
+              <!-- salutations, wallet card, statistics cards go here -->
+              <div class="d-flex flex-row" style="margin-inline: 10em">
+                <div class="col d-flex justify-content-around">
+                  <div class="row" style="flex-direction: column">
+                    <div class="ext-center">
+                      <img
+                        class="center-align-item"
+                        src="~/assets/subscription.png"
+                        alt="buy subscription"
+                        height="120"
+                        width="120"
+                      />
+                    </div>
+                    <div class="heading2 text-center">Buy Subscription</div>
+                    <div class="subheading text-center">
+                      Select plan you wish to buy today
+                    </div>
 
-        <div id="col2">
-          <!-- salutations, wallet card, statistics cards go here -->
-          <div class="d-flex flex-row" style="margin-inline: 10em">
+                    <div
+                      class="d-flex flex-row padding-10 justify-content-center"
+                      style="margin-bottom: 10px"
+                    >
+                      <ConfirmationModal
+                        buttonText="Buy 4 sessions for KES 100/="
+                        title="Buy 4 sessions"
+                        body="Buy 4 sessions for KES 100/="
+                        action="success"
+                        @click="buyBasicPlan()"
+                      />
+                      <div style="padding-right: 10px"></div>
+                      <ConfirmationModal
+                        buttonText="Buy 8 sessions for KES 200/="
+                        title="Buy 8 sessions"
+                        body="Buy 8 sessions for KES 200/="
+                        action="success"
+                        @click="buyPremiumPlan()"
+                      />
+                    </div>
+                    <br />
+                  </div>
+                </div>
+              </div>
+            </div>
+            <!--Search bar / Start quiz button / Profile  Ends here-->
+          </div>
+        </div>
+        <div class="d-block d-sm-none d-none d-sm-block d-md-none">
+          <div class="d-flex flex-row">
             <div class="col centered-container d-flex justify-content-around">
               <div class="row" style="flex-direction: column">
-                <div class="heading3 padding-right-20">Buy Subscription</div>
-                <div class="subheading3">Select plan you wish to buy today</div>
+                <img
+                  class="center-align-item"
+                  src="~/assets/subscription.png"
+                  alt="buy subscription"
+                  height="120"
+                  width="120"
+                />
+                <div class="heading2 padding-right-20">Buy Subscription</div>
+                <div class="subheading">Select plan you wish to buy today</div>
 
                 <div
-                  class="d-flex flex-row padding-10 justify-content-between"
+                  class="d-flex flex-row padding-10 justify-content-center"
                   style="margin-bottom: 10px"
                 >
-                  <b-button
-                    class="rounded-button-cyan"
-                    style="margin-right: 20px"
-                    @click="showMsgBoxTwo(100)"
-                  >
-                    <div class="subheading4">Buy 4 sessions for KES 100/=</div>
-                  </b-button>
-                  <b-button
-                    class="rounded-button-cyan"
-                    @click="showMsgBoxTwo(200)"
-                  >
-                    <div class="subheading4">Buy 8 sessions for KES 200/=</div>
-                  </b-button>
+                  <ConfirmationModal
+                    buttonText="Buy 4 sessions for KES 100/="
+                    title="Buy 4 sessions"
+                    body="Buy 4 sessions for KES 100/="
+                    action="success"
+                    @click="buyBasicPlan()"
+                  />
+                  <div style="padding-right: 10px"></div>
+                  <ConfirmationModal
+                    buttonText="Buy 8 sessions for KES 200/="
+                    title="Buy 8 sessions"
+                    body="Buy 8 sessions for KES 200/="
+                    action="success"
+                    @click="buyPremiumPlan()"
+                  />
                 </div>
                 <br />
               </div>
             </div>
           </div>
         </div>
-        <!--Search bar / Start quiz button / Profile  Ends here-->
-      </div>
-    </div>
-    <div class="d-block d-sm-none d-none d-sm-block d-md-none" v-if="!loading">
-      <div class="painted-background" style="padding: 20px">
-        <NavigationBar />
-        <div class="d-flex flex-row">
-          <div class="col centered-container d-flex justify-content-around">
-            <div class="row" style="flex-direction: column">
-              <div class="heading3 padding-right-20">Buy Subscription</div>
-              <div class="subheading3">Select plan you wish to buy today</div>
-
-              <div
-                class="d-flex flex-row padding-10 justify-content-between"
-                style="margin-bottom: 10px"
-              >
-                <RoundedCyanArrowButton
-                  @click="showMsgBoxTwo(100)"
-                  buttonText="Buy 4 sessions for KES 100/="
-                  showIcon="false"
-                  style="margin-right: 20px; padding: 15px"
-                />
-                <RoundedCyanArrowButton
-                  @click="showMsgBoxTwo(200)"
-                  buttonText="Buy 8 sessions for KES 200/="
-                  showIcon="false"
-                  style="padding: 15px"
-                />
-              </div>
-              <br />
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
+      </template>
+    </AppWrapper>
   </div>
 </template>
 
 <script>
 import RoundedCyanArrowButton from "../../components/Buttons/RoundedCyanArrowButton.vue";
+import ConfirmationModal from "../../components/ConfirmationModal.vue";
+import AppWrapper from "../../components/AppWrapper.vue";
 export default {
   data() {
     return {
@@ -155,12 +156,12 @@ export default {
           this.loading = true;
           // credit user 100
           let creditUserResponse = await this.$axios.post(
-            `http://cms.mswali.co.ke/mswali/mswali_app/backend/web/index.php?r=api/game-play&user_id=${this.mswaliUserId}&msisdn=${this.loggedInUserNumber}&gateway=INTERNAL&amount=100`,
+            `/apiproxy/api/game-play&user_id=${this.mswaliUserId}&msisdn=${this.loggedInUserNumber}&gateway=INTERNAL&amount=100`,
           );
           console.log(creditUserResponse);
           // subscribe to 4 sessions
           let basicPlanResponse = await this.$axios.post(
-            `http://cms.mswali.co.ke/mswali/mswali_app/backend/web/index.php?r=api/daily-plan&user_id=${this.mswaliUserId}`,
+            `/apiproxy/api/daily-plan&user_id=${this.mswaliUserId}`,
           );
           console.log(basicPlanResponse);
           if (basicPlanResponse.data.status_message == "daily plan activated") {
@@ -169,10 +170,14 @@ export default {
             await this.$router.push("/home");
           } else {
             this.errorBuyToast();
+            await this.$store.dispatch("delayTwoSeconds");
+            window.location.reload();
           }
           console.log(basicPlanResponse);
         } else {
           this.failedBuyToast();
+          await this.$store.dispatch("delayTwoSeconds");
+          window.location.reload();
         }
       } catch (e) {}
     },
@@ -183,12 +188,12 @@ export default {
           this.loading = true;
           // credit user 200
           let creditUserResponse = await this.$axios.post(
-            `http://cms.mswali.co.ke/mswali/mswali_app/backend/web/index.php?r=api/game-play&user_id=${this.mswaliUserId}&msisdn=${this.loggedInUserNumber}&gateway=INTERNAL&amount=200`,
+            `/apiproxy/api/game-play&user_id=${this.mswaliUserId}&msisdn=${this.loggedInUserNumber}&gateway=INTERNAL&amount=200`,
           );
           console.log(creditUserResponse);
           // subscribe to 10 sessions
           let premiumPlanResponse = await this.$axios.post(
-            `http://cms.mswali.co.ke/mswali/mswali_app/backend/web/index.php?r=api/premium-daily-plan&user_id=${this.mswaliUserId}`,
+            `/apiproxy/api/premium-daily-plan&user_id=${this.mswaliUserId}`,
           );
           console.log(premiumPlanResponse);
           if (
@@ -199,10 +204,14 @@ export default {
             await this.$router.push("/home");
           } else {
             this.errorBuyToast();
+            await this.$store.dispatch("delayTwoSeconds");
+            window.location.reload();
           }
           console.log(premiumPlanResponse);
         } else {
           this.failedBuyToast();
+          await this.$store.dispatch("delayTwoSeconds");
+          window.location.reload();
         }
       } catch (e) {}
     },
@@ -237,7 +246,7 @@ export default {
       );
     },
   },
-  components: { RoundedCyanArrowButton },
+  components: { RoundedCyanArrowButton, ConfirmationModal, AppWrapper },
 };
 </script>
 

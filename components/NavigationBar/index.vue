@@ -1,7 +1,9 @@
 <template>
   <div style="padding-bottom: 20px">
     <b-navbar toggleable="lg" type="light">
-      <b-navbar-brand> </b-navbar-brand>
+      <b-navbar-brand>
+        <LogoPurple style="width: 140px; height: 30px;" />
+      </b-navbar-brand>
 
       <b-navbar-toggle target="nav-collapse"></b-navbar-toggle>
 
@@ -27,16 +29,6 @@
           <b-nav-item href="/winners"
             ><span class="heading4" style="color: #160d3d"
               >Rankings</span
-            ></b-nav-item
-          >
-          <b-nav-item href="/settings"
-            ><span class="heading4" style="color: #160d3d"
-              >Settings</span
-            ></b-nav-item
-          >
-          <b-nav-item href="/notifications"
-            ><span class="heading4" style="color: #160d3d"
-              >Notifications</span
             ></b-nav-item
           >
           <b-nav-item href="/support"

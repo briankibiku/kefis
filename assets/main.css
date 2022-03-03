@@ -83,10 +83,10 @@
   text-align: center;
 }
 .winner-container {
-  background-image: url("~/assets/win.png");
+  background-image: url("~/assets/happy_player.png");
   background-repeat: no-repeat;
-  width: 200px;
-  height: 200px;
+  width: 240px;
+  height: 240px;
   background-color: #ffb500;
   background-size: contain;
   margin: 0 auto;
@@ -321,6 +321,12 @@
   font-family: "Nunito Sans", sans-serif;
   color: #160d3d;
 }
+.subheading {
+  font-size: 1.2em;
+  font-weight: 500;
+  font-family: "Nunito Sans", sans-serif;
+  color: #160d3d;
+}
 .subheading3 {
   font-size: 0.8em;
   font-weight: 500;
@@ -375,10 +381,18 @@ p {
 /* Alignment styles */
 .center-align-content {
   margin: auto;
-  width: auto;
   justify-content: center;
   align-items: center;
-  padding-bottom: 20px;
+  text-align: center;
+  width: 100%;
+  display: flex;
+}
+.center-align-item {
+  margin: auto;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  display: flex;
 }
 .grid-container {
   display: grid;
@@ -460,6 +474,22 @@ p {
   border-radius: 4em;
   height: 60px;
   width: 60px;
+}
+.promo-card {
+  background-image: url("~/assets/promo.svg");
+  background-repeat: no-repeat;
+  background-size: contain;
+  border-radius: 14px;
+  width: 100%;
+  margin: 0 auto;
+  min-height: 100vh;
+}
+.wallet-card {
+  margin-bottom: 20px;
+  padding: 20px;
+  width: 84vw;
+  border-radius: 15px;
+  box-shadow: 0 0 50px #ccc;
 }
 
 .custom-modal {

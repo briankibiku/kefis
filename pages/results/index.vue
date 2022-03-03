@@ -1,6 +1,9 @@
 <template>
   <section class="purple-bg">
-    <div style="width: 300px; padding-top: 30px" class="center-align-content">
+    <div
+      style="width: 300px; padding-top: 30px"
+      class="center-align-content-body"
+    >
       <div class="otp-header">
         <div>
           <img
@@ -10,18 +13,31 @@
             src="~/assets/logos/mSwali-cyan.png"
           />
           <br /><br />
-          <h3 style="color: #fff">Awesome try on your quiz</h3>
+          <div class="heading2" style="color: #fff">
+            Awesome try on your quiz
+          </div>
           <br />
         </div>
       </div>
+      <div class="heading2" style="color: #fff">
+        <div>
+          <img src="~/assets/correct.png" alt="" height="40" width="40" />
+          Correct : {{ this.correctAttempts }}
+        </div>
+        <br />
+        <div>
+          <img src="~/assets/cancel.png" alt="" height="40" width="40" />
+          Failed : {{ this.totalFailed }}
+        </div>
+        <br />
+        <div>
+          <img src="~/assets/timeout.png" alt="" height="40" width="40" />
+          Timeout : {{ this.totalTimeouts }}
+        </div>
+      </div>
+      <br />
 
-      <p class="outline-button-cyan">Correct: {{ this.correctAttempts }}</p>
-      <p class="outline-button-cyan">Failed: {{ this.totalFailed }}</p>
-      <p class="outline-button-cyan">Timeouts: {{ this.totalTimeouts }}</p>
-      <p class="outline-button-cyan">Not Attempted: {{ this.unAttempted }}</p>
-      <!-- <p class='result-detail'> Not Attempted: {{this.token}} </p>  -->
-
-      <p>
+      <p class="heading2">
         Points Earned: <strong> {{ this.myScore }} </strong>
       </p>
 
@@ -32,7 +48,7 @@
           form="otp-form"
           class="outline-button-cyan ml-10 mr-10"
         >
-          <span class="btn-label"><center>Continue</center></span>
+          <span class="btn-label"><center>Complete</center></span>
         </button>
       </div>
     </div>
@@ -73,7 +89,7 @@ export default {
         let awardUserResponse = await this.$axios.post(
           `http://cms.mswali.co.ke/mswali/mswali_app/backend/web/index.php?r=api/give-prize&user_id=${mswaliUserId}&amount=${awardPrize}`,
         );
-        console.log(awardPrize)
+        console.log(awardPrize);
         console.log(awardUserResponse);
       } else {
         this.$store.commit("updateQuizScore", "");
@@ -101,6 +117,13 @@ export default {
 </script>
 
 <style scoped>
+.center-align-content-body {
+  margin: auto;
+  width: auto;
+  justify-content: center;
+  align-items: center;
+  padding-bottom: 20px;
+}
 .result-score {
   height: 20px;
   font-size: 15px;
