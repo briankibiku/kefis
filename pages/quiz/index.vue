@@ -21,7 +21,7 @@
         {{ this.correctChoice }}.
         <img src="~/assets/loading.gif" alt="" height="70" width="80" />Loading
         next question...
-      </div>
+      </div> 
       <div
         v-if="isCorrect"
         class="text-center heading3"
