@@ -33,7 +33,8 @@
                 <div class="row">
                   <div>
                     <div class="heading3 padding-right-20">
-                      Good morning {{ this.$store.state.loggedinUserName }}!
+                      {{ this.greetings }}
+                      {{ this.$store.state.loggedinUserName }}!
                     </div>
                     <div class="subheading3">
                       Here is how your account is looking today
@@ -42,12 +43,11 @@
                 </div>
                 <br />
                 <div
-                  class="card padding-10"
-                  style="margin-bottom: 20px; padding-left: 40px"
-                >
-                  <div class="d-flex justify-content-between">
-                    <div class="heading4">Wallet Balance</div>
-                    <div>
+                  class="wallet-card"
+                  style="margin-bottom: 20px; padding-left: 40px; width: 50vw"
+                ><div class="d-flex justify-content-between">
+                    <div class="heading4">
+                      Wallet Balance
                       <b-button
                         style="background-color: transparent; border: none"
                         @click="toggleShowBalance()"
@@ -58,9 +58,10 @@
                         />
                       </b-button>
                     </div>
+                    <div class="subheading4">Credits: {{ this.creditsBalanceFromState }}</div>
                   </div>
                   <div class="heading2" v-if="showBalance">
-                    KES {{ this.walletBalanceFromState }}
+                    KES {{ this.walletBalanceFromState}}
                   </div>
                   <div v-if="!showBalance">
                     <div
@@ -74,9 +75,6 @@
                     >
                       ******
                     </div>
-                  </div>
-                  <div class="subheading4">
-                    Credits: {{ this.creditsBalanceFromState }}
                   </div>
                 </div>
 
@@ -115,11 +113,11 @@
           </div>
 
           <div class="column middle" style="text-align: left">
-            <div class="heading3">
-              Good morning {{ this.$store.state.loggedinUserName }}!
-            </div>
-            <div class="subheading2">
-              {{ this.$store.state.loggedinUserPhone }}
+            <div>
+              <div class="heading3">
+                {{ this.greetings }}
+                {{ this.$store.state.loggedinUserName }}!
+              </div>
             </div>
           </div>
           <div
@@ -144,15 +142,7 @@
           </div>
           <hr />
 
-          <div
-            class="card"
-            style="
-              height: 30vh;
-              width: 80vw;
-              border-radius: 10px;
-              padding: 20px;
-            "
-          >
+          <div class="wallet-card">
             <div
               class="d-flex flex-row padding-10 justify-content-between"
               style="margin-bottom: 10px"
@@ -233,6 +223,7 @@
 </template>
 <script>
 import { mapState, mapActions } from "vuex";
+import Salutations from "./Salutations.vue";
 export default {
   data() {
     return {
@@ -240,6 +231,7 @@ export default {
       creditsBalanceFromState: this.$store.state.userCredits,
       mswaliUserId: "",
       showBalance: true,
+      greetings: "",
     };
   },
   mounted() {
@@ -247,6 +239,7 @@ export default {
       this.navigateToLogin();
     }
     this.refreshBalance();
+    this.daySalutatuins();
   },
   computed: {
     ...mapState({
@@ -257,6 +250,23 @@ export default {
     ...mapActions({
       persistwalletBalance: "persistwalletBalance",
     }),
+    async daySalutatuins() {
+      var d = new Date();
+      var time = d.getHours();
+
+      if (time < 12) {
+        this.greetings = "Morning ";
+      } else if (time == 12) {
+        this.greetings = "Afternoon ";
+      } else if (time > 13 && time < 18) {
+        this.greetings = "Afternoon ";
+      } else if (time == 18) {
+        this.greetings = "Evening ";
+      } else if (time > 18) {
+        this.greetings = "Evening ";
+      }
+      return this.greetings;
+    },
     async fetchWalletBalance() {
       try {
         this.walletBalanceFromState = this.$store.state.walletBalance;
@@ -268,7 +278,7 @@ export default {
       // fetch user balance from db to check if amount was deposited successfully
       let mswaliUserId = this.$store.state.mswaliId;
       let response = await this.$axios.get(
-        `http://cms.mswali.co.ke/mswali/mswali_app/backend/web/index.php?r=api/get-balance&user_id=${mswaliUserId}`,
+        `/apiproxy/api/get-balance&user_id=${mswaliUserId}`,
       );
       let walletBalanceFromAPI = await Math.trunc(response.data.data);
       await this.persistwalletBalance(walletBalanceFromAPI);
@@ -310,6 +320,7 @@ export default {
       });
     },
   },
+  components: { Salutations },
 };
 </script>
 <style scoped>

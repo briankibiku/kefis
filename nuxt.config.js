@@ -11,6 +11,7 @@ export default {
       { hid: "description", name: "description", content: "" },
       { name: "format-detection", content: "telephone=no" },
     ],
+    css: ["~/assets/main.css"],
     link: [
       { rel: "icon", type: "image/x-icon", href: "/favicon.ico" },
       {
@@ -30,7 +31,7 @@ export default {
   },
 
   // Plugins to run before rendering page: https://go.nuxtjs.dev/config-plugins
-  plugins: [{ src: "~/plugins/persistedState.client.js" }],
+  plugins: [{ src: "~/plugins/persistedState.client.js" }, "~/plugins/fetchbalance.js"],
 
   // Auto import components: https://go.nuxtjs.dev/config-components
   components: true,
@@ -43,6 +44,7 @@ export default {
     // https://go.nuxtjs.dev/bootstrap
     "bootstrap-vue/nuxt",
     "@nuxtjs/axios",
+    '@nuxtjs/proxy',
     '@nuxt/http',
     [
       "nuxt-fontawesome",
@@ -66,10 +68,15 @@ export default {
 
   proxy: {
     "/api/": {
-      target: `http://161.35.6.91/mswali/mswali_app/backend/web/index.php?`,
+      target: `http://161.35.6.91/mswali/mswali_app/backend/web/index.php?r=api`,
       pathRewrite: { "^/api/": "" },
       changeOrigin: true,
     },
+    "/apiproxy/": {
+      target: `http://161.35.6.91/mswali/mswali_app/backend/web/index.php?r=`,
+      pathRewrite: { "^/apiproxy/": "" },
+      changeOrigin: true,
+    }
   },
 
   // Build Configuration: https://go.nuxtjs.dev/config-build

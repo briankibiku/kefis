@@ -1,158 +1,141 @@
 <template>
   <div>
-    <!--Big screen device code begins here-->
-    <div
-      class="d-none d-md-block d-lg-none d-none d-lg-block d-xl-none d-none d-xl-block"
-      style="padding: 40px"
-    >
-      <div class="row" style="padding-left: 50px">
-        <!--Big screen sidebar navigation starts here-->
+    <AppWrapper requiresSmallAndLargeScreenViews="false">
+      <template v-slot:large-screen>
+        <!--Big screen device code begins here-->
         <div
-          id="col1"
-          style="
-            justify-content: center;
-            align-items: center;
-            text-align: center;
-          "
+          class="d-none d-md-block d-lg-none d-none d-lg-block d-xl-none d-none d-xl-block"
+          style="padding: 40px"
         >
-          <div style="text-align: left">
-            <NuxtLink to="/home">
-              <LogoPurple style="height: 27px; width: 120px" />
-            </NuxtLink>
-          </div>
-          <LargeScreenNavBar />
-        </div>
-        <!--Big screen sidebar navigation starts here-->
-
-        <div id="col2">
-          <!-- salutations, wallet card, statistics cards go here -->
-          <div class="d-flex flex-row">
-            <div
-              class="col-12 padding-top-20 padding-left-60 d-flex justify-content-around"
-            >
-              <div>
-                <div class="row">
+          <div class="row" style="padding-left: 50px">
+            <div id="col2">
+              <!-- salutations, wallet card, statistics cards go here -->
+              <div class="d-flex flex-row">
+                <div
+                  class="col-12 padding-top-20 padding-left-60 d-flex justify-content-around"
+                >
                   <div>
-                    <div class="support-container"></div>
-                    <div class="heading3 d-flex justify-content-center">
-                      Need help?
-                    </div>
-                    <div class="subheading3 d-flex justify-content-center">
-                      Give us a call at +254 795 583 651 or reach out to us via
-                      our socials
-                    </div>
-                    <div class="row d-flex justify-content-center">
+                    <div class="row">
                       <div>
-                        <a href="https://wa.me/254795583651" target="blank">
-                          <img
-                            src="~/assets/whatsapp.png"
-                            height="40"
-                            width="40"
-                            alt=""
-                          />
-                        </a>
-                      </div>
-                      <div class="padding-horizontal-20">
-                        <a
-                          href="https://www.instagram.com/mswali_ke/"
-                          target="blank"
-                        >
-                          <img
-                            src="~/assets/instagram.png"
-                            height="40"
-                            width="40"
-                            alt=""
-                          />
-                        </a>
-                      </div>
-                      <div>
-                        <a href="https://twitter.com/mSwali_KE" target="blank">
-                          <img
-                            src="~/assets/twitter.png"
-                            height="40"
-                            width="40"
-                            alt=""
-                          />
-                        </a>
+                        <div class="support-container"></div>
+                        <div class="heading3 d-flex justify-content-center">
+                          Need help?
+                        </div>
+                        <div class="subheading3 d-flex justify-content-center">
+                          Give us a call at +254 795 583 651 or reach out to us
+                          via our socials
+                        </div>
+                        <div class="row d-flex justify-content-center">
+                          <div>
+                            <a href="https://wa.me/254795583651" target="blank">
+                              <img
+                                src="~/assets/whatsapp.png"
+                                height="40"
+                                width="40"
+                                alt=""
+                              />
+                            </a>
+                          </div>
+                          <div class="padding-horizontal-20">
+                            <a
+                              href="https://www.instagram.com/mswali_ke/"
+                              target="blank"
+                            >
+                              <img
+                                src="~/assets/instagram.png"
+                                height="40"
+                                width="40"
+                                alt=""
+                              />
+                            </a>
+                          </div>
+                          <div>
+                            <a
+                              href="https://twitter.com/mSwali_KE"
+                              target="blank"
+                            >
+                              <img
+                                src="~/assets/twitter.png"
+                                height="40"
+                                width="40"
+                                alt=""
+                              />
+                            </a>
+                          </div>
+                        </div>
                       </div>
                     </div>
-                  </div>
-                </div>
-                <br />
-              </div>
-            </div>
-          </div>
-        </div>
-        <!--Search bar / Start quiz button / Profile  Ends here-->
-      </div>
-    </div>
-
-    <div class="d-block d-sm-none d-none d-sm-block d-md-none">
-      <div class="painted-background" style="padding: 20px">
-        <div>
-          <a href="/home" class="d-flex justify-content-start">
-            <font-awesome-icon
-              :icon="['fas', 'chevron-left']"
-              style="color: #160d3d; margin-left: 20px; margin-right: 40px"
-            />
-          </a>
-
-          <div class="centered-container" style="width: 320px">
-            <div class="col d-flex justify-content-around">
-              <div class="row" style="flex-direction: column">
-                <div class="support-container"></div>
-                <div class="heading3 d-flex justify-content-center">
-                  Need help?
-                </div>
-                <div class="subheading3 d-flex justify-content-center">
-                  Give us a call at +254 795 583 651 or reach out to us via our
-                  socials
-                </div>
-
-                <div class="row d-flex justify-content-center">
-                  <div>
-                    <a href="https://wa.me/254795583651" target="blank">
-                      <img
-                        src="~/assets/whatsapp.png"
-                        height="40"
-                        width="40"
-                        alt=""
-                      />
-                    </a>
-                  </div>
-                  <div class="padding-horizontal-20">
-                    <a
-                      href="https://www.instagram.com/mswali_ke/"
-                      target="blank"
-                    >
-                      <img
-                        src="~/assets/instagram.png"
-                        height="40"
-                        width="40"
-                        alt=""
-                      />
-                    </a>
-                  </div>
-                  <div>
-                    <a href="https://twitter.com/mSwali_KE" target="blank">
-                      <img
-                        src="~/assets/twitter.png"
-                        height="40"
-                        width="40"
-                        alt=""
-                      />
-                    </a>
+                    <br />
                   </div>
                 </div>
               </div>
             </div>
+            <!--Search bar / Start quiz button / Profile  Ends here-->
           </div>
-          <br />
         </div>
-      </div>
-    </div>
+
+        <div class="d-block d-sm-none d-none d-sm-block d-md-none">
+          <div>
+            <div class="centered-container" style="width: 320px">
+              <div class="col d-flex justify-content-around">
+                <div class="row" style="flex-direction: column">
+                  <div class="support-container"></div>
+                  <div class="heading3 d-flex justify-content-center">
+                    Need help?
+                  </div>
+                  <div class="subheading3 d-flex justify-content-center">
+                    Give us a call at +254 795 583 651 or reach out to us via
+                    our socials
+                  </div>
+
+                  <div class="row d-flex justify-content-center">
+                    <div>
+                      <a href="https://wa.me/254795583651" target="blank">
+                        <img
+                          src="~/assets/whatsapp.png"
+                          height="40"
+                          width="40"
+                          alt=""
+                        />
+                      </a>
+                    </div>
+                    <div class="padding-horizontal-20">
+                      <a
+                        href="https://www.instagram.com/mswali_ke/"
+                        target="blank"
+                      >
+                        <img
+                          src="~/assets/instagram.png"
+                          height="40"
+                          width="40"
+                          alt=""
+                        />
+                      </a>
+                    </div>
+                    <div>
+                      <a href="https://twitter.com/mSwali_KE" target="blank">
+                        <img
+                          src="~/assets/twitter.png"
+                          height="40"
+                          width="40"
+                          alt=""
+                        />
+                      </a>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <br />
+          </div>
+        </div> </template
+    ></AppWrapper>
   </div>
 </template>
+<script>
+import AppWrapper from "../../components/AppWrapper.vue";
+export default { components: { AppWrapper } };
+</script>
 
 <style scoped>
 .hr {

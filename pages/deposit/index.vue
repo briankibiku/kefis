@@ -30,13 +30,16 @@
             </div>
             <div>M-pesa</div>
           </div>
-          <RoundedCyanLoadingButton
+          <ConfirmationModal
             buttonText="Continue"
+            title="Confirm deposit"
+            body="Are you sure you want to deposit"
+            :extra="depositAmount"
+            action="success"
             @click="processDeposit()"
           />
-
           <div class="subheading3" style="margin-top: 20px">
-            <a href="/wallet" style="color: #bbb">Back</a>
+            <a @click="$router.back()" style="color: #bbb">Back</a>
           </div>
         </div>
       </div>
@@ -91,9 +94,12 @@
               <div class="subheading3">M-Pesa</div>
             </div>
             <br /><br />
-
-            <RoundedCyanLoadingButton
+            <ConfirmationModal
               buttonText="Continue"
+              title="Confirm deposit"
+              body="Are you sure you want to deposit"
+              :extra="depositAmount"
+              action="success"
               @click="processDeposit()"
             />
             <div class="subheading3" style="margin-top: 20px">
@@ -111,6 +117,7 @@ import axios from "axios";
 import { mapState, mapActions } from "vuex";
 import RoundedCyanArrowButton from "../../components/Buttons/RoundedCyanArrowButton.vue";
 import RoundedCyanLoadingButton from "../../components/Buttons/RoundedCyanLoadingButton.vue";
+import ConfirmationModal from "../../components/ConfirmationModal.vue";
 export default {
   data() {
     return {
@@ -154,9 +161,8 @@ export default {
     },
     async fecthUserBalance() {
       let mswaliUserId = this.$store.state.mswaliId;
-      let response = await this.$axios.get(
-        `http://cms.mswali.co.ke/mswali/mswali_app/backend/web/index.php?r=api/get-balance&user_id=${mswaliUserId}`,
-      );
+      let getbalanceurl = `api/get-balance&user_id=${mswaliUserId}`;
+      let response = await this.$axios.get(`/apiproxy/${getbalanceurl}`);
       let balance = response.data.data;
       return balance;
     },
@@ -167,16 +173,14 @@ export default {
             this.busy = true;
             let userProfile = await this.$store.dispatch("getuserProfile");
             this.phoneNumber = this.$store.state.loggedinUserPhone;
-            const res = await this.$axios.get(
-              `http://cms.mswali.co.ke/mswali/mswali_app/backend/web/index.php?r=api/initiate-payment&account_number=${this.phoneNumber}&amount=${this.depositAmount}`,
-            );
+            let depositurl = `api/initiate-payment&account_number=${this.phoneNumber}&amount=${this.depositAmount}`;
+            const res = await this.$axios.get(`/apiproxy/${depositurl}`);
             console.log("Deposit ongoing.....");
             console.log(res.data);
             await this.$store.dispatch("delayThirtySeconds");
             let mswaliUserId = this.$store.state.mswaliId;
-            let response = await this.$axios.get(
-              `http://cms.mswali.co.ke/mswali/mswali_app/backend/web/index.php?r=api/get-balance&user_id=${mswaliUserId}`,
-            );
+            let getbalanceurl = `api/get-balance&user_id=${mswaliUserId}`;
+            let response = await this.$axios.get(`/apiproxy/${getbalanceurl}`);
             let balance = response.data.data;
             let initialBalance = this.$store.state.walletBalance;
             let totalAfterDeposit =
@@ -246,6 +250,6 @@ export default {
       });
     },
   },
-  components: { RoundedCyanLoadingButton },
+  components: { RoundedCyanLoadingButton, ConfirmationModal },
 };
 </script>

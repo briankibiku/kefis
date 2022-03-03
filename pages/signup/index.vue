@@ -115,7 +115,7 @@ export default {
         try {
           // send user an OTP and direct them to verify
           const result = await axios.get(
-            `http://cms.mswali.co.ke/mswali/mswali_app/backend/web/index.php?r=api/generate-otp&msisdn=${this.phoneNumber}`,
+            `/apiproxy/api/generate-otp&msisdn=${this.phoneNumber}`,
             config,
           );
           console.log(result);

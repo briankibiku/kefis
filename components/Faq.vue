@@ -4,7 +4,7 @@
     <div class="subheading3">Frequently asked questions</div>
     <div v-for="faq in mswaliFaqs">
       <details
-        style="background-color: #bbb; margin-block: 10px; padding: 10px"
+        style="background-color: #bbb ; margin-block: 10px; padding: 10px"
       >
         <summary>{{ faq.question }}</summary>
         {{ faq.answer }}

@@ -1,84 +1,116 @@
 <template>
-  <div>
-    <div v-if="showResults">
-      <Results />
+  <div class="quiz-content">
+    <!-- <Notification :message="this.error" v-if="error" /> -->
+    <div class="heading3" style="text-align: center; color: #fff">
+      Question {{ this.counter + 1 }} of
+      {{ this.quiz.length }}
     </div>
-    <div v-else>
-      <div class="quiz-content">
-        <!-- <Notification :message="this.error" v-if="error" /> -->
-        <div class="heading3" style="text-align: center; color: #fff">
-          Question {{ this.counter + 1 }} of
-          {{ this.quiz.length }}
-        </div>
-        <span id="timernow">05:00</span>
-        <!-- base timer goes here  -->
-        <BaseTimer class="center" :key="rebuildbasetimer" />
-        <b-row style="margin-top: 180px">
-          <b-col>
-            <p
-              v-if="$fetchState.pending"
-              class="container center-align-content"
-            >
-              <span class="loading"></span>
-            </p>
-            <p v-else-if="$fetchState.error">An error occurred :(</p>
-            <div v-else class="card-content">
-              <div class="question-item">
-                <p class="question-title text-center">
-                  {{ this.quiz[this.counter].question }}
-                </p>
-              </div>
-
-              <div class="grid-container resize-choices">
-                <div
-                  class="choices"
-                  v-for="item in this.quiz[this.counter].choices"
-                  :key="item.label"
-                >
-                  <center>
-                    <p class="field">
-                      <button
-                        class="outline-button-cyan click"
-                        v-on:click="
-                          showCorrectAnswer(item.correct, item.choice)
-                        "
-                      >
-                        <span v-if="item.correct" class="text-choice">
-                          {{ item.choice }} . {{ item.answer_text }}</span
-                        >
-                        <span v-else class="text-choice">
-                          {{ item.choice }} . {{ item.answer_text }}
-                        </span>
-                      </button>
-                    </p>
-                  </center>
-                </div>
-              </div>
-              <br />
-              <div
-                v-if="showFeedback"
-                class="position-bottom subheading4"
-                style="color: #fff"
-              >
-                <div v-if="!isCorrect">
-                  You seleceted the wrong answer, the correct answer is
-                  {{ this.correctChoice }}
-                </div>
-                <div v-if="isCorrect">You seleceted the correct answer</div>
-              </div>
-              <br />
-              <div class="position-bottom">
-                <a
-                  @click="showMsgBoxTwo"
-                  style="color: #bbb; padding-bottom: 20px"
-                  >Pause</a
-                >
-              </div>
-            </div>
-          </b-col>
-        </b-row>
+    <!-- base timer goes here  -->
+    <div style="margin-top: 60px">
+      <BaseTimer class="center" :key="rebuildbasetimer" />
+    </div>
+    <div v-if="showFeedback" class="subheading4" style="color: #fff">
+      <div
+        v-if="!isCorrect"
+        class="text-center"
+        align-v="center"
+        style="color: #fff"
+      >
+        <img src="~/assets/cancel.png" alt="" height="40" width="40" />
+        Wrong answer, the correct answer is
+        {{ this.correctChoice }}.
+        <img src="~/assets/loading.gif" alt="" height="70" width="80" />Loading
+        next question...
+      </div>
+      <div
+        v-if="isCorrect"
+        class="text-center"
+        align-v="center"
+        style="color: #fff"
+      >
+        <img src="~/assets/correct.png" alt="" height="40" width="40" />
+        You seleceted the correct answer.<img
+          src="~/assets/loading.gif"
+          alt=""
+          height="70"
+          width="80"
+        />Loading next question...
       </div>
     </div>
+    <b-row>
+      <b-col>
+        <p v-if="$fetchState.pending" class="container center-align-content">
+          <span class="loading"></span>
+        </p>
+        <p v-else-if="$fetchState.error">An error occurred :(</p>
+        <div v-else class="card-content">
+          <div class="question-title">
+            {{ this.quiz[this.counter].question }}
+          </div>
+          <div class="grid-container resize-choices">
+            <div
+              class="choices"
+              v-for="item in this.quiz[this.counter].choices"
+              :key="item.label"
+            >
+              <center>
+                <p class="field">
+                  <button
+                    class="outline-button-cyan click"
+                    v-on:click="showCorrectAnswer(item.correct, item.choice)"
+                  >
+                    <span v-if="item.correct" class="text-choice">
+                      {{ item.choice }} . {{ item.answer_text }}</span
+                    >
+                    <span v-else class="text-choice">
+                      {{ item.choice }} . {{ item.answer_text }}
+                    </span>
+                  </button>
+                </p>
+              </center>
+            </div>
+          </div>
+          <br />
+          <!-- <div
+            v-if="showFeedback"
+            class="position-bottom subheading4"
+            style="color: #fff"
+          >
+            <div
+              v-if="!isCorrect"
+              class="text-center"
+              align-v="center"
+              style="color: #fff"
+            >
+              <img src="~/assets/cancel.png" alt="" height="40" width="40" />
+              Wrong answer, the correct answer is
+              {{ this.correctChoice }}.
+              <img
+                src="~/assets/loading.gif"
+                alt=""
+                height="70"
+                width="80"
+              />Loading next question...
+            </div>
+            <div
+              v-if="isCorrect"
+              class="text-center"
+              align-v="center"
+              style="color: #fff"
+            >
+              <img src="~/assets/correct.png" alt="" height="40" width="40" />
+              You seleceted the correct answer.<img
+                src="~/assets/loading.gif"
+                alt=""
+                height="70"
+                width="80"
+              />Loading next question...
+            </div>
+          </div> -->
+          <br />
+        </div>
+      </b-col>
+    </b-row>
   </div>
 </template>
 
@@ -86,6 +118,7 @@
 import { mapState, mapActions } from "vuex";
 import RoundedCyanLoadingButton from "../../components/Buttons/RoundedCyanLoadingButton.vue";
 import BaseTimer from "../../components/BaseTimer.vue";
+import ConfirmationModal from "../../components/ConfirmationModal.vue";
 
 const FULL_DASH_ARRAY = 283;
 const WARNING_THRESHOLD = 7;
@@ -127,29 +160,30 @@ export default {
       isCorrect: false,
       timeouts: 0,
       rebuildbasetimer: 0,
-      showResults: false,
       timePassed: 0,
       timerInterval: null,
     };
   },
   async fetch() {
     this.quiz = this.$store.state.triviaQuestions;
-    // console.log(this.quiz);
+    console.log(this.quiz);
   },
   watch: {
     timeLeft(newValue) {
       if (newValue === 0) {
-        this.onTimesUp();
-        this.timePassed = 0;
+        this.resetTimer();
         this.goToNextQuestion("timeout");
         this.timeoutToast();
-        this.startTimer();
+        this.forceRerender();
       }
     },
   },
   mounted() {
     if (!this.$store.state.isAuthenticated) {
       this.navigateToLogin();
+    } else if (this.$store.state.triviaQuestions.length === 0) {
+      // navigate to home page
+      this.$router.push("/home");
     } else {
       this.startTimer();
     }
@@ -201,10 +235,14 @@ export default {
     forceRerender() {
       this.rebuildbasetimer += 1;
     },
-
+    resetTimer() {
+      this.onTimesUp();
+      this.startTimer();
+      this.timePassed = 0;
+    },
     timeoutToast(toaster) {
       this.$bvToast.toast(`You ran out of time while answering the question`, {
-        title: `Times Up!`,
+        title: `Timeout!`,
         variant: "danger",
         toaster: toaster,
         solid: true,
@@ -230,9 +268,10 @@ export default {
         // user selected correct answer
         this.isCorrect = true;
       }
-      await this.$store.dispatch("delayTwoSeconds"),
+      await this.$store.dispatch("delayFiveSeconds"),
         await this.goToNextQuestion(answer);
       this.forceRerender();
+      this.resetTimer();
       this.showFeedback = false;
     },
     // Logic to loop through questions goes here
@@ -243,7 +282,25 @@ export default {
       if (this.counter < 8) {
         this.counter += 1;
       } else {
-        this.showResults = true;
+        let sessionID = this.$store.state.sessionDetails.session.id;
+        let mswaliUserId = this.$store.state.mswaliId;
+        let markplayedsessionurl = `solo-play/mark-played-session&user_id=${mswaliUserId}&session_id=${sessionID}`;
+        let markPlayedSession = await this.$axios.post(
+          `/apiproxy/${markplayedsessionurl}`,
+        );
+        console.log("Session tracking goes here");
+        console.log(markPlayedSession);
+        let postplayerinsessionurl = `solo-play/post-player-in-session&user_id=${mswaliUserId}&session_id=${sessionID}`;
+        let trackPlayerSession = await this.$axios.post(
+          `/apiproxy/${postplayerinsessionurl}`,
+        );
+        console.log(trackPlayerSession);
+        let markfinishdgameurl = `solo-play/mark-finished-game&user_id=${mswaliUserId}&session_id=${sessionID}`;
+        let markFinishedGame = await this.$axios.post(
+          `/apiproxy/${markfinishdgameurl}`,
+        );
+        console.log(markFinishedGame);
+        this.$router.push("/results");
       }
     },
     async updateAnswerOnBackend(questionNumber, answer) {
@@ -272,8 +329,9 @@ export default {
       } else if (answer == "") {
         console.log("Select answer to proceed");
       }
+      let updatequestionurl = `solo-play/update-session-score&session_id=${sessionID}&question_id=${questionId}&user_id=${mswaliUserId}&user_response=timeout&user_text=A&question=${questionNumber}&timeout=${timeoutValue}&correct=${answerValue}`;
       let updateQuestionAnswer = await this.$axios.post(
-        `http://cms.mswali.co.ke/mswali/mswali_app/backend/web/index.php?r=solo-play/update-session-score&session_id=${sessionID}&question_id=${questionId}&user_id=${mswaliUserId}&user_response=timeout&user_text=A&question=${questionNumber}&timeout=${timeoutValue}&correct=${answerValue}`,
+        `/apiproxy/${updatequestionurl}`,
       );
       console.log("Answer API response" + questionNumber);
       console.log(updateQuestionAnswer);
@@ -301,20 +359,16 @@ export default {
         });
     },
     // base timer methods go here
+
     onTimesUp() {
       clearInterval(this.timerInterval);
     },
-    startTimer(timelapsed) {
-      this.timerInterval = setInterval(
-        () =>
-          timelapsed
-            ? this.timePassed - this.timePassed
-            : (this.timePassed += 1),
-        1000,
-      );
+
+    startTimer() {
+      this.timerInterval = setInterval(() => (this.timePassed += 1), 1000);
     },
   },
-  components: { RoundedCyanLoadingButton, BaseTimer },
+  components: { RoundedCyanLoadingButton, BaseTimer, ConfirmationModal },
 };
 </script>
 
@@ -340,19 +394,6 @@ export default {
   justify-content: center;
   text-align: center;
 }
-.outer-wrapper {
-  position: fixed;
-  top: 0px;
-  margin: 0px;
-  margin-top: 20px;
-  height: 100vh;
-  width: 100%;
-  display: flex;
-  align-items: center; /*horizontal centering*/
-  justify-content: center; /*vertical centering*/
-  flex-direction: row; /*keep the h3 above the textbox*/
-  /* border:1px solid red; */
-}
 .quiz-content {
   /* position: absolute; */
   padding: 20px;
@@ -368,8 +409,7 @@ export default {
 }
 .question-title {
   color: #fff;
-  font-size: 20px;
-  justify-content: center;
+  font-size: 18px;
   /* text-align-last:justify; */
   font-style: normal;
   font-weight: 800;

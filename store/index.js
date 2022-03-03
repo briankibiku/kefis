@@ -226,7 +226,7 @@ export const mutations = {
 export const actions = {
   async getuserProfile() {
     let res = await this.$axios.get(
-      `http://cms.mswali.co.ke/mswali/mswali_app/backend/web/index.php?r=api/get-user&username=mast&account_number=0724609783`,
+      `/apiproxy/api/get-user&username=mast&account_number=0724609783`,
     );
     return res;
   },

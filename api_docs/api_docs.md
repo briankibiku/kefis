@@ -4,7 +4,7 @@
 
 ##### POST /a/sample/endpoint
 
-[http://cms.mswali.co.ke/mswali/mswali_app/backend/web/index.php?r=team-play/get-top-teams](http://localhost/mswali/mswali_app/backend/web/index.php?r=team-play/get-top-teams) --->  Working
+[http://161.35.6.91/mswali/mswali_app/backend/web/index.php?r=team-play/get-top-teams](http://localhost/mswali/mswali_app/backend/web/index.php?r=team-play/get-top-teams) --->  Working
 
 ##### Authentication
 
@@ -42,7 +42,7 @@ Response 200
 
 ##### POST /a/sample/endpoint
 
-[http://cms.mswali.co.ke/mswali/mswali_app/backend/web/index.php?r=team-play/get-top-performers](http://cms.mswali.co.ke/mswali/mswali_app/backend/web/index.php?r=team-play/get-top-performers) ---> Working
+[http://161.35.6.91/mswali/mswali_app/backend/web/index.php?r=team-play/get-top-performers](http://161.35.6.91/mswali/mswali_app/backend/web/index.php?r=team-play/get-top-performers) ---> Working
 
 ##### Authentication
 
@@ -80,7 +80,7 @@ Response 200
 
 ##### POST /a/sample/endpoint
 
-[http://cms.mswali.co.ke/mswali/mswali_app/backend/web/index.php?r=solo-play/show-my-answers&msisdn=${this.phoneNumber}](http://cms.mswali.co.ke/mswali/mswali_app/backend/web/index.php?r=solo-play/show-my-answers&msisdn=${this.phoneNumber}) --->  Working
+[http://161.35.6.91/mswali/mswali_app/backend/web/index.php?r=solo-play/show-my-answers&msisdn=${this.phoneNumber}](http://161.35.6.91/mswali/mswali_app/backend/web/index.php?r=solo-play/show-my-answers&msisdn=${this.phoneNumber}) --->  Working
 
 ##### Authentication
 
@@ -129,7 +129,7 @@ Response 200
 
 ##### POST /a/sample/endpoint
 
-[http://cms.mswali.co.ke/mswali/mswali_app/backend/web/index.php?r=solo-play/show-my-answers&msisdn=${this.phoneNumber}](http://cms.mswali.co.ke/mswali/mswali_app/backend/web/index.php?r=solo-play/show-my-answers&msisdn=${this.phoneNumber})  ---> Working
+[http://161.35.6.91/mswali/mswali_app/backend/web/index.php?r=solo-play/show-my-answers&msisdn=${this.phoneNumber}](http://161.35.6.91/mswali/mswali_app/backend/web/index.php?r=solo-play/show-my-answers&msisdn=${this.phoneNumber})  ---> Working
 
 ##### Authentication
 
@@ -198,7 +198,7 @@ Response 200
 #### 5. Register new user
 ##### POST /a/sample/endpoint
 
-[http://cms.mswali.co.ke/mswali/mswali_app/backend/web/index.php?r=api/register-user&username=TestUser&account_number=${this.phoneNumber}](http://cms.mswali.co.ke/mswali/mswali_app/backend/web/index.php?r=api/register-user&username=TestUser&account_number=${this.phoneNumber})  ---> Working
+[http://161.35.6.91/mswali/mswali_app/backend/web/index.php?r=api/register-user&username=TestUser&account_number=${this.phoneNumber}](http://161.35.6.91/mswali/mswali_app/backend/web/index.php?r=api/register-user&username=TestUser&account_number=${this.phoneNumber})  ---> Working
 
 ##### Authentication
 
@@ -229,7 +229,7 @@ Response 200
 
 ##### POST /a/sample/endpoint
 
-[http://cms.mswali.co.ke/mswali/mswali_app/backend/web/index.php?r=api/get-user&username=mast&account_number=254707630747](http://cms.mswali.co.ke/mswali/mswali_app/backend/web/index.php?r=api/get-user&username=mast&account_number=254707630747)  ---> Working
+[http://161.35.6.91/mswali/mswali_app/backend/web/index.php?r=api/get-user&username=mast&account_number=254707630747](http://161.35.6.91/mswali/mswali_app/backend/web/index.php?r=api/get-user&username=mast&account_number=254707630747)  ---> Working
 
 ##### Authentication
 
@@ -288,7 +288,7 @@ Response 200
 
 ##### POST /a/sample/endpoint
 
-[http://cms.mswali.co.ke/mswali/mswali_app/backend/web/index.php?r=api/initiate-payment&account_number=254724609783&amount=10](http://cms.mswali.co.ke/mswali/mswali_app/backend/web/index.php?r=api/initiate-payment&account_number=254724609783&amount=100)  ---> Working
+[http://161.35.6.91/mswali/mswali_app/backend/web/index.php?r=api/initiate-payment&account_number=254724609783&amount=10](http://161.35.6.91/mswali/mswali_app/backend/web/index.php?r=api/initiate-payment&account_number=254724609783&amount=100)  ---> Working
 
 ##### Authentication
 
