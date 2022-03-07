@@ -1,10 +1,9 @@
 <template>
   <div>
     <AppWrapper requiresSmallAndLargeScreenViews="false">
-      <template v-slot:large-screen>      
-      <Answers/>
-      </template
-    ></AppWrapper>    
+      <template v-slot:large-screen>
+        <Answers /> </template
+    ></AppWrapper>
   </div>
 </template>
 
@@ -12,6 +11,10 @@
 import AppWrapper from "../../components/AppWrapper.vue";
 import Answers from "../../components/Answers.vue";
 export default {
-  components: {  AppWrapper, Answers },
+  loading: {
+    color: "blue",
+    height: "5px",
+  },
+  components: { AppWrapper, Answers },
 };
 </script>

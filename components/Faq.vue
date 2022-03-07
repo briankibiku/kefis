@@ -1,10 +1,10 @@
 <template>
-  <div class="row" style="flex-direction: column">
+  <div class="align-center" style="flex-direction: column">
     <div class="heading3 padding-right-20">FAQS</div>
     <div class="subheading3">Frequently asked questions</div>
     <div v-for="faq in mswaliFaqs">
       <details
-        style="background-color: #bbb ; margin-block: 10px; padding: 10px"
+        style="background-color: #bbb; margin-block: 10px; padding: 10px"
       >
         <summary>{{ faq.question }}</summary>
         {{ faq.answer }}

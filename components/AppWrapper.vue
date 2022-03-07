@@ -135,10 +135,10 @@ export default {
   mounted() {
     if (this.$store.state.isAuthenticated) {
       this.fetchWalletBalance();
-      if (this.requiresSmallAndLargeScreenViews == "true") {
-        this.smallandbigrequired = true;
-      } else {
+      if (this.requiresSmallAndLargeScreenViews === "false") {
         this.smallandbigrequired = false;
+      } else {
+        this.smallandbigrequired = true;
       }
     } else {
       this.navigateToLogin();
@@ -297,7 +297,7 @@ export default {
       // deduct a session from the user
       let deductsessionproxy = `deduct-free-games&user_id=${this.mswaliUserId}`;
       let deductGameSessionResponse = await this.$axios.post(
-        `/api/${deductsessionproxy}`,
+        `/apiproxy/api${deductsessionproxy}`,
       );
       if (
         deductGameSessionResponse.data.status_message ===

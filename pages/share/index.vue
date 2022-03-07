@@ -62,38 +62,36 @@
           class="d-block d-sm-none d-none d-sm-block d-md-none"
           v-if="!loading"
         >
-          <div class="centered-container" style="width: 320px">
-            <div class="col d-flex justify-content-around">
-              <div class="row" style="flex-direction: column">
-                <div>
-                  <img src="~/assets/share.png" alt="" height="80" width="80" />
-                </div>
-                <div class="heading3">Share</div>
-                <div class="subheading3" style="margin-block: 10px">
-                  Enter number you wish to share with are receive referral
-                  credits
-                </div>
-                <input
-                  class="rounded-border-input"
-                  type="number"
-                  v-model="referralNumber"
-                  placeholder="0712 345 678"
-                  required
-                  style="margin-bottom: 10px"
-                />
-                <RoundedCyanArrowButton
-                  @click="submit()"
-                  buttonText="Proceed"
-                  style="width: 340px"
-                />
-                <br />
-                <a href="/home" style="color: #bbb"> Home </a>
-              </div>
+          <div
+            class="align-center"
+            style="flex-direction: column; margin-top: 20px"
+          >
+            <div>
+              <img src="~/assets/share.png" alt="" height="80" width="80" />
             </div>
+            <div class="heading3">Share</div>
+            <div class="subheading3" style="margin-block: 10px">
+              Enter number you wish to share with are receive referral credits
+            </div>
+            <input
+              class="rounded-border-input"
+              type="number"
+              v-model="referralNumber"
+              placeholder="0712 345 678"
+              required
+              style="margin-bottom: 10px"
+            />
+            <RoundedCyanArrowButton
+              @click="submit()"
+              buttonText="Proceed"
+              style="width: 240px"
+            />
+            <br />
+            <a @click="$router.back()" style="color: #bbb">Back</a>
+            <br />
           </div>
-        </div>
-      </template></AppWrapper
-    >
+        </div> </template
+    ></AppWrapper>
   </div>
 </template>
 

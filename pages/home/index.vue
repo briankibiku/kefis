@@ -44,9 +44,10 @@
                 />
               </div>
             </form>
-            <RoundedCyanLoadingButton
+            <RoundedGoldLoadingButton
               @click="navigateToQuiz()"
               buttonText="Play NOW to WIN"
+              style="font-size: 24px; font-weight: bold"
             />
             <div class="d-flex align-items-center" style="flex-direction: row">
               <b-button class="text-button margin-horizontal-20" @click="">
@@ -159,16 +160,17 @@
                     {{ banner }}
                   </div>
                   <div class="center-align-content heading2 prize-card">
-                    {{ prize }}
+                    KES {{ prize }}
                   </div>
                 </div>
               </div>
               <!-- start quiz button -->
               <div class="col" style="margin-inline: 20px; width: 100%">
-                <RoundedCyanLoadingButton
+                <RoundedGoldLoadingButton
                   @click="navigateToQuiz()"
                   buttonText="Play NOW to WIN"
                   showIcon="true"
+                  style="font-size: 24px; font-weight: bold"
                 />
               </div>
               <!-- wallet card go here -->
@@ -206,6 +208,9 @@
                 <div class="subheading4">
                   Credits: {{ this.creditsBalanceFromState }}
                 </div>
+                <b-button class="outline-button" href="/deposit"
+                  >Deposit</b-button
+                >
               </div>
 
               <!-- stats card go here -->
@@ -242,6 +247,7 @@ import Flat from "../../components/Buttons/Flat.vue";
 import RoundedCyanArrowButton from "../../components/Buttons/RoundedCyanArrowButton.vue";
 import RoundedCyanLoadingButton from "../../components/Buttons/RoundedCyanLoadingButton.vue";
 import Salutations from "../../components/Salutations.vue";
+import RoundedGoldLoadingButton from "../../components/RoundedGoldLoadingButton.vue";
 export default {
   data() {
     return {
@@ -424,7 +430,7 @@ export default {
       // deduct a session from the user
       let deductsessionproxy = `api/deduct-free-games&user_id=${this.mswaliUserId}`;
       let deductGameSessionResponse = await this.$axios.post(
-        `/apiproxy/${deductsessionproxy}`,
+        `/apiproxy/api${deductsessionproxy}`,
       );
       if (
         deductGameSessionResponse.data.status_message ===
@@ -464,6 +470,7 @@ export default {
           `/apiproxy/${sessionresponseurl}`,
         );
         console.log("EARTH HACKED BY UKRAINE.............");
+        console.log(sessionResponse);
         await this.persistSessionDetails(sessionResponse.data);
         await this.persistCanWinStatus(
           this.$store.state.sessionDetails.can_win,
@@ -590,8 +597,8 @@ export default {
                     await this.fetchWalletBalance();
                     console.log("STEP 1");
                     await this.fetchSessionQuestions(sessionID);
-                    console.log("STEP 2");
-                    console.log("STEP 3");
+                    await this.infoToast();
+                    await this.$store.dispatch("delayFiveSeconds");
                     await this.$router.push("/quiz");
                   } else {
                     await this.errorToast();
@@ -621,7 +628,7 @@ export default {
         }
       } catch (e) {
         // stop loading
-        this.networkErrorToast();
+        this.sessionIsNotLiveToast();
         await this.$store.dispatch("delayTwoSeconds");
         window.location.reload();
       }
@@ -636,6 +643,7 @@ export default {
     RoundedCyanArrowButton,
     RoundedCyanLoadingButton,
     Salutations,
+    RoundedGoldLoadingButton,
   },
 };
 </script>

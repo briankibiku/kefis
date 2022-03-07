@@ -2,7 +2,9 @@
   <div style="padding-bottom: 20px">
     <b-navbar toggleable="lg" type="light">
       <b-navbar-brand>
-        <LogoPurple style="width: 140px; height: 30px;" />
+        <a href="/home">
+          <LogoPurple style="width: 140px; height: 30px" />
+        </a>
       </b-navbar-brand>
 
       <b-navbar-toggle target="nav-collapse"></b-navbar-toggle>

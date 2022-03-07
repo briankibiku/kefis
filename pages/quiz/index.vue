@@ -12,19 +12,19 @@
     <div v-if="showFeedback" class="subheading4" style="color: #fff">
       <div
         v-if="!isCorrect"
-        class="text-center heading3"
+        class="text-center heading3 animate__animated animate__fadeInLeft"
         align-v="center"
         style="color: #fff"
       >
         <img src="~/assets/cancel.png" alt="" height="40" width="40" />
         Wrong answer, the correct answer is
         {{ this.correctChoice }}.
-        <img src="~/assets/loading.gif" alt="" height="70" width="80" />Loading
-        next question...
-      </div> 
+        <img src="~/assets/loading.gif" alt="" height="70" width="80" />
+        <div style="color: #ffb500">Loading next question...</div>
+      </div>
       <div
         v-if="isCorrect"
-        class="text-center heading3"
+        class="text-center heading3 animate__animated animate__fadeInRight"
         align-v="center"
         style="color: #fff"
       >
@@ -34,7 +34,8 @@
           alt=""
           height="70"
           width="80"
-        />Loading next question...
+        />
+        <div style="color: #ffb500">Loading next question...</div>
       </div>
     </div>
     <b-row>
@@ -57,7 +58,9 @@
                 <p class="field">
                   <button
                     class="outline-button-cyan click"
+                    id="answerBtn"
                     v-on:click="showCorrectAnswer(item.correct, item.choice)"
+                    :disabled="isDisabled"
                   >
                     <span v-if="item.correct" class="text-choice">
                       {{ item.choice }} . {{ item.answer_text }}</span
@@ -126,6 +129,8 @@ export default {
       rebuildbasetimer: 0,
       timePassed: 0,
       timerInterval: null,
+      isDisabled: false,
+      canTimeout: true,
     };
   },
   async fetch() {
@@ -134,7 +139,7 @@ export default {
   },
   watch: {
     timeLeft(newValue) {
-      if (newValue === 0) {
+      if (newValue === 0 && this.canTimeout) {
         this.resetTimer();
         this.goToNextQuestion("timeout");
         this.timeoutToast();
@@ -215,6 +220,8 @@ export default {
     },
     // show answer function
     async showCorrectAnswer(answer, selectedchoice) {
+      this.isDisabled = true;
+      this.canTimeout = false;
       console.log(answer);
       console.log(selectedchoice);
       console.log(this.quiz[this.counter].choices);
@@ -234,15 +241,21 @@ export default {
         this.isCorrect = true;
       }
       await this.$store.dispatch("delayFiveSeconds"),
-        await this.goToNextQuestion(answer);
+        await this.goToNextQuestion(answer, selectedchoice);
       this.forceRerender();
       this.resetTimer();
       this.showFeedback = false;
     },
     // Logic to loop through questions goes here
-    async goToNextQuestion(correct) {
+    async goToNextQuestion(correct, selectedchoice) {
       // update answer using API
-      await this.updateAnswerOnBackend(this.counter + 1, correct);
+      await this.updateAnswerOnBackend(
+        this.counter + 1,
+        correct,
+        selectedchoice,
+      );
+      this.isDisabled = false;
+      this.canTimeout = true;
       // prevent counter from incrementing to 10
       if (this.counter < 8) {
         this.counter += 1;
@@ -268,7 +281,7 @@ export default {
         this.$router.push("/results");
       }
     },
-    async updateAnswerOnBackend(questionNumber, answer) {
+    async updateAnswerOnBackend(questionNumber, answer, selectedchoice) {
       let sessionID = this.$store.state.sessionDetails.session.id;
       let mswaliUserId = this.$store.state.mswaliId;
       let questionId = this.quiz[this.counter].question_id;
@@ -294,12 +307,12 @@ export default {
       } else if (answer == "") {
         console.log("Select answer to proceed");
       }
-      let updatequestionurl = `solo-play/update-session-score&session_id=${sessionID}&question_id=${questionId}&user_id=${mswaliUserId}&user_response=timeout&user_text=A&question=${questionNumber}&timeout=${timeoutValue}&correct=${answerValue}`;
-      let updateQuestionAnswer = await this.$axios.post(
-        `/apiproxy/${updatequestionurl}`,
+      let updateQuestionAnswer = await this.$axios.put(
+        `/apiproxy/solo-play/update-score&session_id=${sessionID}&question_id=${questionId}&user_id=${mswaliUserId}&user_response=timeout&user_text=${selectedchoice}&question=${questionNumber}&timeout=${timeoutValue}&correct=${answerValue}`,
       );
       console.log("Answer API response" + questionNumber);
       console.log(updateQuestionAnswer);
+      console.log("Update question score API:::::::::::::::::::");
     },
     showMsgBoxTwo() {
       this.boxTwo = "";

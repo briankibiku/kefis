@@ -68,13 +68,8 @@ export default {
           picked: [],
         },
       ],
-      answerfields: [{ key: "picked", label: "Your Choice" }],
-      fields: [
-        "question",
-        "answer",
-        { key: "label", label: "Choice" },
-        // { key: "picked", label: "Your Choice" },
-      ],
+      answerfields: [{ key: "picked", label: "Your Ans" }],
+      fields: ["question", "answer", { key: "label", label: "Answer" }],
     };
   },
   mounted() {
@@ -98,10 +93,11 @@ export default {
       this.userAnswers = await this.$axios.$get(
         `/apiproxy/solo-play/show-my-answers&msisdn=${loggedINPhone}`,
       );
+      console.log("Herooku");
       console.log(this.userAnswers);
       if (this.userAnswers.has_played) {
         this.questionAnswers2 = this.userAnswers.resp;
-        this.fillItemsList();
+        // this.fillItemsList();
       } else {
         this.userHasNeverPlayed = true;
       }
@@ -116,7 +112,6 @@ export default {
         this.items[0].answer.push(this.userAnswers.resp[i].answer);
         this.items[0].label.push(this.userAnswers.resp[i].label);
       }
-      console.log("Herooku");
       console.log(this.items);
     },
   },
