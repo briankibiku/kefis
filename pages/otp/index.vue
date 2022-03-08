@@ -155,6 +155,11 @@ export default {
   },
   mounted() {
     this.startTimer();
+    if (!window.OTPCredential) {
+      console.log("Feature Not Available");
+    } else {
+      console.log("Feature Available");
+    }
   },
   computed: {
     ...mapState({
@@ -189,7 +194,6 @@ export default {
       persistUserCredits: "persistUserCredits",
       persistSessionDetails: "persistSessionDetails",
     }),
-
     forceRerender() {
       this.rebuildverifybutton += 1;
     },
@@ -274,10 +278,8 @@ export default {
       this.phoneNumber = this.$store.state.loggedinUserPhone;
     },
     async fetchWalletBalance(mswaliUserId) {
-      let fetchbalanceproxy = `get-balance&user_id=${mswaliUserId}`
-      let response = await this.$axios.get(
-        `/api/${fetchbalanceproxy}`,
-      );
+      let fetchbalanceproxy = `get-balance&user_id=${mswaliUserId}`;
+      let response = await this.$axios.get(`/api/${fetchbalanceproxy}`);
       let walletBalanceFromAPI = await Math.trunc(response.data.data);
       let walletCreditsFromAPI = await response.data.credit_balance;
       await this.persistwalletBalance(walletBalanceFromAPI);

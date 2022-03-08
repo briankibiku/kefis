@@ -45,7 +45,8 @@
                 <div
                   class="wallet-card"
                   style="margin-bottom: 20px; padding-left: 40px; width: 50vw"
-                ><div class="d-flex justify-content-between">
+                >
+                  <div class="d-flex justify-content-between">
                     <div class="heading4">
                       Wallet Balance
                       <b-button
@@ -58,10 +59,12 @@
                         />
                       </b-button>
                     </div>
-                    <div class="subheading4">Credits: {{ this.creditsBalanceFromState }}</div>
+                    <div class="subheading4">
+                      Credits: {{ this.creditsBalanceFromState }}
+                    </div>
                   </div>
                   <div class="heading2" v-if="showBalance">
-                    KES {{ this.walletBalanceFromState}}
+                    KES {{ this.walletBalanceFromState }}
                   </div>
                   <div v-if="!showBalance">
                     <div
@@ -282,7 +285,10 @@ export default {
       );
       let walletBalanceFromAPI = await Math.trunc(response.data.data);
       await this.persistwalletBalance(walletBalanceFromAPI);
+      let walletCreditsFromAPI = await response.data.credit_balance;
+      await this.persistUserCredits(walletCreditsFromAPI);
       this.walletBalanceFromState = this.$store.state.walletBalance;
+      this.creditsBalanceFromState = this.$store.state.userCredits;
     },
     fetchBalanceErrorToast(toaster, variant = null) {
       this.$bvToast.toast(

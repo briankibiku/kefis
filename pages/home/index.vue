@@ -422,19 +422,17 @@ export default {
     },
     async deductGameSession() {
       // deduct a session from the user
-      let deductsessionproxy = `deduct-free-games&user_id=${this.mswaliUserId}`;
+      let deductsessionproxy = `api/deduct-free-games&user_id=${this.mswaliUserId}`;
       let deductGameSessionResponse = await this.$axios.post(
-        `/api/${deductsessionproxy}`,
+        `/apiproxy/${deductsessionproxy}`,
       );
       if (
         deductGameSessionResponse.data.status_message ===
         "daily plan balance updated"
       ) {
         console.log("Playing with existing subscription");
-        this.loading = true;
         await this.infoToast();
         await this.$store.dispatch("delayFiveSeconds");
-        this.loading = false;
         await this.$router.push("/quiz");
       } else {
         await this.errorToast();
@@ -564,7 +562,6 @@ export default {
                     let basicPlanResponse = await this.$axios.post(
                       `/apiproxy/${dailtplanurl}`,
                     );
-                    console.log(basicPlanResponse);
                     if (
                       basicPlanResponse.data.status_message ===
                       "daily plan activated"
@@ -572,7 +569,6 @@ export default {
                       // serve questions if daily plan was bought sucessfully
                       await this.fetchSessionQuestions(sessionID);
                       // stop loading
-                      this.$nuxt.$loading.finish();
                       await this.deductGameSession();
                     } else {
                       this.errorBuyToast();
@@ -589,10 +585,14 @@ export default {
                   let dailyPlanResponse = await this.$axios.post(
                     `/apiproxy/${gameratesubscriptionurl}`,
                   );
+                  console.log("50 BOOB SUB BROUGHT");
                   if (dailyPlanResponse.data == null) {
                     await this.fetchWalletBalance();
+                    console.log("STEP 1");
                     await this.fetchSessionQuestions(sessionID);
-                    await this.deductGameSession();
+                    console.log("STEP 2");
+                    console.log("STEP 3");
+                    await this.$router.push("/quiz");
                   } else {
                     await this.errorToast();
                     console.log(

@@ -12,7 +12,7 @@
     <div v-if="showFeedback" class="subheading4" style="color: #fff">
       <div
         v-if="!isCorrect"
-        class="text-center"
+        class="text-center heading3"
         align-v="center"
         style="color: #fff"
       >
@@ -21,10 +21,10 @@
         {{ this.correctChoice }}.
         <img src="~/assets/loading.gif" alt="" height="70" width="80" />Loading
         next question...
-      </div>
+      </div> 
       <div
         v-if="isCorrect"
-        class="text-center"
+        class="text-center heading3"
         align-v="center"
         style="color: #fff"
       >
@@ -71,42 +71,6 @@
             </div>
           </div>
           <br />
-          <!-- <div
-            v-if="showFeedback"
-            class="position-bottom subheading4"
-            style="color: #fff"
-          >
-            <div
-              v-if="!isCorrect"
-              class="text-center"
-              align-v="center"
-              style="color: #fff"
-            >
-              <img src="~/assets/cancel.png" alt="" height="40" width="40" />
-              Wrong answer, the correct answer is
-              {{ this.correctChoice }}.
-              <img
-                src="~/assets/loading.gif"
-                alt=""
-                height="70"
-                width="80"
-              />Loading next question...
-            </div>
-            <div
-              v-if="isCorrect"
-              class="text-center"
-              align-v="center"
-              style="color: #fff"
-            >
-              <img src="~/assets/correct.png" alt="" height="40" width="40" />
-              You seleceted the correct answer.<img
-                src="~/assets/loading.gif"
-                alt=""
-                height="70"
-                width="80"
-              />Loading next question...
-            </div>
-          </div> -->
           <br />
         </div>
       </b-col>
@@ -224,6 +188,7 @@ export default {
   },
   deforeDestroy() {
     this.disableButtonFunc(true);
+    this.clearTimeout();
   },
   methods: {
     ...mapActions({
