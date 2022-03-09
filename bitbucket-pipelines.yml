@@ -1,5 +1,5 @@
 # mSwali PWA CI/CD
-image: mSwali PWA
+image: atlassian/default-image:3
 
 pipelines:
   default:
