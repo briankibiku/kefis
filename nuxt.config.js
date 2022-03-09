@@ -22,7 +22,7 @@ export default {
   },
   // Disable server side rendering
   // Global CSS: https://go.nuxtjs.dev/config-css
-  css: ["~/assets/main.css"],
+  css: ["~/assets/main.css", 'animate.css/animate.min.css'],
   loading: '~/components/Loading.vue',
 
   loading: {
@@ -31,7 +31,7 @@ export default {
   },
 
   // Plugins to run before rendering page: https://go.nuxtjs.dev/config-plugins
-  plugins: [{ src: "~/plugins/persistedState.client.js" }, "~/plugins/fetchbalance.js"],
+  plugins: [{ src: "~/plugins/persistedState.client.js" }],
 
   // Auto import components: https://go.nuxtjs.dev/config-components
   components: true,
@@ -73,10 +73,11 @@ export default {
       changeOrigin: true,
     },
     "/apiproxy/": {
-      target: `http://161.35.6.91/mswali/mswali_app/backend/web/index.php?r=`,
+      target: `http://197.248.4.233/mswali/mswali_app/backend/web/index.php?r=`,
+      // target: `http://161.35.6.91/mswali/mswali_app/backend/web/index.php?r=`,
       pathRewrite: { "^/apiproxy/": "" },
       changeOrigin: true,
-    }
+    },
   },
 
   // Build Configuration: https://go.nuxtjs.dev/config-build

@@ -1,32 +1,36 @@
 <template>
   <div>
-    <p v-if="$fetchState.pending">
-      <b-spinner label="Spinning"></b-spinner>
-    </p>
-    <p v-else-if="$fetchState.error">An error occurred while fetching data</p>
-    <div v-else>
+    <div>
       <div>
-        <div class="row" style="width: 100%;">
+        <div class="row" style="width: 100%">
           <div class="heading3" style="padding-right: 40px">
             <button
-              class="outline-button"
-              style="height: 40px"
-              @click="topScoreView = true"
+              class="text-button"
+              style="height: 40px; font-weight: 600"
+              @click="toggleViewFunction"
             >
               Top Players
             </button>
+            <div
+              v-if="!toggleView"
+              style="height: 5px; background-color: #160d3d; width: 100%"
+            ></div>
           </div>
           <div class="heading3">
             <button
-              class="outline-button"
-              style="height: 40px"
-              @click="topScoreView = false"
+              class="text-button"
+              style="height: 40px; font-weight: 600"
+              @click="toggleViewFunction"
             >
               Top Teams
             </button>
+            <div
+              v-if="toggleView"
+              style="height: 5px; background-color: #160d3d; width: 100%"
+            ></div>
           </div>
         </div>
-        <div v-if="topScoreView" >
+        <div v-if="topScoreView">
           <b-table
             striped
             hover
@@ -75,6 +79,7 @@
 </template>
 
 <script>
+import axios from "axios";
 export default {
   data() {
     return {
@@ -83,6 +88,7 @@ export default {
       topTeams: [],
       perPage: 8,
       currentPage: 1,
+      toggleView: false,
       teamPerPage: 8,
       teamCurrentPage: 1,
       topScoreView: true,
@@ -90,33 +96,43 @@ export default {
       teamFields: ["team_name", "score"],
     };
   },
-  async fetch() {
-    if (!this.$store.state.topScoreSet) {
+  loading: {
+    color: "blue",
+    height: "5px",
+  },
+  mounted() {
+    this.fetchWinners();
+  },
+  methods: {
+    toggleViewFunction() {
+      this.toggleView ? (this.toggleView = false) : (this.toggleView = true);
+      this.topScoreView
+        ? (this.topScoreView = false)
+        : (this.topScoreView = true);
+    },
+    async fetchWinners() {
+      // if (!this.$store.state.topScoreSet) {
       console.log(this.$store.state.topScoreSet);
       console.log("Didn't fetched top scores from state!!");
-      this.topScores = await fetch(
+      this.topScores = await this.$axios.get(
         "/apiproxy/team-play/get-top-performers",
-      ).then((res) => res.json());
+      );
+      console.log(this.topScores.data.data);
       // this.topScores = this.topScores.data;
       //   getting of user answers payload to state
-      this.$store.commit("updateTopScores", this.topScores);
+      this.$store.commit("updateTopScores", this.topScores.data);
       //   getting of top players from state
       this.topScores = this.$store.state.topScores.data;
-      this.topTeams = await fetch("/apiproxy/team-play/get-top-teams").then(
-        (res) => res.json(),
+      this.topTeams = await this.$axios.get(
+        "/apiproxy/team-play/get-top-teams",
       );
+      console.log(this.topTeams);
       this.$store.commit("updateTopScoreSet", true);
       console.log("updateTopScoreSet set to TRUE");
-      this.$store.commit("updateTopTeams", this.topTeams);
+      this.$store.commit("updateTopTeams", this.topTeams.data);
       //   getting of top teams from state
       this.topTeams = this.$store.state.topTeams.data;
-    } else {
-      console.log("Fetched top scores from state!!");
-      //   getting of top players from state
-      this.topScores = this.$store.state.topScores.data;
-      //   getting of top teams from state
-      this.topTeams = this.$store.state.topTeams.data;
-    }
+    },
   },
   computed: {
     rows() {
