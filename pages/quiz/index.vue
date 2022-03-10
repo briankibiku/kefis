@@ -16,8 +16,7 @@
         align-v="center"
         style="color: #fff"
       >
-        <img src="~/assets/cancel.png" alt="" height="40" width="40" />
-        Wrong answer, the correct answer is
+        😢 Wrong answer, the correct answer is
         {{ this.correctChoice }}.
         <img src="~/assets/loading.gif" alt="" height="70" width="80" />
         <div style="color: #ffb500">Loading next question...</div>
@@ -28,8 +27,7 @@
         align-v="center"
         style="color: #fff"
       >
-        <img src="~/assets/correct.png" alt="" height="40" width="40" />
-        You seleceted the correct answer.<img
+        🤗 You seleceted the correct answer.<img
           src="~/assets/loading.gif"
           alt=""
           height="70"
@@ -135,7 +133,6 @@ export default {
   },
   async fetch() {
     this.quiz = this.$store.state.triviaQuestions;
-    console.log(this.quiz);
   },
   watch: {
     timeLeft(newValue) {
@@ -222,15 +219,11 @@ export default {
     async showCorrectAnswer(answer, selectedchoice) {
       this.isDisabled = true;
       this.canTimeout = false;
-      console.log(answer);
-      console.log(selectedchoice);
-      console.log(this.quiz[this.counter].choices);
       this.showFeedback = true;
       // register correct choice before hand
       for (var i = 0; i < 4; i++) {
         if (this.quiz[this.counter].choices[i].correct === 1) {
           this.correctChoice = this.quiz[this.counter].choices[i].choice;
-          console.log(this.correctChoice + "correct answer label");
         }
       }
       if (answer === 0) {
@@ -266,8 +259,6 @@ export default {
         let markPlayedSession = await this.$axios.post(
           `/apiproxy/${markplayedsessionurl}`,
         );
-        console.log("Session tracking goes here");
-        console.log(markPlayedSession);
         let postplayerinsessionurl = `solo-play/post-player-in-session&user_id=${mswaliUserId}&session_id=${sessionID}`;
         let trackPlayerSession = await this.$axios.post(
           `/apiproxy/${postplayerinsessionurl}`,
@@ -292,27 +283,21 @@ export default {
         timeoutValue = 0;
         this.correctScore += 1;
         await this.$store.commit("updateQuizScore", this.correctScore);
-        console.log("CORRECT ANSWER " + this.$store.state.trivia_score.correct);
       } else if (answer === 0) {
         answerValue = 0;
         timeoutValue = 0;
         this.wrongScore += 1;
         await this.$store.commit("updateQuizWrongs", this.wrongScore);
-        console.log("WRONG ANSWER " + this.$store.state.trivia_score.wrong);
       } else if (answer === "timeout") {
         answerValue = 0;
         timeoutValue = 1;
         this.timeouts += 1;
         await this.$store.commit("updateQuizTimeouts", this.timeouts);
       } else if (answer == "") {
-        console.log("Select answer to proceed");
       }
       let updateQuestionAnswer = await this.$axios.put(
         `/apiproxy/solo-play/update-score&session_id=${sessionID}&question_id=${questionId}&user_id=${mswaliUserId}&user_response=timeout&user_text=${selectedchoice}&question=${questionNumber}&timeout=${timeoutValue}&correct=${answerValue}`,
       );
-      console.log("Answer API response" + questionNumber);
-      console.log(updateQuestionAnswer);
-      console.log("Update question score API:::::::::::::::::::");
     },
     showMsgBoxTwo() {
       this.boxTwo = "";
