@@ -17,7 +17,7 @@
         onClick();
         navigateToQuiz();
       "
-      style="width: 240px; background-color: #ffb500"
+      style="width: 260px; background-color: #ffb500"
     >
       {{ buttonText }}
       <font-awesome-icon v-if="show" :icon="['fas', 'arrow-right']" />
@@ -33,6 +33,7 @@ export default {
       busy: false,
       timeout: null,
       show: false,
+      mswaliUserId: this.$store.state.mswaliId,
     };
   },
   props: {
@@ -102,9 +103,7 @@ export default {
       await this.persistUserCredits("");
       let mswaliUserId = this.$store.state.mswaliId;
       let getbalanceproxy = `get-balance&user_id=${mswaliUserId}`;
-      let response = await this.$axios.get(`/api/${getbalanceproxy}`);
-      console.log("Fetching wallet balance");
-      console.log(response.data);
+      let response = await this.$axios.get(`/apiproxy/api/${getbalanceproxy}`);
       let walletBalanceFromAPI = await Math.trunc(response.data.data);
       let walletCreditsFromAPI = await response.data.credit_balance;
       await this.persistwalletBalance(walletBalanceFromAPI);
@@ -118,11 +117,19 @@ export default {
       );
       await this.persistTriviaQuestions(sessionQuestionsResponse.data.data);
     },
+    sessionIsNotLiveToast(toaster) {
+      this.$bvToast.toast(`The game will be on from 10AM-10PM, check later`, {
+        title: `Session is not Live`,
+        variant: "danger",
+        toaster: toaster,
+        solid: true,
+      });
+    },
     async deductGameSession() {
       // deduct a session from the user
       let deductsessionproxy = `api/deduct-free-games&user_id=${this.mswaliUserId}`;
       let deductGameSessionResponse = await this.$axios.post(
-        `/apiproxy/api${deductsessionproxy}`,
+        `/apiproxy/${deductsessionproxy}`,
       );
       if (
         deductGameSessionResponse.data.status_message ===
@@ -139,17 +146,18 @@ export default {
       }
     },
     async navigateToQuiz() {
+      // make sure you have reset your state to no values
+      this.$store.commit("updateQuizScore", "");
+      this.$store.commit("updateQuizWrongs", "");
+      this.$store.commit("updateQuizTimeouts", "");
       // step 1 fetch game session for this user ---> done on otp/index.vue ln 288 and stored in state
       let mswaliUserId = this.$store.state.mswaliId;
       // start loading
-      this.$nuxt.$loading.start();
       try {
         let sessionresponseurl = `solo-play/get-solo-session&user_id=${this.mswaliUserId}`;
         let sessionResponse = await this.$axios.get(
           `/apiproxy/${sessionresponseurl}`,
         );
-        console.log("EARTH HACKED BY UKRAINE.............");
-        console.log(sessionResponse);
         await this.persistSessionDetails(sessionResponse.data);
         await this.persistCanWinStatus(
           this.$store.state.sessionDetails.can_win,
@@ -159,7 +167,6 @@ export default {
         let gameRate = this.$store.state.sessionDetails.session.rate;
         let sessionID = this.$store.state.sessionDetails.session.id;
         let isSessionLive = this.$store.state.sessionDetails.session.id;
-        console.log("sessionID " + sessionID);
         // step 2 check if the game session is live for user to play
         if (isSessionLive) {
           // step 3 check if rate is > 0 or = 0
@@ -274,17 +281,15 @@ export default {
                   }
                 } else if (userWalletBalance.data.data < gameRate) {
                   // stop loading
-                  this.$nuxt.$loading.finish();
                   this.loadAccountToast();
                 }
               }
             }
           } else if (gameRate == 0) {
             await this.fetchSessionQuestions(sessionID);
-            console.log(freeSessionQuestions.data.data);
             // stop loading
-            this.$nuxt.$loading.finish();
             await this.$router.push("/quiz");
+            // console.log("GAME RATE IS ZZERO");
           }
         } else {
           // stop loading

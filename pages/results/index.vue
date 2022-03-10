@@ -9,7 +9,7 @@
           <img
             class="Logo"
             width="200"
-            height="43"
+            height="42"
             src="~/assets/logos/mSwali-cyan.png"
           />
           <br /><br />

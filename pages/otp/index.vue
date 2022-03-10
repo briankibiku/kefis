@@ -257,8 +257,10 @@ export default {
     },
     async getuserName() {
       this.phoneNumber = this.$store.state.signUpPhone;
-      let getusernameproxy = `get-user&username=mast&account_number=${this.phoneNumber}`;
-      let userProfile = await axios.get(`/api/${getusernameproxy}`);
+      let getusernameproxy = ``;
+      let userProfile = await axios.get(
+        `/apiproxy/api/get-user&username=mast&account_number=${this.phoneNumber}`,
+      );
       let userName = userProfile.data.data.name;
       // persist phone number to state
       let phoneNumberFromApi = userProfile.data.data.account_number;
@@ -279,7 +281,9 @@ export default {
     },
     async fetchWalletBalance(mswaliUserId) {
       let fetchbalanceproxy = `get-balance&user_id=${mswaliUserId}`;
-      let response = await this.$axios.get(`/api/${fetchbalanceproxy}`);
+      let response = await this.$axios.get(
+        `/apiproxy/api/${fetchbalanceproxy}`,
+      );
       let walletBalanceFromAPI = await Math.trunc(response.data.data);
       let walletCreditsFromAPI = await response.data.credit_balance;
       await this.persistwalletBalance(walletBalanceFromAPI);
@@ -301,7 +305,10 @@ export default {
           this.signUpPhone = this.$store.state.signUpPhone;
           // verify OTP
           let verifyotpproxy = `verify-otp&msisdn=${this.signUpPhone}&code=${this.signUpOTP}`;
-          const res = await axios.get(`/api/${verifyotpproxy}`, config);
+          const res = await axios.get(
+            `/apiproxy/api/verify-otp&msisdn=${this.signUpPhone}&code=${this.signUpOTP}`,
+            config,
+          );
           // assign user name and phone from state
           this.phoneNumber = await this.$store.state.signUpPhone;
           this.userName = await this.$store.state.signUpName;
@@ -309,7 +316,7 @@ export default {
             // sign up new user using their phone and username
             let registernewuserproxy = `register-user&username=${this.userName}&account_number=${this.phoneNumber}`;
             const result = await axios.get(
-              `/api/${registernewuserproxy}`,
+              `/apiproxy/api/${registernewuserproxy}`,
               config,
             );
             // update user authentication status

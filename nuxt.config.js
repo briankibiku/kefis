@@ -67,11 +67,6 @@ export default {
   },
 
   proxy: {
-    "/api/": {
-      target: `http://161.35.6.91/mswali/mswali_app/backend/web/index.php?r=api`,
-      pathRewrite: { "^/api/": "" },
-      changeOrigin: true,
-    },
     "/apiproxy/": {
       target: `http://197.248.4.233/mswali/mswali_app/backend/web/index.php?r=`,
       // target: `http://161.35.6.91/mswali/mswali_app/backend/web/index.php?r=`,

@@ -139,6 +139,7 @@ export default {
             `/apiproxy/api/get-user&username=mast&account_number=${this.phoneNumber}`,
             config,
           );
+          console.log(res);
           // check if user already exists
           if (!res.data.status) {
             // stop loading
