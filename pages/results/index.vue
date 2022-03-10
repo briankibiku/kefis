@@ -40,15 +40,38 @@
       <p class="heading2">
         Points Earned: <strong> {{ this.myScore }} </strong>
       </p>
-
-      <div class="t-section">
-        <button
+      <div>
+        <RoundedGoldLoadingButton
+          @click="
+            navigateToQuiz();
+            onSubmit();
+          "
+          buttonText="Play Again"
+          style="font-size: 24px; font-weight: bold; margin-bottom: 20px"
+        />
+        <a
           type="submit"
-          @click.stop.prevent="onSubmit()"
+          href="https://mswali.co.ke/?page_id=198"
+          target="blank"
           form="otp-form"
+          style="width: 240px"
           class="outline-button-cyan ml-10 mr-10"
         >
-          <span class="btn-label"><center>Complete</center></span>
+          <span class="btn-label"><center>Give Feedback</center></span>
+        </a>
+        <button
+          class="text-button"
+          style="color: #bbb; margin-top: 20px"
+          @click="onSubmit()"
+        >
+          <span class="btn-label"
+            ><center>
+              Go to Home Page
+              <font-awesome-icon
+                :icon="['fas', 'chevron-right']"
+                style="color: #fff"
+              /></center
+          ></span>
         </button>
       </div>
     </div>
@@ -56,6 +79,7 @@
 </template>
 
 <script>
+import RoundedGoldLoadingButton from "../../components/RoundedGoldLoadingButton.vue";
 export default {
   head() {
     return {
@@ -73,7 +97,6 @@ export default {
       // token: nuxtStorage.localStorage.getItem('Token')
     };
   },
-
   methods: {
     async onSubmit() {
       if (this.correctAttempts == 9) {
@@ -103,16 +126,16 @@ export default {
         this.$router.push("/home");
       }
     },
-
     makeToast(toaster) {
-      this.$bvToast.toast("Thanks and see you again.", {
-        title: `Come again`,
+      this.$bvToast.toast("Thanks for playing, please play again", {
+        title: `Good bye`,
         variant: "success",
         toaster: toaster,
         solid: true,
       });
     },
   },
+  components: { RoundedGoldLoadingButton },
 };
 </script>
 
