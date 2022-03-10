@@ -16,6 +16,7 @@
         align-v="center"
         style="color: #fff"
       >
+        <!--<img src="~/assets/cancel.png" alt="" height="40" width="40" />-->
         😢 Wrong answer, the correct answer is
         {{ this.correctChoice }}.
         <img src="~/assets/loading.gif" alt="" height="70" width="80" />
@@ -27,6 +28,7 @@
         align-v="center"
         style="color: #fff"
       >
+        <!--<img src="~/assets/correct.png" alt="" height="40" width="40" /-->
         🤗 You seleceted the correct answer.<img
           src="~/assets/loading.gif"
           alt=""

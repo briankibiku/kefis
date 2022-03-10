@@ -49,16 +49,16 @@
           buttonText="Play Again"
           style="font-size: 24px; font-weight: bold; margin-bottom: 20px"
         />
-        <a
+        <b-button
           type="submit"
           href="https://mswali.co.ke/?page_id=198"
           target="blank"
           form="otp-form"
           style="width: 240px"
-          class="outline-button-cyan ml-10 mr-10"
+          class="outline-button-cyan"
         >
           <span class="btn-label"><center>Give Feedback</center></span>
-        </a>
+        </b-button>
         <button
           class="text-button"
           style="color: #bbb; margin-top: 20px"
