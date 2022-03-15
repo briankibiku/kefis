@@ -16,10 +16,16 @@
         align-v="center"
         style="color: #fff"
       >
+        <!--<img src="~/assets/cancel.png" alt="" height="40" width="40" />-->
         😢 Wrong answer, the correct answer is
         {{ this.correctChoice }}.
-        <img src="~/assets/loading.gif" alt="" height="70" width="80" />
-        <div style="color: #ffb500">Loading next question...</div>
+        <div v-if="this.counter + 1 == this.counter + 1" style="color: #ffb500">
+          Loading next question...
+        </div>
+        <div v-if="this.counter + 1 != this.counter + 1" style="color: #ffb500">
+          Loading your results...
+        </div>
+        <img src="~/assets/loading.gif" alt="" height="90" width="100" />
       </div>
       <div
         v-if="isCorrect"
@@ -27,13 +33,15 @@
         align-v="center"
         style="color: #fff"
       >
-        🤗 You seleceted the correct answer.<img
-          src="~/assets/loading.gif"
-          alt=""
-          height="70"
-          width="80"
-        />
-        <div style="color: #ffb500">Loading next question...</div>
+        <img src="~/assets/win_emoji.png" alt="" height="40" width="55" />
+        You seleceted the correct answer.
+        <div v-if="lastQuestion(this.counter + 1)" style="color: #ffb500">
+          Loading next question...
+        </div>
+        <div v-if="this.counter + 1 == this.counter + 1" style="color: #ffb500">
+          Loading your results...
+        </div>
+        <img src="~/assets/loading.gif" alt="" height="90" width="100" />
       </div>
     </div>
     <b-row>
@@ -196,6 +204,13 @@ export default {
     ...mapActions({
       persistCanWinStatus: "persistCanWinStatus",
     }),
+    lastQuestion(question_num) {
+      if (question_num != question_num) {
+        return true;
+      } else {
+        return false;
+      }
+    },
     navigateToLogin() {
       return this.$router.push("/login");
     },

@@ -37,9 +37,9 @@
                 />
               </div>
             </form>
-            <RoundedCyanLoadingButton
-              @click="navigateToQuiz()"
-              buttonText="Start Quiz"
+            <RoundedGoldLoadingButton
+              buttonText="Play NOW to WIN"
+              style="font-size: 24px; font-weight: bold"
             />
             <div class="d-flex align-items-center" style="flex-direction: row">
               <b-button class="text-button margin-horizontal-20" @click="">
@@ -113,6 +113,7 @@
 <script>
 import { mapState, mapActions } from "vuex";
 import RoundedCyanLoadingButton from "./Buttons/RoundedCyanLoadingButton.vue";
+import RoundedGoldLoadingButton from "./RoundedGoldLoadingButton.vue";
 export default {
   data() {
     return {
@@ -277,7 +278,7 @@ export default {
       await this.persistUserCredits("");
       let mswaliUserId = this.$store.state.mswaliId;
       let getbalanceproxy = `get-balance&user_id=${mswaliUserId}`;
-      let response = await this.$axios.get(`/api/${getbalanceproxy}`);
+      let response = await this.$axios.get(`/apiproxy/api/${getbalanceproxy}`);
       console.log("Fetching wallet balance");
       console.log(response.data);
       let walletBalanceFromAPI = await Math.trunc(response.data.data);
@@ -489,6 +490,7 @@ export default {
   },
   components: {
     RoundedCyanLoadingButton,
+    RoundedGoldLoadingButton,
   },
 };
 </script>

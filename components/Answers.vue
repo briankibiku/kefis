@@ -32,7 +32,7 @@
             <b-table
               striped
               hover
-              :items="this.userAnswers.choices_picked"
+              :items="this.items[0].picked"
               :fields="answerfields"
               :per-page="perPage"
               :current-page="currentPage"
@@ -95,6 +95,15 @@ export default {
       );
       console.log("Herooku");
       console.log(this.userAnswers);
+      for (let i = 0; i <= 9; i++) {
+        if (this.userAnswers.choices_picked[i].timeout === 1) {
+          this.items[0].picked.push({ picked: "Timeout" });
+        } else {
+          this.items[0].picked.push({
+            picked: this.userAnswers.choices_picked[i].picked,
+          });
+        }
+      }
       if (this.userAnswers.has_played) {
         this.questionAnswers2 = this.userAnswers.resp;
         // this.fillItemsList();
