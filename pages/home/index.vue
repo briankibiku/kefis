@@ -104,7 +104,7 @@
               </div>
               <!--Statistics area, quiz passed, fastest times go here-->
               <div>
-                <img src="~/assets/stats.png" alt="" />
+                <img src="~/assets/stats.svg" alt="" height="220px" />
               </div>
             </div>
           </div>
@@ -219,7 +219,7 @@
                 style="display: flex; flex-direction: row"
               >
                 <div>
-                  <img src="~/assets/stats.png" alt="" />
+                  <img src="~/assets/stats.svg" alt="" height="220px" />
                 </div>
               </div>
               <!-- promo & ads card go here -->
