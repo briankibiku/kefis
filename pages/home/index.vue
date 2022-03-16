@@ -250,6 +250,7 @@ import RoundedCyanArrowButton from "../../components/Buttons/RoundedCyanArrowBut
 import RoundedCyanLoadingButton from "../../components/Buttons/RoundedCyanLoadingButton.vue";
 import Salutations from "../../components/Salutations.vue";
 import RoundedGoldLoadingButton from "../../components/RoundedGoldLoadingButton.vue";
+import ConfirmationModal from "../../components/ConfirmationModal.vue";
 export default {
   data() {
     return {
@@ -267,6 +268,7 @@ export default {
       creditsBalanceFromState: this.$store.state.userCredits,
       banner: "",
       prize: "",
+      allowBuySubscription: false,
     };
   },
   mounted() {
@@ -311,57 +313,31 @@ export default {
     navigateToLogin() {
       return this.$router.push("/login");
     },
-
-    paidSessionToast(toaster) {
-      this.$bvToast.toast(`Buy credits to play`, {
-        title: `Credits Required`,
-        variant: "danger",
-        toaster: toaster,
-        solid: true,
-      });
+    navigateToBuySubscription(allowBuySubscription) {
+      if (allowBuySubscription) {
+        showModal = true;
+      } else {
+        showModal = false;
+      }
     },
-    problemPlayingWithCreditToast(toaster) {
-      this.$bvToast.toast(`We encountered an error while trying to startyou`, {
-        title: `Error`,
-        variant: "danger",
-        toaster: toaster,
-        solid: true,
-      });
-    },
-    paidSessionToast(toaster) {
-      this.$bvToast.toast(`Buy credits to play`, {
-        title: `Credits Required`,
-        variant: "danger",
-        toaster: toaster,
-        solid: true,
-      });
-    },
-    successBuyToast(toaster) {
-      this.$bvToast.toast(
-        `You have subscribed to regular game plan at 50 KES`,
-        {
-          title: `Subscription Successful`,
-          variant: "success",
-          toaster: toaster,
-          solid: true,
-        },
+    async deductGameSession() {
+      // deduct a session from the user
+      let deductsessionproxy = `api/deduct-free-games&user_id=${this.mswaliUserId}`;
+      let deductGameSessionResponse = await this.$axios.post(
+        `/apiproxy/${deductsessionproxy}`,
       );
-    },
-    infoToast(toaster) {
-      this.$bvToast.toast(`Please wait as, game starts in a few seconds`, {
-        title: `Game starting shortly`,
-        variant: "info",
-        toaster: toaster,
-        solid: true,
-      });
-    },
-    sessionIsNotLiveToast(toaster) {
-      this.$bvToast.toast(`The game will be on from 10AM-10PM, check later`, {
-        title: `Session is not Live`,
-        variant: "danger",
-        toaster: toaster,
-        solid: true,
-      });
+      if (
+        deductGameSessionResponse.data.status_message ===
+        "daily plan balance updated"
+      ) {
+        await this.infoToast();
+        await this.$store.dispatch("delayTwoSeconds");
+        await this.$router.push("/quiz");
+      } else {
+        await this.errorToast();
+        await this.$store.dispatch("delayFiveSeconds");
+        await this.$router.push("/home");
+      }
     },
     errorToast(toaster) {
       this.$bvToast.toast(
@@ -374,18 +350,10 @@ export default {
         },
       );
     },
-    loadAccountToast(toaster) {
-      this.$bvToast.toast(`Deposit to wallet to play mSwali`, {
-        title: `Insufficient Balance`,
-        variant: "danger",
-        toaster: toaster,
-        solid: true,
-      });
-    },
-    networkErrorToast(toaster) {
-      this.$bvToast.toast(`Check your internet connection and try again`, {
-        title: `No internet`,
-        variant: "danger",
+    infoToast(toaster) {
+      this.$bvToast.toast(`Please wait as, game starts in a few seconds`, {
+        title: `Game starting shortly`,
+        variant: "info",
         toaster: toaster,
         solid: true,
       });
@@ -413,8 +381,6 @@ export default {
       let mswaliUserId = this.$store.state.mswaliId;
       let getbalanceproxy = `get-balance&user_id=${mswaliUserId}`;
       let response = await this.$axios.get(`/apiproxy/api/${getbalanceproxy}`);
-      console.log(response);
-      console.log("WALLET BALANCE");
       let walletBalanceFromAPI = await Math.trunc(response.data.data);
       let walletCreditsFromAPI = await response.data.credit_balance;
       await this.persistwalletBalance(walletBalanceFromAPI);
@@ -442,6 +408,7 @@ export default {
     RoundedCyanLoadingButton,
     Salutations,
     RoundedGoldLoadingButton,
+    ConfirmationModal,
   },
 };
 </script>

@@ -1,6 +1,6 @@
 <template>
   <div>
-    <button class="rounded-button-cyan" @click="showModal">
+    <button class="rounded-button-gold" @click="showModal">
       {{ buttonText }}
     </button>
 

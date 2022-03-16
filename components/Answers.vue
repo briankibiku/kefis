@@ -93,8 +93,6 @@ export default {
       this.userAnswers = await this.$axios.$get(
         `/apiproxy/solo-play/show-my-answers&msisdn=${loggedINPhone}`,
       );
-      console.log("Herooku");
-      console.log(this.userAnswers);
       for (let i = 0; i <= 9; i++) {
         if (this.userAnswers.choices_picked[i].timeout === 1) {
           this.items[0].picked.push({ picked: "Timeout" });
@@ -121,7 +119,6 @@ export default {
         this.items[0].answer.push(this.userAnswers.resp[i].answer);
         this.items[0].label.push(this.userAnswers.resp[i].label);
       }
-      console.log(this.items);
     },
   },
   components: { RoundedCyanArrowButton },

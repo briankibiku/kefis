@@ -125,6 +125,44 @@ export default {
         solid: true,
       });
     },
+    errorToast(toaster) {
+      this.$bvToast.toast(
+        `We encountered an error while processing your request, try again later`,
+        {
+          title: `Error`,
+          variant: "danger",
+          toaster: toaster,
+          solid: true,
+        },
+      );
+    },
+    infoToast(toaster) {
+      this.$bvToast.toast(`Please wait as, game starts in a few seconds`, {
+        title: `Game starting shortly`,
+        variant: "info",
+        toaster: toaster,
+        solid: true,
+      });
+    },
+    loadAccountToast(toaster) {
+      this.$bvToast.toast(`Deposit to wallet to play mSwali`, {
+        title: `Insufficient Balance`,
+        variant: "danger",
+        toaster: toaster,
+        solid: true,
+      });
+    },
+    errorBuyToast(toaster) {
+      this.$bvToast.toast(
+        `Sorry, we encountered an error while trying to buy your suscription`,
+        {
+          title: `Error`,
+          variant: "danger",
+          toaster: toaster,
+          solid: true,
+        },
+      );
+    },
     async deductGameSession() {
       // deduct a session from the user
       let deductsessionproxy = `api/deduct-free-games&user_id=${this.mswaliUserId}`;
@@ -135,9 +173,8 @@ export default {
         deductGameSessionResponse.data.status_message ===
         "daily plan balance updated"
       ) {
-        console.log("Playing with existing subscription");
         await this.infoToast();
-        await this.$store.dispatch("delayFiveSeconds");
+        await this.$store.dispatch("delayTwoSeconds");
         await this.$router.push("/quiz");
       } else {
         await this.errorToast();
@@ -166,7 +203,7 @@ export default {
         this.prize = await this.$store.state.sessionDetails.rate;
         let gameRate = this.$store.state.sessionDetails.session.rate;
         let sessionID = this.$store.state.sessionDetails.session.id;
-        let isSessionLive = this.$store.state.sessionDetails.session.id;
+        let isSessionLive = this.$store.state.sessionDetails.live;
         // step 2 check if the game session is live for user to play
         if (isSessionLive) {
           // step 3 check if rate is > 0 or = 0
@@ -215,13 +252,11 @@ export default {
                   let creditUserResponse = await this.$axios.post(
                     `/apiproxy/${gameplay200url}`,
                   );
-                  console.log(creditUserResponse);
                   // subscribe to 10 sessions
                   let premiumplanurl = `api/premium-daily-plan&user_id=${this.mswaliUserId}`;
                   let premiumPlanResponse = await this.$axios.post(
                     `/apiproxy/${premiumplanurl}`,
                   );
-                  console.log(premiumPlanResponse);
                   if (
                     basicPlanResponse.data.status_message ===
                     "daily plan activated"
@@ -241,7 +276,6 @@ export default {
                     `/apiproxy/${gameplay100url}`,
                   );
                   if (gamePlayResponse.data == null) {
-                    console.log("Buying 100 KES subscription");
                     // subscribe to 4 sessions
                     let dailtplanurl = `api/daily-plan&user_id=${this.mswaliUserId}`;
                     let basicPlanResponse = await this.$axios.post(
@@ -257,15 +291,15 @@ export default {
                       await this.deductGameSession();
                     } else {
                       this.errorBuyToast();
+                      await this.$store.dispatch("delayTwoSeconds");
                     }
                   } else {
-                    console.log("100 sub not bught");
                     this.errorBuyToast();
+                    await this.$store.dispatch("delayTwoSeconds");
                   }
-                } else if (userWalletBalance.data.data > gameRate) {
+                } else if (userWalletBalance.data.data >= gameRate) {
                   // step 6 if user has no credits and wallet balance >= rate notify user of insufficient balance
                   // TODO: deduct the balance froom the wallet
-                  console.log("Buying 50 boob subscription");
                   let gameratesubscriptionurl = `api/game-play&user_id=${this.mswaliUserId}&amount=50`;
                   let dailyPlanResponse = await this.$axios.post(
                     `/apiproxy/${gameratesubscriptionurl}`,
@@ -282,6 +316,8 @@ export default {
                 } else if (userWalletBalance.data.data < gameRate) {
                   // stop loading
                   this.loadAccountToast();
+                  await this.$store.dispatch("delayTwoSeconds");
+                  window.location.reload();
                 }
               }
             }
@@ -289,7 +325,6 @@ export default {
             await this.fetchSessionQuestions(sessionID);
             // stop loading
             await this.$router.push("/quiz");
-            // console.log("GAME RATE IS ZZERO");
           }
         } else {
           // stop loading

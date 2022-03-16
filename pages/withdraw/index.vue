@@ -150,7 +150,6 @@ export default {
     }),
     async navigate() {
       let makeDepositResponse = await this.$store.dispatch("makeDeposit");
-      console.log(makeDepositResponse);
       return this.makeDepositResponse;
       // return this.$router.push("/category");
     },
@@ -192,8 +191,6 @@ export default {
               this.phoneNumber = this.$store.state.loggedinUserPhone;
               let withdrawurl = `api/log-payment-request&msisdn=${this.phoneNumber}&amount=${this.withdrawAmount}&type=WITHDRAWAL`;
               let res = await this.$axios.post(`/apiproxy/${withdrawurl}`);
-              console.log("Withdraw successful");
-              console.log(res.data);
               if (res.data == "Successful") {
                 await this.persistwalletBalance(this.balanceAfterWithdraw);
                 await this.$store.dispatch("delay");
@@ -206,8 +203,6 @@ export default {
               }
             }
           } catch (err) {
-            this.loading = false;
-            console.log(err);
             await this.withdrawErrorToast();
             await this.$store.dispatch("delayTwoSeconds");
             await this.$router.push("/wallet");

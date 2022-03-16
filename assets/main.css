@@ -68,6 +68,14 @@
   padding: 10px;
   width: 100%;
 }
+.rounded-button-gold {
+  background-color: #ffb500;
+  color: #160d3d;
+  border-radius: 2em;
+  border: none;
+  padding: 10px;
+  width: 100%;
+}
 /* Container styles */
 .container-bg-image {
   background-image: url("shared/win.png");

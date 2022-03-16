@@ -112,12 +112,9 @@ export default {
     },
     async fetchWinners() {
       // if (!this.$store.state.topScoreSet) {
-      console.log(this.$store.state.topScoreSet);
-      console.log("Didn't fetched top scores from state!!");
       this.topScores = await this.$axios.get(
         "/apiproxy/team-play/get-top-performers",
       );
-      console.log(this.topScores.data.data);
       // this.topScores = this.topScores.data;
       //   getting of user answers payload to state
       this.$store.commit("updateTopScores", this.topScores.data);
@@ -126,9 +123,7 @@ export default {
       this.topTeams = await this.$axios.get(
         "/apiproxy/team-play/get-top-teams",
       );
-      console.log(this.topTeams);
       this.$store.commit("updateTopScoreSet", true);
-      console.log("updateTopScoreSet set to TRUE");
       this.$store.commit("updateTopTeams", this.topTeams.data);
       //   getting of top teams from state
       this.topTeams = this.$store.state.topTeams.data;

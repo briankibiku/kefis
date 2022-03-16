@@ -19,10 +19,10 @@
         <!--<img src="~/assets/cancel.png" alt="" height="40" width="40" />-->
         😢 Wrong answer, the correct answer is
         {{ this.correctChoice }}.
-        <div v-if="this.counter + 1 == this.counter + 1" style="color: #ffb500">
+        <div v-if="this.counter + 1 != 9" style="color: #ffb500">
           Loading next question...
         </div>
-        <div v-if="this.counter + 1 != this.counter + 1" style="color: #ffb500">
+        <div v-if="this.counter + 1 == 9" style="color: #ffb500">
           Loading your results...
         </div>
         <img src="~/assets/loading.gif" alt="" height="90" width="100" />
@@ -35,10 +35,10 @@
       >
         <img src="~/assets/win_emoji.png" alt="" height="40" width="55" />
         You seleceted the correct answer.
-        <div v-if="lastQuestion(this.counter + 1)" style="color: #ffb500">
+        <div v-if="this.counter + 1 != 9" style="color: #ffb500">
           Loading next question...
         </div>
-        <div v-if="this.counter + 1 == this.counter + 1" style="color: #ffb500">
+        <div v-if="this.counter + 1 == 9" style="color: #ffb500">
           Loading your results...
         </div>
         <img src="~/assets/loading.gif" alt="" height="90" width="100" />
@@ -278,12 +278,10 @@ export default {
         let trackPlayerSession = await this.$axios.post(
           `/apiproxy/${postplayerinsessionurl}`,
         );
-        console.log(trackPlayerSession);
         let markfinishdgameurl = `solo-play/mark-finished-game&user_id=${mswaliUserId}&session_id=${sessionID}`;
         let markFinishedGame = await this.$axios.post(
           `/apiproxy/${markfinishdgameurl}`,
         );
-        console.log(markFinishedGame);
         this.$router.push("/results");
       }
     },
