@@ -413,8 +413,6 @@ export default {
       let mswaliUserId = this.$store.state.mswaliId;
       let getbalanceproxy = `get-balance&user_id=${mswaliUserId}`;
       let response = await this.$axios.get(`/apiproxy/api/${getbalanceproxy}`);
-      console.log(response);
-      console.log("WALLET BALANCE");
       let walletBalanceFromAPI = await Math.trunc(response.data.data);
       let walletCreditsFromAPI = await response.data.credit_balance;
       await this.persistwalletBalance(walletBalanceFromAPI);

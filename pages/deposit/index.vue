@@ -152,7 +152,6 @@ export default {
     },
     async navigate() {
       let makeDepositResponse = await this.$store.dispatch("makeDeposit");
-      console.log(makeDepositResponse);
       return this.makeDepositResponse;
       // return this.$router.push("/category");
     },
@@ -175,8 +174,6 @@ export default {
             this.phoneNumber = this.$store.state.loggedinUserPhone;
             let depositurl = `api/initiate-payment&account_number=${this.phoneNumber}&amount=${this.depositAmount}`;
             const res = await this.$axios.get(`/apiproxy/${depositurl}`);
-            console.log("Deposit ongoing.....");
-            console.log(res.data);
             await this.$store.dispatch("delayThirtySeconds");
             let mswaliUserId = this.$store.state.mswaliId;
             let getbalanceurl = `api/get-balance&user_id=${mswaliUserId}`;
@@ -185,14 +182,7 @@ export default {
             let initialBalance = this.$store.state.walletBalance;
             let totalAfterDeposit =
               parseInt(this.depositAmount) + parseInt(initialBalance);
-            console.log(
-              "My balance after topping up" +
-                balance +
-                "  " +
-                initialBalance +
-                "  " +
-                this.depositAmount,
-            );
+
             if (balance == totalAfterDeposit) {
               let walletBalanceFromAPI = await Math.trunc(balance);
               await this.persistwalletBalance(walletBalanceFromAPI);
@@ -207,9 +197,7 @@ export default {
             }
             this.busy = false;
           } catch (err) {
-            console.log(err);
             this.busy = false;
-            console.log("error occured while trying to deposit...");
           }
         } else {
           // you cannot deposit amount less than KSH

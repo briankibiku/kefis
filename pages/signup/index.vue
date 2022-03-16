@@ -1,10 +1,5 @@
 <template>
   <div class="row">
-    <div class="overlay" v-if="loading">
-      <div style="margin: 20px">
-        <b-spinner variant="primary" label="Spinning"></b-spinner>
-      </div>
-    </div>
     <div id="col1" class="bg-image d-none d-sm-block">
       <MswaliExplained />
     </div>
@@ -39,12 +34,11 @@
                 />
               </div>
             </form>
-            <button class="rounded-button-cyan" @click="signUpuser()">
-              <div class="subheading4">
-                Sign Up
-                <font-awesome-icon :icon="['fas', 'arrow-right']" />
-              </div>
-            </button>
+            <RoundedCyanLoadingButton
+              buttonText="Sign Up"
+              showIcon="true"
+              @click="signUpuser()"
+            />
 
             <div class="subheading5" style="color: #bbb; padding-top: 10px">
               Have an account already?
@@ -60,6 +54,7 @@
 <script>
 import axios from "axios";
 import MswaliExplained from "../../components/MswaliExplained.vue";
+import RoundedCyanLoadingButton from "../../components/Buttons/RoundedCyanLoadingButton.vue";
 export default {
   head: {
     title: "Sign Up",
@@ -74,9 +69,6 @@ export default {
     };
   },
   methods: {
-    showLoading() {
-      this.isLoading = true;
-    },
     showMissingFieldsToast(toaster, variant = "danger") {
       this.$bvToast.toast("Make sure you have filled up all fields", {
         title: `All fields are required!`,
@@ -111,21 +103,17 @@ export default {
         !!this.userName &&
         this.validatePhoneNumber(this.phoneNumber)
       ) {
-        this.loading = true;
         try {
           // send user an OTP and direct them to verify
           const result = await axios.get(
             `/apiproxy/api/generate-otp&msisdn=${this.phoneNumber}`,
             config,
           );
-          console.log(result);
           await this.$store.commit("updateSignUpPhone", this.phoneNumber);
           await this.$store.commit("updateSignUpName", this.userName);
           await this.$store.commit("updateSignUpOTP", result);
-          this.loading = false;
           await this.$router.push("/otp");
         } catch (err) {
-          this.loading = false;
           this.sendOTPErrorToast();
         }
       } else {
@@ -133,7 +121,7 @@ export default {
       }
     },
   },
-  components: { MswaliExplained },
+  components: { MswaliExplained, RoundedCyanLoadingButton },
 };
 </script>
 <style>

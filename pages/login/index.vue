@@ -1,25 +1,12 @@
 <template>
   <div>
-    <div class="overlay" v-if="showOverlay">
-      <div style="margin: 20px">
-        <div class="custom-modal">
-          <div class="heading2">Hello!</div>
-          <div class="subheading5">You do not have an account</div>
-          <div class="heading5">Would you like to Sign up?</div>
-        </div>
-        <RoundedCyanArrowButton
-          @click="goToSignup()"
-          buttonText="Proceed to sign up"
-        />
-      </div>
-    </div>
     <div class="overlay" v-if="loading">
       <div style="margin: 20px">
         <b-spinner variant="primary" label="Spinning"></b-spinner>
         <div>Loading...</div>
       </div>
     </div>
-    <div v-if="!showOverlay" id="row">
+    <div id="row">
       <div id="col1" class="bg-image d-none d-lg-block">
         <MswaliExplained />
       </div>
@@ -76,7 +63,6 @@ export default {
     return {
       phoneNumber: this.phoneNumber,
       userName: this.userName,
-      showOverlay: false,
       loading: false,
     };
   },
@@ -130,7 +116,6 @@ export default {
           Accept: "application/json",
         },
       };
-      console.log();
       if (!!this.phoneNumber && this.validatePhoneNumber(this.phoneNumber)) {
         try {
           // start loading
@@ -139,13 +124,11 @@ export default {
             `/apiproxy/api/get-user&username=mast&account_number=${this.phoneNumber}`,
             config,
           );
-          console.log(res);
           // check if user already exists
           if (!res.data.status) {
             // stop loading
-            this.$nuxt.$loading.finish();
-            this.showOverlay = true;
             await this.$store.commit("updateSignUpPhone", this.phoneNumber);
+            this.$router.push("/accept-signup");
           } else {
             // update state that the user is an existing user and not need to show modal
             await this.peristIsExistingUSer(true);
@@ -154,7 +137,6 @@ export default {
               `/apiproxy/api/generate-otp&msisdn=${this.phoneNumber}`,
               config,
             );
-            console.log(result);
             // stop loading
             this.$nuxt.$loading.finish();
             await this.$store.commit("updateSignUpPhone", this.phoneNumber);
