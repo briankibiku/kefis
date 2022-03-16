@@ -138,10 +138,10 @@ export default {
               config,
             );
             // stop loading
-            this.$nuxt.$loading.finish();
             await this.$store.commit("updateSignUpPhone", this.phoneNumber);
             await this.$store.commit("updateSignUpOTP", res);
-            await this.$router.push("/otp");
+            console.log("Navigating to OTP page");
+            this.$router.push("/otp");
           }
         } catch (err) {
           this.sendOTPErrorToast();
