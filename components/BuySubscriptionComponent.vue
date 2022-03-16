@@ -16,9 +16,9 @@
       </div>
       <div class="d-flex flex-row heading4 justify-content-center">
         <ConfirmationModal
-          buttonText="Buy 1 session for KES 50/= and play"
-          title="Buy 1 session"
-          body="Buy 1 play session for KES 50/= and play"
+          buttonText="Buy 1 play session for KES 50/= and proceed to play now"
+          title="Confirm purchase"
+          body="Buy 1 play session for KES 50/= and proceed to play now"
           action="success"
           @click="buydailyPlan()"
         />
@@ -28,17 +28,17 @@
         style="margin-bottom: 10px"
       >
         <ConfirmationModal
-          buttonText="Buy 4 sessions for KES 100/= and play"
-          title="Buy 4 sessions"
-          body="Buy 4 play sessions for KES 100/= and play"
+          buttonText="Buy 4 play sessions for KES 100/= and proceed to play now"
+          title="Confirm purchase"
+          body="Buy 4 play sessions for KES 100/= and proceed to play now"
           action="success"
           @click="buyBasicPlan()"
         />
         <div style="padding-right: 10px"></div>
         <ConfirmationModal
-          buttonText="Buy 8 sessions for KES 200/= and play"
-          title="Buy 8 sessions"
-          body="Buy 8 play sessions for KES 200/= and play"
+          buttonText="Buy 10 play sessions for KES 200/= and proceed to play now"
+          title="Confirm purchase"
+          body="Buy 10 play sessions for KES 200/= and proceed to play now"
           action="success"
           @click="buyPremiumPlan()"
         />
@@ -83,8 +83,8 @@ export default {
     },
     infoToast(toaster) {
       this.$bvToast.toast(`Please wait as, game starts in a few seconds`, {
-        title: `Game starting shortly`,
-        variant: "info",
+        title: `Subscription bought successfully`,
+        variant: "success",
         toaster: toaster,
         solid: true,
       });
@@ -189,9 +189,9 @@ export default {
             );
             if (gamePlayResponse.data == null) {
               // subscribe to 4 sessions
-              let dailtplanurl = `api/daily-plan&user_id=${this.mswaliUserId}`;
+              let dailyplanurl = `api/daily-plan&user_id=${this.mswaliUserId}`;
               let basicPlanResponse = await this.$axios.post(
-                `/apiproxy/${dailtplanurl}`,
+                `/apiproxy/${dailyplanurl}`,
               );
               if (
                 basicPlanResponse.data.status_message === "daily plan activated"
@@ -240,20 +240,21 @@ export default {
         let sessionID = this.$store.state.sessionDetails.session.id;
         let isSessionLive = this.$store.state.sessionDetails.live;
         if (isSessionLive) {
-          if (userWalletBalance >= 200) {
-            this.loading = true;
+          if (userWalletBalance.data.data >= 200) {
             // credit user 200
+            let gameplay200url = `api/game-play&user_id=${this.mswaliUserId}&msisdn=${this.loggedInUserNumber}&gateway=INTERNAL&amount=200`;
             let gameplay200response = await this.$axios.post(
-              `/apiproxy/api/game-play&user_id=${this.mswaliUserId}&msisdn=${this.loggedInUserNumber}&gateway=INTERNAL&amount=200`,
+              `/apiproxy/${gameplay200url}`,
             );
             if (gameplay200response.data == null) {
               // subscribe to 10 sessions
+              let premiumplanurl = `api/premium-daily-plan&user_id=${this.mswaliUserId}`;
               let premiumPlanResponse = await this.$axios.post(
-                `/apiproxy/api/premium-daily-plan&user_id=${this.mswaliUserId}`,
+                `/apiproxy/${premiumplanurl}`,
               );
               if (
-                premiumPlanResponse.data.status_message ==
-                "premium plan activated"
+                premiumPlanResponse.data.status_message ===
+                "daily plan activated"
               ) {
                 // serve questions if daily plan was bought sucessfully
                 await this.fetchSessionQuestions(sessionID);
@@ -291,7 +292,7 @@ export default {
     },
     errorBuyToast(toaster) {
       this.$bvToast.toast(
-        `Sorry, we encountered an error while trying to buy your suscription`,
+        `Sorry, we encountered an error while trying to buy your subcription`,
         {
           title: `Error`,
           variant: "danger",

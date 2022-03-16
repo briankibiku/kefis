@@ -110,33 +110,32 @@
     <div class="d-block d-sm-none d-none d-sm-block d-md-none">
       <div class="painted-background" style="padding: 20px">
         <NavigationBar />
-        <div class="row" style="vertical-align: top">
-          <div class="column left">
-            <b-avatar variant="light"></b-avatar>
-          </div>
-
-          <div class="column middle" style="text-align: left">
-            <div>
-              <div class="heading3">
-                {{ this.greetings }}
-                {{ this.$store.state.loggedinUserName }}!
-              </div>
+        <div>
+          <div class="row" style="padding-left: 20px">
+            <div class="col-3">
+              <b-avatar variant="light"></b-avatar>
             </div>
-          </div>
-          <div
-            class="column"
-            style="
-              background-color: #160d3d;
-              width: 50px;
-              height: 50px;
-              justify-content: center;
-              align-items: center;
-              text-align: center;
-              display: flex;
-              border-radius: 10px;
-            "
-          >
-            <font-awesome-icon :icon="['fas', 'bell']" style="color: #fff" />
+
+            <div class="col-6" style="text-align: left">
+              <Salutations />
+            </div>
+            <div
+              class="col-3"
+              style="
+                width: 50px;
+                height: 50px;
+                justify-content: center;
+                align-items: center;
+                text-align: center;
+                display: flex;
+                border-radius: 10px;
+              "
+            >
+              <font-awesome-icon
+                :icon="['fas', 'bell']"
+                style="color: #160d3d"
+              />
+            </div>
           </div>
         </div>
         <div>

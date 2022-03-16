@@ -20,48 +20,7 @@
         <div class="d-block d-sm-none d-none d-sm-block d-md-none">
           <div class="d-flex flex-row">
             <div class="col centered-container d-flex justify-content-around">
-              <div class="row" style="flex-direction: column">
-                <img
-                  class="center-align-item"
-                  src="~/assets/subscription.png"
-                  alt="buy subscription"
-                  height="120"
-                  width="120"
-                />
-                <div class="heading2 padding-right-20">Buy Subscription</div>
-                <div class="subheading">Select plan you wish to buy today</div>
-
-                <div class="d-flex flex-row heading4 justify-content-center">
-                  <ConfirmationModal
-                    buttonText="Buy 1 session for KES 50/="
-                    title="Buy 1 session"
-                    body="Buy 1 session for KES 50/= and play"
-                    action="success"
-                    @click="buydailyPlan()"
-                  />
-                </div>
-                <div
-                  class="d-flex flex-row padding-10 justify-content-center heading4"
-                  style="margin-bottom: 10px"
-                >
-                  <ConfirmationModal
-                    buttonText="Buy 4 sessions for KES 100/="
-                    title="Buy 4 sessions"
-                    body="Buy 4 sessions for KES 100/="
-                    action="success"
-                    @click="buyBasicPlan()"
-                  />
-                  <div style="padding-right: 10px"></div>
-                  <ConfirmationModal
-                    buttonText="Buy 8 sessions for KES 200/="
-                    title="Buy 8 sessions"
-                    body="Buy 8 sessions for KES 200/="
-                    action="success"
-                    @click="buyPremiumPlan()"
-                  />
-                </div>
-                <br />
-              </div>
+              <BuySubscriptionComponent />
             </div>
           </div>
         </div>

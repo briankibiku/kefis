@@ -62,22 +62,24 @@
               />
             </a>
 
-            <div class="heading2">{{ this.userName }}</div>
+            <div class="heading2">Hello, {{ this.userName }}</div>
 
-            <div class="subheading3">How much would you wish to deposit?</div>
+            <div class="subheading3">Make a deposit</div>
           </div>
           <div style="margin: 20px">
             <div
-              class="card center-align-content"
+              class="wallet-card center-align-content"
               style="
                 height: 30vh;
                 width: 80vw;
+                background-color: #fff;
                 padding: 30px;
                 border-radius: 10px;
               "
             >
               <br />
               <div class="form-section">
+                <div class="heading2">How much would you wish to deposit?</div>
                 <form method="post">
                   <div class="form-group">
                     <input
@@ -90,8 +92,8 @@
                     />
                   </div>
                 </form>
+                <div class="subheading3">M-Pesa</div>
               </div>
-              <div class="subheading3">M-Pesa</div>
             </div>
             <br /><br />
             <ConfirmationModal
