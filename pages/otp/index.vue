@@ -156,9 +156,7 @@ export default {
   mounted() {
     this.startTimer();
     if (!window.OTPCredential) {
-      console.log("Feature Not Available");
     } else {
-      console.log("Feature Available");
     }
   },
   computed: {
@@ -323,8 +321,6 @@ export default {
             await this.authenticateUser(true);
             if (this.$store.state.isExistingUser) {
               // if it is not a new user redirect to home
-              console.log("EXISTING USER APOCALYPS ONGOING....");
-              console.log(res);
               await this.getuserName();
               // stop loading
               this.$nuxt.$loading.finish();

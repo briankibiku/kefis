@@ -158,12 +158,10 @@ export default {
           let creditUserResponse = await this.$axios.post(
             `/apiproxy/api/game-play&user_id=${this.mswaliUserId}&msisdn=${this.loggedInUserNumber}&gateway=INTERNAL&amount=100`,
           );
-          console.log(creditUserResponse);
           // subscribe to 4 sessions
           let basicPlanResponse = await this.$axios.post(
             `/apiproxy/api/daily-plan&user_id=${this.mswaliUserId}`,
           );
-          console.log(basicPlanResponse);
           if (basicPlanResponse.data.status_message == "daily plan activated") {
             this.successBuyToast();
             await this.$store.dispatch("delayFiveSeconds");
@@ -173,7 +171,6 @@ export default {
             await this.$store.dispatch("delayTwoSeconds");
             window.location.reload();
           }
-          console.log(basicPlanResponse);
         } else {
           this.failedBuyToast();
           await this.$store.dispatch("delayTwoSeconds");
@@ -190,12 +187,10 @@ export default {
           let creditUserResponse = await this.$axios.post(
             `/apiproxy/api/game-play&user_id=${this.mswaliUserId}&msisdn=${this.loggedInUserNumber}&gateway=INTERNAL&amount=200`,
           );
-          console.log(creditUserResponse);
           // subscribe to 10 sessions
           let premiumPlanResponse = await this.$axios.post(
             `/apiproxy/api/premium-daily-plan&user_id=${this.mswaliUserId}`,
           );
-          console.log(premiumPlanResponse);
           if (
             premiumPlanResponse.data.status_message == "premium plan activated"
           ) {
@@ -207,7 +202,6 @@ export default {
             await this.$store.dispatch("delayTwoSeconds");
             window.location.reload();
           }
-          console.log(premiumPlanResponse);
         } else {
           this.failedBuyToast();
           await this.$store.dispatch("delayTwoSeconds");

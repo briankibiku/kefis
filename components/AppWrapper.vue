@@ -279,8 +279,6 @@ export default {
       let mswaliUserId = this.$store.state.mswaliId;
       let getbalanceproxy = `get-balance&user_id=${mswaliUserId}`;
       let response = await this.$axios.get(`/apiproxy/api/${getbalanceproxy}`);
-      console.log("Fetching wallet balance");
-      console.log(response.data);
       let walletBalanceFromAPI = await Math.trunc(response.data.data);
       let walletCreditsFromAPI = await response.data.credit_balance;
       await this.persistwalletBalance(walletBalanceFromAPI);
@@ -304,11 +302,8 @@ export default {
         deductGameSessionResponse.data.status_message ===
         "daily plan balance updated"
       ) {
-        console.log("Playing with existing subscription");
-        this.loading = true;
         await this.infoToast();
         await this.$store.dispatch("delayFiveSeconds");
-        this.loading = false;
         await this.$router.push("/quiz");
       } else {
         await this.errorToast();
@@ -326,7 +321,6 @@ export default {
         let sessionResponse = await this.$axios.get(
           `/apiproxy/${sessionresponseurl}`,
         );
-        console.log("EARTH HACKED BY UKRAINE.............");
         await this.persistSessionDetails(sessionResponse.data);
         await this.persistCanWinStatus(
           this.$store.state.sessionDetails.can_win,
@@ -336,7 +330,6 @@ export default {
         let gameRate = this.$store.state.sessionDetails.session.rate;
         let sessionID = this.$store.state.sessionDetails.session.id;
         let isSessionLive = this.$store.state.sessionDetails.session.id;
-        console.log("sessionID " + sessionID);
         // step 2 check if the game session is live for user to play
         if (isSessionLive) {
           // step 3 check if rate is > 0 or = 0
@@ -357,7 +350,6 @@ export default {
               let creditDeduct = await this.$axios.post(
                 `/apiproxy/${playwithcreditsurl}`,
               );
-              console.log("CREDITS TRACKING EARTH HACKED ::::::::::::::::::");
               if (creditDeduct.data.message == "credit redeemed successfully") {
                 // if user has credits serve the questions and deduct a credit
                 await this.fetchSessionQuestions(sessionID);
@@ -365,13 +357,9 @@ export default {
                   parseInt(this.$store.state.userCredits) - 1,
                 );
                 // finish loading
-                this.$nuxt.$loading.finish();
                 await this.$router.push("/quiz");
                 // save questions to serve in quiz page
               } else {
-                console.log(
-                  "We encountered a problem while trying to redeem your credits, kindly try again later.",
-                );
                 this.problemPlayingWithCreditToast();
               }
             } else {
@@ -379,12 +367,9 @@ export default {
               if (userSubscriptionStatus.data) {
                 await this.fetchSessionQuestions(sessionID);
                 await this.fetchWalletBalance();
-                this.loading = false;
-                console.log("User has an active subscription");
                 // deduct a session from the user
                 await this.deductGameSession();
               } else {
-                console.log("Starting to buy::::::::::::::::::;; subscription");
                 // step 7 if user has NO subscription check if user can afford buying a subscription starting with 200 else 100 else game rate. If true serve questions
                 // credit user for 10 games if bal >= 200 else credit for 4 games if bal >= 100 else credit gamerate
                 if (userWalletBalance.data.data >= 200) {
@@ -393,13 +378,11 @@ export default {
                   let creditUserResponse = await this.$axios.post(
                     `/apiproxy/${gameplay200url}`,
                   );
-                  console.log(creditUserResponse);
                   // subscribe to 10 sessions
                   let premiumplanurl = `api/premium-daily-plan&user_id=${this.mswaliUserId}`;
                   let premiumPlanResponse = await this.$axios.post(
                     `/apiproxy/${premiumplanurl}`,
                   );
-                  console.log(premiumPlanResponse);
                   if (
                     basicPlanResponse.data.status_message ===
                     "daily plan activated"
@@ -407,7 +390,6 @@ export default {
                     // after buying a subscription serve the questions
                     await this.fetchSessionQuestions(sessionID);
                     await this.fetchWalletBalance();
-                    this.loading = false;
                     await this.deductGameSession();
                   } else {
                     this.errorBuyToast();
@@ -419,13 +401,11 @@ export default {
                     `/apiproxy/${gameplay100url}`,
                   );
                   if (gamePlayResponse.data == null) {
-                    console.log("Buying 100 KES subscription");
                     // subscribe to 4 sessions
                     let dailtplanurl = `api/daily-plan&user_id=${this.mswaliUserId}`;
                     let basicPlanResponse = await this.$axios.post(
                       `/apiproxy/${dailtplanurl}`,
                     );
-                    console.log(basicPlanResponse);
                     if (
                       basicPlanResponse.data.status_message ===
                       "daily plan activated"
@@ -439,13 +419,11 @@ export default {
                       this.errorBuyToast();
                     }
                   } else {
-                    console.log("100 sub not bught");
                     this.errorBuyToast();
                   }
                 } else if (userWalletBalance.data.data > gameRate) {
                   // step 6 if user has no credits and wallet balance >= rate notify user of insufficient balance
                   // TODO: deduct the balance froom the wallet
-                  console.log("Buying 50 boob subscription");
                   let gameratesubscriptionurl = `api/game-play&user_id=${this.mswaliUserId}&amount=50`;
                   let dailyPlanResponse = await this.$axios.post(
                     `/apiproxy/${gameratesubscriptionurl}`,
@@ -456,22 +434,16 @@ export default {
                     await this.deductGameSession();
                   } else {
                     await this.errorToast();
-                    console.log(
-                      "Problem faced while buying daily plan subscription",
-                    );
                   }
                 } else if (userWalletBalance.data.data < gameRate) {
                   // stop loading
-                  this.$nuxt.$loading.finish();
                   this.loadAccountToast();
                 }
               }
             }
           } else if (gameRate == 0) {
             await this.fetchSessionQuestions(sessionID);
-            console.log(freeSessionQuestions.data.data);
             // stop loading
-            this.$nuxt.$loading.finish();
             await this.$router.push("/quiz");
           }
         } else {
