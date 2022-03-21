@@ -11,45 +11,7 @@
             <div>
               <!-- salutations, wallet card, statistics cards go here -->
               <div class="d-flex flex-row" style="margin-inline: 10em">
-                <div class="col d-flex justify-content-around">
-                  <div class="row" style="flex-direction: column">
-                    <div class="ext-center">
-                      <img
-                        class="center-align-item"
-                        src="~/assets/subscription.png"
-                        alt="buy subscription"
-                        height="120"
-                        width="120"
-                      />
-                    </div>
-                    <div class="heading2 text-center">Buy Subscription</div>
-                    <div class="subheading text-center">
-                      Select plan you wish to buy today
-                    </div>
-
-                    <div
-                      class="d-flex flex-row padding-10 justify-content-center"
-                      style="margin-bottom: 10px"
-                    >
-                      <ConfirmationModal
-                        buttonText="Buy 4 sessions for KES 100/="
-                        title="Buy 4 sessions"
-                        body="Buy 4 sessions for KES 100/="
-                        action="success"
-                        @click="buyBasicPlan()"
-                      />
-                      <div style="padding-right: 10px"></div>
-                      <ConfirmationModal
-                        buttonText="Buy 8 sessions for KES 200/="
-                        title="Buy 8 sessions"
-                        body="Buy 8 sessions for KES 200/="
-                        action="success"
-                        @click="buyPremiumPlan()"
-                      />
-                    </div>
-                    <br />
-                  </div>
-                </div>
+                <BuySubscriptionComponent />
               </div>
             </div>
             <!--Search bar / Start quiz button / Profile  Ends here-->
@@ -58,39 +20,7 @@
         <div class="d-block d-sm-none d-none d-sm-block d-md-none">
           <div class="d-flex flex-row">
             <div class="col centered-container d-flex justify-content-around">
-              <div class="row" style="flex-direction: column">
-                <img
-                  class="center-align-item"
-                  src="~/assets/subscription.png"
-                  alt="buy subscription"
-                  height="120"
-                  width="120"
-                />
-                <div class="heading2 padding-right-20">Buy Subscription</div>
-                <div class="subheading">Select plan you wish to buy today</div>
-
-                <div
-                  class="d-flex flex-row padding-10 justify-content-center"
-                  style="margin-bottom: 10px"
-                >
-                  <ConfirmationModal
-                    buttonText="Buy 4 sessions for KES 100/="
-                    title="Buy 4 sessions"
-                    body="Buy 4 sessions for KES 100/="
-                    action="success"
-                    @click="buyBasicPlan()"
-                  />
-                  <div style="padding-right: 10px"></div>
-                  <ConfirmationModal
-                    buttonText="Buy 8 sessions for KES 200/="
-                    title="Buy 8 sessions"
-                    body="Buy 8 sessions for KES 200/="
-                    action="success"
-                    @click="buyPremiumPlan()"
-                  />
-                </div>
-                <br />
-              </div>
+              <BuySubscriptionComponent />
             </div>
           </div>
         </div>
@@ -103,6 +33,7 @@
 import RoundedCyanArrowButton from "../../components/Buttons/RoundedCyanArrowButton.vue";
 import ConfirmationModal from "../../components/ConfirmationModal.vue";
 import AppWrapper from "../../components/AppWrapper.vue";
+import BuySubscriptionComponent from "../../components/BuySubscriptionComponent.vue";
 export default {
   data() {
     return {
@@ -148,6 +79,63 @@ export default {
         .catch((err) => {
           // An error occurred
         });
+    },
+    errorToast(toaster) {
+      this.$bvToast.toast(
+        `We encountered an error while processing your request, try again later`,
+        {
+          title: `Error`,
+          variant: "danger",
+          toaster: toaster,
+          solid: true,
+        },
+      );
+    },
+    infoToast(toaster) {
+      this.$bvToast.toast(`Please wait as, game starts in a few seconds`, {
+        title: `Game starting shortly`,
+        variant: "info",
+        toaster: toaster,
+        solid: true,
+      });
+    },
+    loadAccountToast(toaster) {
+      this.$bvToast.toast(`Deposit to wallet to play mSwali`, {
+        title: `Insufficient Balance`,
+        variant: "danger",
+        toaster: toaster,
+        solid: true,
+      });
+    },
+    async buydailyPlan() {
+      let mswaliUserId = this.$store.state.mswaliId;
+      let getbalanceproxy = `api/get-balance&user_id=${mswaliUserId}`;
+      let userWalletBalance = await this.$axios.get(
+        `/apiproxy/${getbalanceproxy}`,
+      );
+      if (userWalletBalance.data.data >= 50) {
+        // step 6 if user has no credits and wallet balance >= rate notify user of insufficient balance
+        // TODO: deduct the balance froom the wallet
+        let gameratesubscriptionurl = `api/game-play&user_id=${this.mswaliUserId}&amount=50`;
+        let dailyPlanResponse = await this.$axios.post(
+          `/apiproxy/${gameratesubscriptionurl}`,
+        );
+        if (dailyPlanResponse.data == null) {
+          await this.fetchWalletBalance();
+          await this.fetchSessionQuestions(sessionID);
+          await this.infoToast();
+          await this.$store.dispatch("delayFiveSeconds");
+          await this.$router.push("/quiz");
+        } else {
+          await this.errorToast();
+          await this.$store.dispatch("delayFiveSeconds");
+        }
+      } else if (userWalletBalance.data.data < gameRate) {
+        // stop loading
+        this.loadAccountToast();
+        await this.$store.dispatch("delayTwoSeconds");
+        window.location.reload();
+      }
     },
     async buyBasicPlan() {
       let userWalletBalance = this.$store.state.walletBalance;
@@ -240,7 +228,12 @@ export default {
       );
     },
   },
-  components: { RoundedCyanArrowButton, ConfirmationModal, AppWrapper },
+  components: {
+    RoundedCyanArrowButton,
+    ConfirmationModal,
+    AppWrapper,
+    BuySubscriptionComponent,
+  },
 };
 </script>
 

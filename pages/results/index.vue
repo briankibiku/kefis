@@ -42,15 +42,13 @@
       </p>
       <div>
         <RoundedGoldLoadingButton
-          @click="
-            navigateToQuiz();
-            onSubmit();
-          "
+          @click="onSubmit()"
           buttonText="Play Again"
           style="font-size: 24px; font-weight: bold; margin-bottom: 20px"
         />
         <b-button
           type="submit"
+          @click="onSubmit()"
           href="https://mswali.co.ke/?page_id=198"
           target="blank"
           form="otp-form"

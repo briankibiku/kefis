@@ -155,8 +155,10 @@ export default {
   },
   mounted() {
     this.startTimer();
-    if (!window.OTPCredential) {
+    if (this.$store.state.isAuthenticated) {
+      this.navigateToHome();
     } else {
+      this.navigateToLogin();
     }
   },
   computed: {
@@ -194,6 +196,12 @@ export default {
     }),
     forceRerender() {
       this.rebuildverifybutton += 1;
+    },
+    navigateToHome() {
+      this.$router.push("/home");
+    },
+    navigateToLogin() {
+      this.$router.push("/login");
     },
     startTimer() {
       this.timerInterval = setInterval(() => (this.timePassed += 1), 1000);

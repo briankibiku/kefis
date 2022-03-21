@@ -19,7 +19,9 @@
         <!--<img src="~/assets/cancel.png" alt="" height="40" width="40" />-->
         😢 Wrong answer, the correct answer is
         {{ this.correctChoice }}.
-        <div style="color: #ffb500">Loading next question...</div>
+        <div v-if="this.counter + 1 != 9" style="color: #ffb500">
+          Loading next question...
+        </div>
         <div v-if="this.counter + 1 == 9" style="color: #ffb500">
           Loading your results...
         </div>
@@ -33,7 +35,9 @@
       >
         <img src="~/assets/win_emoji.png" alt="" height="40" width="55" />
         You seleceted the correct answer.
-        <div style="color: #ffb500">Loading next question...</div>
+        <div v-if="this.counter + 1 != 9" style="color: #ffb500">
+          Loading next question...
+        </div>
         <div v-if="this.counter + 1 == 9" style="color: #ffb500">
           Loading your results...
         </div>
@@ -244,7 +248,7 @@ export default {
         // user selected correct answer
         this.isCorrect = true;
       }
-      await this.$store.dispatch("delayFiveSeconds"),
+      await this.$store.dispatch("delayTwoSeconds"),
         await this.goToNextQuestion(answer, selectedchoice);
       this.forceRerender();
       this.resetTimer();
