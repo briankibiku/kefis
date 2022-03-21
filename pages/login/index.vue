@@ -77,11 +77,13 @@ export default {
     ...mapGetters("products", ["maskedPhone"]),
     ...mapState({
       isExistingUser: "isExistingUser",
+      loggedinUserPhone: "loggedinUserPhone",
     }),
   },
   methods: {
     ...mapActions({
       peristIsExistingUSer: "peristIsExistingUSer",
+      peristUserPhone: "peristUserPhone",
     }),
     showMissingFieldsToast(toaster, variant = "danger") {
       this.$bvToast.toast("Enter a valid phone number to proceed", {
@@ -127,6 +129,7 @@ export default {
           // check if user already exists
           if (!res.data.status) {
             // stop loading
+            await this.peristUserPhone(this.phoneNumber);
             await this.$store.commit("updateSignUpPhone", this.phoneNumber);
             this.$router.push("/accept-signup");
           } else {
@@ -138,9 +141,10 @@ export default {
               config,
             );
             // stop loading
+            await this.peristUserPhone(this.phoneNumber);
+            console.log(this.$store.state.loggedinUserPhone);
             await this.$store.commit("updateSignUpPhone", this.phoneNumber);
             await this.$store.commit("updateSignUpOTP", res);
-            console.log("Navigating to OTP page");
             this.$router.push("/otp");
           }
         } catch (err) {

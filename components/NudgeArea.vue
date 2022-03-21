@@ -18,7 +18,9 @@
           >
             <div class="subheading4nudge">
               Register team
+              <!--
               <font-awesome-icon :icon="['fas', 'arrow-right']" />
+              -->
             </div>
           </button>
         </div>
@@ -36,7 +38,9 @@
           <button class="rounded-button-cyan" style="margin-top: 10px">
             <div class="subheading4nudge-mobile">
               Register team
+              <!--
               <font-awesome-icon :icon="['fas', 'arrow-right']" />
+              -->
             </div>
           </button>
         </div>

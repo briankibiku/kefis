@@ -20,7 +20,9 @@
       style="width: 260px; background-color: #ffb500"
     >
       {{ buttonText }}
+      <!--
       <font-awesome-icon v-if="show" :icon="['fas', 'arrow-right']" />
+      -->
     </b-button>
   </b-overlay>
 </template>

@@ -1,0 +1,4 @@
+[defaults]
+org = <your_sentry_org>
+project = <your_sentry_project>
+url = <your_sentry_url>

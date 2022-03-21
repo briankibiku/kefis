@@ -1,3 +1,13 @@
+import Vue from "vue";
+import Router from "vue-router";
+import * as Sentry from "@sentry/vue";
+import { BrowserTracing } from "@sentry/tracing";
+
+Vue.use(Router);
+
+const router = new Router({
+  // ...
+});
 export default {
   // Global page headers: https://go.nuxtjs.dev/config-head
   head: {
@@ -47,6 +57,7 @@ export default {
     '@nuxtjs/proxy',
     '@nuxt/http',
     '@nuxtjs/firebase',
+    '@nuxtjs/sentry',
     [
       "nuxt-fontawesome",
       {
@@ -92,6 +103,25 @@ export default {
       }
     ],
     fcmPublicVapidKey: 'BEfgwrltEh2CBzpZGaTeOJZ3w9AmSKUpC5b8qp8G6cZNOIRIE1BRoc28mhRVg07OiISzpTcUTUPP8DQcZjUHayE' // OPTIONAL : Sets vapid key for FCM after initialization
+  },
+  sentry: {
+    dsn: "https://c75bd89c3db342d1ab3bd678ad3e806f@o1189979.ingest.sentry.io/6310968",
+    publishRelease: true,
+    sourceMapStyle: 'hidden-source-map',
+    config: {
+      release: process.env.GIT_COMMIT_SHA,
+    }, integrations: [
+      new BrowserTracing({
+        routingInstrumentation: Sentry.vueRouterInstrumentation(router),
+        tracingOrigins: ["localhost", "https://quiz.mswali.co.ke", /^\//],
+      }),
+    ],
+    // Set tracesSampleRate to 1.0 to capture 100%
+    // of transactions for performance monitoring.
+    // We recommend adjusting this value in production
+    tracesSampleRate: 1.0,
+    trackComponents: ["Header", "Navigation", "Footer"],
+    hooks: ["create", "mount"],
   },
   axios: {
     proxy: true,

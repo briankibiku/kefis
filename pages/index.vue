@@ -19,6 +19,11 @@
 import axios from "axios";
 import Purple from "../components/Logo/Purple.vue";
 export default {
+  data() {
+    return {
+      currentYear: new Date().getFullYear(),
+    };
+  },
   head() {
     return {
       title: "Home",
