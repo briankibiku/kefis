@@ -155,11 +155,6 @@ export default {
   },
   mounted() {
     this.startTimer();
-    if (this.$store.state.isAuthenticated) {
-      this.navigateToHome();
-    } else {
-      this.navigateToLogin();
-    }
   },
   computed: {
     ...mapState({
