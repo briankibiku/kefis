@@ -42,7 +42,7 @@
       </p>
       <div>
         <RoundedGoldLoadingButton
-          @click="onSubmit()"
+          @click="onSubmit(false)"
           buttonText="Play Again"
           style="font-size: 24px; font-weight: bold; margin-bottom: 20px"
         />
@@ -96,7 +96,7 @@ export default {
     };
   },
   methods: {
-    async onSubmit() {
+    async onSubmit(goToHome) {
       if (this.correctAttempts == 9) {
         let awardPrize = this.$store.state.sessionDetails.session.prize;
         let mswaliUserId = this.$store.state.mswaliId;
@@ -118,7 +118,7 @@ export default {
         //   `http://cms.mswali.co.ke/mswali/mswali_app/backend/web/index.php?r=solo-play/post-winner&user_id=${mswaliUserId}&session_id=${sessionID}`,
         // );
         this.makeToast(), await this.$store.dispatch("delayTwoSeconds");
-        this.$router.push("/home");
+        goToHome ? this.$router.push("/home") : () => {};
       }
     },
     makeToast(toaster) {
