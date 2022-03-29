@@ -8,7 +8,7 @@
           <LogoCyan style="height: 35px; width: 150px" />
           <br />
           <br />
-          <p>@copyright mSwali 2021</p>
+          <p>@copyright mSwali {{ this.currentYear }}</p>
         </div>
       </div>
     </div>
@@ -37,6 +37,11 @@ export default {
           content: "default page",
         },
       ],
+    };
+  },
+  data() {
+    return {
+      currentYear: new Date().getFullYear(),
     };
   },
   mounted() {
