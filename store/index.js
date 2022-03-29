@@ -6,24 +6,6 @@ export const state = () => ({
         "https://drive.google.com/uc?export=view&id=1F-a5Svs-YffBbu-mTDtP1uMOGQgFJAC4",
       value: "music",
     },
-    {
-      tag: "Politics",
-      photoUrl:
-        "https://drive.google.com/uc?export=view&id=1F-a5Svs-YffBbu-mTDtP1uMOGQgFJAC4",
-      value: "politics",
-    },
-    {
-      tag: "Food",
-      photoUrl:
-        "https://drive.google.com/uc?export=view&id=1F-a5Svs-YffBbu-mTDtP1uMOGQgFJAC4",
-      value: "food",
-    },
-    {
-      tag: "History",
-      photoUrl:
-        "https://drive.google.com/uc?export=view&id=1F-a5Svs-YffBbu-mTDtP1uMOGQgFJAC4",
-      value: "history",
-    },
   ],
   test_quiz: {
     data: [
@@ -86,6 +68,7 @@ export const state = () => ({
   // question & answer variables
   persistedAnswers: null,
   userAnswersPayloadSet: false,
+  userAnswers: [],
   persistedState: null,
   alert: false,
   canWinStatus: false,
@@ -137,6 +120,10 @@ export const mutations = {
   updateMswaliId(state, payload) {
     state.mswaliId = payload;
   },
+  updateUserAnswersPayload(state, payload) {
+    state.userAnswers = payload;
+  },
+
   updatewalletBalance(state, payload) {
     state.walletBalance = payload;
   },
@@ -268,5 +255,8 @@ export const actions = {
   },
   persistCanWinStatus({ commit }, payload) {
     commit("updateCanWinStatus", payload);
+  },
+  persistupdateUserAnswers({ commit }, payload) {
+    commit("updateUserAnswersPayload", payload);
   },
 };
