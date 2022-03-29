@@ -8,7 +8,7 @@
           <LogoCyan style="height: 35px; width: 150px" />
           <br />
           <br />
-          <p>@copyright mSwali 2021</p>
+          <p>@copyright mSwali {{ this.currentYear }}</p>
         </div>
       </div>
     </div>
@@ -39,11 +39,14 @@ export default {
       ],
     };
   },
+  data() {
+    return {
+      currentYear: new Date().getFullYear(),
+    };
+  },
   mounted() {
     this.$nextTick(() => {
       this.$nuxt.$loading.start();
-      // navigate to phone  input
-
       if (this.$store.state.isAuthenticated) {
         setTimeout(() => (window.location.href = "/home"), 2000);
       } else {

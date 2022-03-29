@@ -22,7 +22,7 @@
                           Need help?
                         </div>
                         <div class="subheading3 d-flex justify-content-center">
-                          Give us a call at +254 795 583 651 / +254 783 397 397
+                          Give us a call at +254 794 583 651 / +254 783 397 397
                           or reach out to us via our socials
                         </div>
                         <div class="row d-flex justify-content-center">
@@ -84,7 +84,7 @@
                     Need help?
                   </div>
                   <div class="subheading3 d-flex justify-content-center">
-                    Give us a call at +254 795 583 651 / +254 783 397 397 or
+                    Give us a call at +254 794 583 651 / +254 783 397 397 or
                     reach out to us via our socials
                   </div>
 
