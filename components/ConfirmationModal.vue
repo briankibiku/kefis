@@ -1,6 +1,17 @@
 <template>
   <div>
-    <button class="rounded-button-cyan heading4 text-center" @click="showModal">
+    <button
+      v-if="!isTextBtn"
+      class="rounded-button-cyan heading4 text-center"
+      @click="showModal"
+    >
+      {{ buttonText }}
+    </button>
+    <button
+      v-if="isTextBtn"
+      class="text-button heading4 text-center"
+      @click="showModal"
+    >
       {{ buttonText }}
     </button>
 
@@ -50,6 +61,7 @@ export default {
     action: "",
     extra: "",
     busy: false,
+    isTextBtn: false,
   },
   beforeDestroy() {
     this.clearTimeout();

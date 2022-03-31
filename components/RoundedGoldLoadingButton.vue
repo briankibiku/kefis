@@ -99,23 +99,35 @@ export default {
       this.showIcon == "true" ? (this.show = true) : (this.show = false);
     },
     async fetchWalletBalance() {
-      await this.persistwalletBalance("");
-      await this.persistUserCredits("");
-      let mswaliUserId = this.$store.state.mswaliId;
-      let getbalanceproxy = `get-balance&user_id=${mswaliUserId}`;
-      let response = await this.$axios.get(`/apiproxy/api/${getbalanceproxy}`);
-      let walletBalanceFromAPI = await Math.trunc(response.data.data);
-      let walletCreditsFromAPI = await response.data.credit_balance;
-      await this.persistwalletBalance(walletBalanceFromAPI);
-      await this.persistUserCredits(walletCreditsFromAPI);
-      this.walletBalanceFromAPI = this.$store.state.walletBalance;
+      try {
+        await this.persistwalletBalance("");
+        await this.persistUserCredits("");
+        let mswaliUserId = this.$store.state.mswaliId;
+        let getbalanceproxy = `get-balance&user_id=${mswaliUserId}`;
+        let response = await this.$axios.get(
+          `/apiproxy/api/${getbalanceproxy}`,
+        );
+        let walletBalanceFromAPI = await Math.trunc(response.data.data);
+        let walletCreditsFromAPI = await response.data.credit_balance;
+        await this.persistwalletBalance(walletBalanceFromAPI);
+        await this.persistUserCredits(walletCreditsFromAPI);
+        this.walletBalanceFromAPI = this.$store.state.walletBalance;
+      } catch (e) {
+        console.log(e);
+        this.errorToast();
+      }
     },
     async fetchSessionQuestions(sessionID) {
-      let soloplayproxy = `solo-play/fetch-questions&session_id=${sessionID}  `;
-      let sessionQuestionsResponse = await this.$axios.get(
-        `/apiproxy/${soloplayproxy}`,
-      );
-      await this.persistTriviaQuestions(sessionQuestionsResponse.data.data);
+      try {
+        let soloplayproxy = `solo-play/fetch-questions&session_id=${sessionID}  `;
+        let sessionQuestionsResponse = await this.$axios.get(
+          `/apiproxy/${soloplayproxy}`,
+        );
+        await this.persistTriviaQuestions(sessionQuestionsResponse.data.data);
+      } catch (e) {
+        console.log(e);
+        this.errorToast();
+      }
     },
     sessionIsNotLiveToast(toaster) {
       this.$bvToast.toast(`The game will be on from 10AM-10PM, check later`, {
@@ -261,80 +273,6 @@ export default {
                 this.noActiveSubscriptionToast();
                 await this.$store.dispatch("delayFiveSeconds");
                 this.$router.push("/buy-subscription");
-                // step 7 if user has NO subscription take them to buy subscription page
-                // if (userWalletBalance.data.data >= 200) {
-                //   // credit user 200
-                //   let gameplay200url = `api/game-play&user_id=${this.mswaliUserId}&msisdn=${this.loggedInUserNumber}&gateway=INTERNAL&amount=200`;
-                //   let creditUserResponse = await this.$axios.post(
-                //     `/apiproxy/${gameplay200url}`,
-                //   );
-                //   // subscribe to 10 sessions
-                //   let premiumplanurl = `api/premium-daily-plan&user_id=${this.mswaliUserId}`;
-                //   let premiumPlanResponse = await this.$axios.post(
-                //     `/apiproxy/${premiumplanurl}`,
-                //   );
-                //   if (
-                //     basicPlanResponse.data.status_message ===
-                //     "daily plan activated"
-                //   ) {
-                //     // after buying a subscription serve the questions
-                //     await this.fetchSessionQuestions(sessionID);
-                //     await this.fetchWalletBalance();
-                //     this.loading = false;
-                //     await this.deductGameSession();
-                //   } else {
-                //     this.errorBuyToast();
-                //   }
-                // } else if (userWalletBalance.data.data >= 100) {
-                //   // credit user 100
-                //   let gameplay100url = `api/game-play&user_id=${this.mswaliUserId}&msisdn=${this.loggedInUserNumber}&gateway=INTERNAL&amount=100`;
-                //   let gamePlayResponse = await this.$axios.post(
-                //     `/apiproxy/${gameplay100url}`,
-                //   );
-                //   if (gamePlayResponse.data == null) {
-                //     // subscribe to 4 sessions
-                //     let dailtplanurl = `api/daily-plan&user_id=${this.mswaliUserId}`;
-                //     let basicPlanResponse = await this.$axios.post(
-                //       `/apiproxy/${dailtplanurl}`,
-                //     );
-                //     if (
-                //       basicPlanResponse.data.status_message ===
-                //       "daily plan activated"
-                //     ) {
-                //       // serve questions if daily plan was bought sucessfully
-                //       await this.fetchSessionQuestions(sessionID);
-                //       // stop loading
-                //       await this.deductGameSession();
-                //     } else {
-                //       this.errorBuyToast();
-                //       await this.$store.dispatch("delayTwoSeconds");
-                //     }
-                //   } else {
-                //     this.errorBuyToast();
-                //     await this.$store.dispatch("delayTwoSeconds");
-                //   }
-                // } else if (userWalletBalance.data.data >= gameRate) {
-                //   // step 6 if user has no credits and wallet balance >= rate notify user of insufficient balance
-                //   // TODO: deduct the balance froom the wallet
-                //   let gameratesubscriptionurl = `api/game-play&user_id=${this.mswaliUserId}&amount=50`;
-                //   let dailyPlanResponse = await this.$axios.post(
-                //     `/apiproxy/${gameratesubscriptionurl}`,
-                //   );
-                //   if (dailyPlanResponse.data == null) {
-                //     await this.fetchWalletBalance();
-                //     await this.fetchSessionQuestions(sessionID);
-                //     await this.infoToast();
-                //     await this.$store.dispatch("delayFiveSeconds");
-                //     await this.$router.push("/quiz");
-                //   } else {
-                //     await this.errorToast();
-                //   }
-                // } else if (userWalletBalance.data.data < gameRate) {
-                //   // stop loading
-                //   this.loadAccountToast();
-                //   await this.$store.dispatch("delayTwoSeconds");
-                //   window.location.reload();
-                // }
               }
             }
           } else if (gameRate == 0) {

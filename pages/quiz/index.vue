@@ -1,89 +1,91 @@
 <template>
-  <div class="quiz-content">
-    <!-- <Notification :message="this.error" v-if="error" /> -->
-    <div class="heading3" style="text-align: center; color: #fff">
-      Question {{ this.counter + 1 }} of
-      {{ this.quiz.length }}
-    </div>
-    <!-- base timer goes here  -->
-    <div style="margin-top: 60px">
-      <BaseTimer class="center" :key="rebuildbasetimer" />
-    </div>
-    <div v-if="showFeedback" class="subheading4" style="color: #fff">
-      <div
-        v-if="!isCorrect"
-        class="text-center heading3 animate__animated animate__fadeInLeft"
-        align-v="center"
-        style="color: #fff"
-      >
-        <!--<img src="~/assets/cancel.png" alt="" height="40" width="40" />-->
-        😢 Wrong answer, the correct answer is
-        {{ this.correctChoice }}.
-        <div v-if="this.counter + 1 != 9" style="color: #ffb500">
-          Loading next question...
-        </div>
-        <div v-if="this.counter + 1 == 9" style="color: #ffb500">
-          Loading your results...
-        </div>
-        <img src="~/assets/loading.gif" alt="" height="90" width="100" />
+  <div>
+    <div class="quiz-content" v-if="this.quiz.length > 0">
+      <!-- <Notification :message="this.error" v-if="error" /> -->
+      <div class="heading3" style="text-align: center; color: #fff">
+        Question {{ this.counter + 1 }} of
+        {{ this.quiz.length }}
       </div>
-      <div
-        v-if="isCorrect"
-        class="text-center heading3 animate__animated animate__fadeInRight"
-        align-v="center"
-        style="color: #fff"
-      >
-        <img src="~/assets/win_emoji.png" alt="" height="40" width="55" />
-        You seleceted the correct answer.
-        <div v-if="this.counter + 1 != 9" style="color: #ffb500">
-          Loading next question...
-        </div>
-        <div v-if="this.counter + 1 == 9" style="color: #ffb500">
-          Loading your results...
-        </div>
-        <img src="~/assets/loading.gif" alt="" height="90" width="100" />
+      <!-- base timer goes here  -->
+      <div style="margin-top: 60px">
+        <BaseTimer class="center" :key="rebuildbasetimer" />
       </div>
-    </div>
-    <b-row>
-      <b-col>
-        <p v-if="$fetchState.pending" class="container center-align-content">
-          <span class="loading"></span>
-        </p>
-        <p v-else-if="$fetchState.error">An error occurred :(</p>
-        <div v-else class="card-content">
-          <div class="question-title">
-            {{ this.quiz[this.counter].question }}
+      <div v-if="showFeedback" class="subheading4" style="color: #fff">
+        <div
+          v-if="!isCorrect"
+          class="text-center heading3 animate__animated animate__fadeInLeft"
+          align-v="center"
+          style="color: #fff"
+        >
+          <!--<img src="~/assets/cancel.png" alt="" height="40" width="40" />-->
+          😢 Wrong answer, the correct answer is
+          {{ this.correctChoice }}.
+          <div v-if="this.counter + 1 != 9" style="color: #ffb500">
+            Loading next question...
           </div>
-          <div class="grid-container resize-choices">
-            <div
-              class="choices"
-              v-for="item in this.quiz[this.counter].choices"
-              :key="item.label"
-            >
-              <center>
-                <p class="field">
-                  <button
-                    class="outline-button-cyan click"
-                    id="answerBtn"
-                    v-on:click="showCorrectAnswer(item.correct, item.choice)"
-                    :disabled="isDisabled"
-                  >
-                    <span v-if="item.correct" class="text-choice">
-                      {{ item.choice }} . {{ item.answer_text }}</span
-                    >
-                    <span v-else class="text-choice">
-                      {{ item.choice }} . {{ item.answer_text }}
-                    </span>
-                  </button>
-                </p>
-              </center>
+          <div v-if="this.counter + 1 == 9" style="color: #ffb500">
+            Loading your results...
+          </div>
+          <img src="~/assets/loading.gif" alt="" height="90" width="100" />
+        </div>
+        <div
+          v-if="isCorrect"
+          class="text-center heading3 animate__animated animate__fadeInRight"
+          align-v="center"
+          style="color: #fff"
+        >
+          <img src="~/assets/win_emoji.png" alt="" height="40" width="55" />
+          You seleceted the correct answer.
+          <div v-if="this.counter + 1 != 9" style="color: #ffb500">
+            Loading next question...
+          </div>
+          <div v-if="this.counter + 1 == 9" style="color: #ffb500">
+            Loading your results...
+          </div>
+          <img src="~/assets/loading.gif" alt="" height="90" width="100" />
+        </div>
+      </div>
+      <b-row>
+        <b-col>
+          <p v-if="$fetchState.pending" class="container center-align-content">
+            <span class="loading"></span>
+          </p>
+          <p v-else-if="$fetchState.error">An error occurred :(</p>
+          <div v-else class="card-content">
+            <div class="question-title">
+              {{ this.quiz[this.counter].question }}
             </div>
+            <div class="grid-container resize-choices">
+              <div
+                class="choices"
+                v-for="item in this.quiz[this.counter].choices"
+                :key="item.label"
+              >
+                <center>
+                  <p class="field">
+                    <button
+                      class="outline-button-cyan click"
+                      id="answerBtn"
+                      v-on:click="showCorrectAnswer(item.correct, item.choice)"
+                      :disabled="isDisabled"
+                    >
+                      <span v-if="item.correct" class="text-choice">
+                        {{ item.choice }} . {{ item.answer_text }}</span
+                      >
+                      <span v-else class="text-choice">
+                        {{ item.choice }} . {{ item.answer_text }}
+                      </span>
+                    </button>
+                  </p>
+                </center>
+              </div>
+            </div>
+            <br />
+            <br />
           </div>
-          <br />
-          <br />
-        </div>
-      </b-col>
-    </b-row>
+        </b-col>
+      </b-row>
+    </div>
   </div>
 </template>
 
@@ -155,10 +157,12 @@ export default {
   mounted() {
     if (!this.$store.state.isAuthenticated) {
       this.navigateToLogin();
-    } else if (this.$store.state.triviaQuestions.length === 0) {
+    } else if (typeof this.quiz[0] == "undefined") {
       // navigate to home page
       this.$router.push("/home");
     } else {
+      console.log("this.quiz");
+      console.log(this.quiz[0]);
       this.startTimer();
     }
   },

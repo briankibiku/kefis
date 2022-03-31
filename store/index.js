@@ -60,24 +60,6 @@ export const state = () => ({
     wrong: 0,
     timeouts: 0,
   },
-  answersResponse: {
-    choices_picked: [
-      {
-        picked: "C",
-        timeout: 0,
-      },
-    ],
-    resp: [
-      {
-        id: "25564",
-        question:
-          "Charity Ngilu served as the Minister For Health between which years?",
-        answer: "2003-2007",
-        label: "C",
-        session_id: "149044",
-      },
-    ],
-  },
   triviaQuestions: {},
   trialQuestion: [],
   profile: {},
