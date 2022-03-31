@@ -6,21 +6,24 @@
           class="center-align-item"
           src="~/assets/subscription.png"
           alt="buy subscription"
-          height="120"
-          width="120"
+          height="100"
+          width="100"
         />
       </div>
       <div class="heading2 text-center">Buy Subscription</div>
-      <div class="subheading text-center">
+      <div class="subheading text-center" style="padding-bottom: 10px">
         Select plan you wish to buy today
       </div>
       <div class="d-flex flex-row heading4 justify-content-center">
         <ConfirmationModal
+          class="subscription-card"
           buttonText="Buy 1 play session for KES 50/= and proceed to play now"
           title="Confirm purchase"
           body="Buy 1 play session for KES 50/= and proceed to play now"
           action="success"
+          isTextBtn="true"
           @click="buydailyPlan()"
+          style="color: #fff"
         />
       </div>
       <div
@@ -28,18 +31,22 @@
         style="margin-bottom: 10px"
       >
         <ConfirmationModal
+          class="subscription-card"
           buttonText="Buy 4 play sessions for KES 100/= and proceed to play now"
           title="Confirm purchase"
           body="Buy 4 play sessions for KES 100/= and proceed to play now"
           action="success"
+          isTextBtn="true"
           @click="buyBasicPlan()"
         />
         <div style="padding-right: 10px"></div>
         <ConfirmationModal
+          class="subscription-card"
           buttonText="Buy 10 play sessions for KES 200/= and proceed to play now"
           title="Confirm purchase"
           body="Buy 10 play sessions for KES 200/= and proceed to play now"
           action="success"
+          isTextBtn="true"
           @click="buyPremiumPlan()"
         />
       </div>
@@ -315,3 +322,13 @@ export default {
   },
 };
 </script>
+
+<style>
+.subscription-card {
+  margin-bottom: 20px;
+  padding: 10px;
+  width: 30vw;
+  border-radius: 15px;
+  box-shadow: 0 0 50px #ccc;
+}
+</style>
