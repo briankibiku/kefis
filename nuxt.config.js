@@ -46,6 +46,7 @@ export default {
     "@nuxtjs/axios",
     '@nuxtjs/proxy',
     '@nuxt/http',
+    '@nuxtjs/firebase',
     [
       "nuxt-fontawesome",
       {
@@ -62,6 +63,36 @@ export default {
       },
     ],
   ],
+  // firebase FCM starts here
+
+  firebase: {
+    lazy: false,
+    config: {
+      apiKey: "AIzaSyB_uPwm93FtfTGJ8JJ38RpRwQyEWdd4_Oc",
+      authDomain: "mswali-1171e.firebaseapp.com",
+      projectId: "mswali-1171e",
+      storageBucket: "mswali-1171e.appspot.com",
+      messagingSenderId: "746446534026",
+      appId: "1:746446534026:web:89c4f2b9cabf1a82080473",
+      measurementId: "G-BQVPFSMG80",
+      databaseURL: "https://mswali-1171e-default-rtdb.firebaseio.com/",
+    },
+    onFirebaseHosting: false,
+    services: {
+      messaging: true,
+    }
+  },
+
+  messaging: {
+    createServiceWorker: true,
+    actions: [
+      {
+        action: 'goHome',
+        url: 'https://localhost:3000'
+      }
+    ],
+    fcmPublicVapidKey: 'BEfgwrltEh2CBzpZGaTeOJZ3w9AmSKUpC5b8qp8G6cZNOIRIE1BRoc28mhRVg07OiISzpTcUTUPP8DQcZjUHayE' // OPTIONAL : Sets vapid key for FCM after initialization
+  },
   axios: {
     proxy: true,
   },
@@ -80,6 +111,12 @@ export default {
   pwa: {
     mobileAppIOS: true,
     mobileApp: true,
-    icon: false // disables the icon module
+    icon: false, // disables the icon module
+    workbox: {
+      importScripts: ['/firebase-auth-sw.js'],
+      // by default the workbox module will not install the service worker in dev environment to avoid conflicts with HMR
+      // only set this true for testing and remember to always clear your browser cache in development
+      dev: false,
+    },
   }
 };

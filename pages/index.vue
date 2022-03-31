@@ -16,6 +16,7 @@
 </template>
 
 <script>
+import axios from "axios";
 import Purple from "../components/Logo/Purple.vue";
 export default {
   head() {
