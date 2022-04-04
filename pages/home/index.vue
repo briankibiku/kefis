@@ -47,7 +47,7 @@
             <RoundedGoldLoadingButton
               buttonText="Play NOW to WIN"
               style="font-size: 24px; font-weight: bold"
-            /> 
+            />
             <div class="d-flex align-items-center" style="flex-direction: row">
               <b-button class="text-button margin-horizontal-20" @click="">
                 <b-avatar variant="light"></b-avatar>
@@ -254,6 +254,8 @@ import ConfirmationModal from "../../components/ConfirmationModal.vue";
 export default {
   data() {
     return {
+      listenersStarted: false,
+      idToken: "",
       overallPoints: "2,000",
       userProfile: {},
       lastName: this.$store.state.loggedinUserName,
@@ -273,11 +275,10 @@ export default {
   },
   mounted() {
     if (this.$store.state.isAuthenticated) {
-      this.loading = true;
       this.daySalutatuins();
       this.fetchWalletBalance();
       this.getSessionDetails();
-      this.loading = false;
+      this.startListeners();
     } else {
       this.navigateToLogin();
     }
@@ -358,6 +359,14 @@ export default {
         solid: true,
       });
     },
+    showNotificationToast(title, body) {
+      this.$bvToast.toast(`${body}`, {
+        title: `${title}`,
+        variant: "info",
+        toaster: toaster,
+        solid: true,
+      });
+    },
     async daySalutatuins() {
       var d = new Date();
       var time = d.getHours();
@@ -396,6 +405,56 @@ export default {
       await this.persistCanWinStatus(this.$store.state.sessionDetails.can_win);
       this.banner = await this.$store.state.sessionDetails.banner;
       this.prize = await this.$store.state.sessionDetails.session.prize;
+    },
+
+    // FCM NOTIFICATION FUNCTIONS
+    async startListeners() {
+      await this.startOnMessageListener();
+      await this.startTokenRefreshListener();
+      await this.requestPermission();
+      await this.getIdToken();
+      this.listenersStarted = true;
+    },
+    startOnMessageListener() {
+      try {
+        this.$fire.messaging.onMessage((payload) => {
+          console.info("Message received : ", payload);
+          console.log(payload.notification.body);
+        });
+      } catch (e) {
+        console.error("Error : ", e);
+      }
+    },
+    startTokenRefreshListener() {
+      try {
+        this.$fire.messaging.onTokenRefresh(async () => {
+          try {
+            await this.$fire.messaging.getToken();
+          } catch (e) {
+            console.error("Error : ", e);
+          }
+        });
+      } catch (e) {
+        console.error("Error : ", e);
+      }
+    },
+    async requestPermission() {
+      try {
+        const permission = await Notification.requestPermission();
+        console.log("GIVEN notify perms");
+        console.log(permission);
+      } catch (e) {
+        console.error("Error : ", e);
+      }
+    },
+    async getIdToken() {
+      try {
+        this.idToken = await this.$fire.messaging.getToken();
+        console.log("TOKEN ID FOR this browser");
+        console.log(this.idToken);
+      } catch (e) {
+        console.error("Error : ", e);
+      }
     },
   },
   components: {
