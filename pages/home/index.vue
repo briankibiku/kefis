@@ -441,7 +441,6 @@ export default {
     async requestPermission() {
       try {
         const permission = await Notification.requestPermission();
-        console.log("GIVEN notify perms");
         console.log(permission);
       } catch (e) {
         console.error("Error : ", e);
@@ -450,8 +449,6 @@ export default {
     async getIdToken() {
       try {
         this.idToken = await this.$fire.messaging.getToken();
-        console.log("TOKEN ID FOR this browser");
-        console.log(this.idToken);
       } catch (e) {
         console.error("Error : ", e);
       }

@@ -6,7 +6,9 @@
       @click="navigateToHome()"
     >
       <div class="menu">
+        <!--
         <font-awesome-icon :icon="['fas', 'home']" />
+      -->
         Home
       </div>
     </button>
@@ -16,7 +18,9 @@
       @click="navigateToBuySubscription()"
     >
       <div class="menu">
+        <!--
         <font-awesome-icon :icon="['fas', 'dollar-sign']" />
+      -->
         Buy Subscription
       </div>
     </button>
@@ -26,7 +30,9 @@
       @click="navigateToAnswers()"
     >
       <div class="menu">
+        <!--
         <font-awesome-icon :icon="['fas', 'question-circle']" />
+      -->
         My Answers
       </div>
     </button>
@@ -36,7 +42,9 @@
       @click="navigateToWallet()"
     >
       <div class="menu">
+        <!--
         <font-awesome-icon :icon="['fas', 'wallet']" />
+      -->
         Wallet
       </div>
     </button>
@@ -46,17 +54,22 @@
       @click="navigateToRankings()"
     >
       <div class="menu">
+        <!--
         <font-awesome-icon :icon="['fas', 'trophy']" />
+      -->
         Rankings
       </div>
-    </button> 
+    </button>
     <button
       class="rounded-button-transparent"
       style="text-align: left; background-color: transparent"
       @click="navigateToSupport()"
     >
       <div class="menu">
+        <!--
+      
         <font-awesome-icon :icon="['fas', 'headset']" />
+      -->
         Support
       </div>
     </button>
@@ -66,7 +79,9 @@
       @click="navigateToFAQ()"
     >
       <div class="menu">
+        <!--
         <font-awesome-icon :icon="['fas', 'question']" />
+      -->
         FAQs
       </div>
     </button>
@@ -76,7 +91,10 @@
       style="text-align: left; background-color: transparent"
     >
       <div class="menu">
-        <font-awesome-icon :icon="['fas', 'share']" /> Share
+        <!--
+        <font-awesome-icon :icon="['fas', 'share']" /> 
+      -->
+        Share
       </div>
     </button>
     <button
@@ -99,7 +117,9 @@
           padding-bottom: 20px;
         "
       >
+        <!--
         <font-awesome-icon :icon="['fa', 'sign-out-alt']" />
+      -->
         Logout
       </div>
     </button>

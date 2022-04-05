@@ -1,7 +1,9 @@
 <template>
   <button class="rounded-button-cyan subheading4" @click="callback($event)">
     {{ buttonText }}
+    <!--
     <font-awesome-icon v-if="show" :icon="['fas', 'arrow-right']" />
+    -->
   </button>
 </template>
 

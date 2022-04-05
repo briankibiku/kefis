@@ -31,7 +31,9 @@
         <button class="rounded-button-cyan" @click="goToHomePage()">
           <div class="subheading4">
             Proceed
+            <!--
             <font-awesome-icon :icon="['fas', 'arrow-right']" />
+            -->
           </div>
         </button>
       </div>
@@ -62,7 +64,7 @@
                     "
                   >
                     Waiting for verification sent to <br />
-                    {{ this.$store.state.signUpPhone }}
+                    {{ this.$store.state.loggedinUserPhone }}
                   </p>
                   <p style="color: #160d3d; text-align: center">
                     We've sent the code to you mobile phone
@@ -132,7 +134,7 @@ export default {
   },
   data() {
     return {
-      signUpPhone: "",
+      signUpPhone: this.$store.state.loggedinUserPhone,
       signUpOTP: this.signUpOTP,
       resendPhoneNumber: "",
       timePassed: 0,
@@ -258,7 +260,6 @@ export default {
     },
     async getuserName() {
       this.phoneNumber = this.$store.state.signUpPhone;
-      let getusernameproxy = ``;
       let userProfile = await axios.get(
         `/apiproxy/api/get-user&username=mast&account_number=${this.phoneNumber}`,
       );
@@ -302,10 +303,8 @@ export default {
       if (!!this.signUpOTP) {
         try {
           // start loading
-          this.$nuxt.$loading.start();
           this.signUpPhone = this.$store.state.signUpPhone;
           // verify OTP
-          let verifyotpproxy = `verify-otp&msisdn=${this.signUpPhone}&code=${this.signUpOTP}`;
           const res = await axios.get(
             `/apiproxy/api/verify-otp&msisdn=${this.signUpPhone}&code=${this.signUpOTP}`,
             config,
@@ -326,14 +325,12 @@ export default {
               // if it is not a new user redirect to home
               await this.getuserName();
               // stop loading
-              this.$nuxt.$loading.finish();
               await this.goToHomePage();
             } else {
               // if it is first time user redirect to modal and continue from home
               await this.getuserName();
               // stop loading
-              this.$nuxt.$loading.finish();
-              this.successfulLogin = true;
+              await this.goToHomePage();
             }
           } else {
             await this.app.$toast;
