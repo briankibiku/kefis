@@ -22,17 +22,18 @@ export default {
   },
   mounted() {
     this.updaScore();
+    this.endSessionFunction();
   },
   async fetch() {
     this.quiz = this.$store.state.triviaQuestions;
   },
 
   methods: {
-    async updaScore() {
+    updaScore() {
       try {
         for (var i = 0; i < this.quiz.length; i++) {
           // illegal bandit should be removed once feature is stable
-          await this.updateAnswerOnBackend(
+          this.updateAnswerOnBackend(
             this.userAnswersList[i].question_number,
             this.userAnswersList[i].correctAnswer,
             this.userAnswersList[i].selectedchoice,
@@ -44,26 +45,7 @@ export default {
         console.log(e);
         console.log("Posting answers to backend error");
       }
-      try {
-        let markplayedsessionurl = `solo-play/mark-played-session&user_id=${this.mswaliUserId}&session_id=${this.sessionID}`;
-        let markPlayedSession = await this.$axios.post(
-          `/apiproxy/${markplayedsessionurl}`,
-        );
-        let postplayerinsessionurl = `solo-play/post-player-in-session&user_id=${this.mswaliUserId}&session_id=${this.sessionID}`;
-        let trackPlayerSession = await this.$axios.post(
-          `/apiproxy/${postplayerinsessionurl}`,
-        );
-        let markfinishdgameurl = `solo-play/mark-finished-game&user_id=${this.mswaliUserId}&session_id=${this.sessionID}`;
-        let markFinishedGame = await this.$axios.post(
-          `/apiproxy/${markfinishdgameurl}`,
-        );
-        this.showLoadingScore = false;
-        this.$router.push("/results");
-      } catch (e) {
-        console.log(e);
-        console.log("Error marking session as complete");
-      }
-      //   await this.endSessionFunction();
+      //
     },
     async updateAnswerOnBackend(
       questionNumber,
