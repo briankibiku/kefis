@@ -291,7 +291,6 @@ export default {
         console.log(parsedobj);
 
         await this.persistupdateUserAnswers(parsedobj);
-        await console.log(this.$store.state.userAnswers);
         this.$router.push("/loading-score");
         // post all answers here
         // try {
