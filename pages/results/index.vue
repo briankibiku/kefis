@@ -19,7 +19,7 @@
           <br />
         </div>
       </div>
-      <div class="heading2" style="color: #fff">
+      <div class="heading3" style="color: #fff">
         <div>
           <img src="~/assets/correct.png" alt="" height="40" width="40" />
           Correct : {{ this.correctAttempts }}
@@ -37,9 +37,14 @@
       </div>
       <br />
 
-      <p class="heading2">
+      <p class="heading3">
         Points Earned: <strong> {{ this.myScore }} </strong>
       </p>
+      <!--
+      <p class="heading3">
+        View your answers <u><a href="/my-answers">here</a></u>
+      </p>
+      -->
       <div>
         <RoundedGoldLoadingButton
           @click="onSubmit()"
@@ -105,7 +110,7 @@ export default {
         let trackUserResponse = await this.$axios.post(
           `http://cms.mswali.co.ke/mswali/mswali_app/backend/web/index.php?r=solo-play/post-winner&user_id=${mswaliUserId}&session_id=${sessionID}`,
         );
-        // award winner game play amount of the session
+        // award winner game play amount of the sessionl
         let awardUserResponse = await this.$axios.post(
           `http://cms.mswali.co.ke/mswali/mswali_app/backend/web/index.php?r=api/give-prize&user_id=${mswaliUserId}&amount=${awardPrize}`,
         );
