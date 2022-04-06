@@ -15,7 +15,8 @@ export default ({ store }) => {
       "signUpPhone",
       "isExistingUser",
       "userCredits",
-      "canWinStatus"
+      "canWinStatus",
+      "userAnswers"
     ],
   })(store);
 };

@@ -1,6 +1,12 @@
 <template>
   <div>
-    <div class="quiz-content" v-if="this.quiz.length > 0">
+    <div v-if="showLoadingScore" class="centered-container">
+      <div>
+        <img src="~/assets/cogs.gif" alt="" height="140" width="140" />
+        <div class="heading3">Processing your score...</div>
+      </div>
+    </div>
+    <div class="quiz-content" v-if="this.quiz.length > 0 && !showLoadingScore">
       <!-- <Notification :message="this.error" v-if="error" /> -->
       <div class="heading3" style="text-align: center; color: #fff">
         Question {{ this.counter + 1 }} of
@@ -120,6 +126,7 @@ export default {
     return {
       counter: 0,
       mswaliUserId: this.$store.state.mswaliId,
+      sessionID: this.$store.state.sessionDetails.session.id,
       number: 1,
       quiz_score: 0,
       canWin: true,
@@ -139,6 +146,7 @@ export default {
       timerInterval: null,
       isDisabled: false,
       canTimeout: true,
+      showLoadingScore: false,
     };
   },
   async fetch() {
@@ -161,14 +169,12 @@ export default {
       // navigate to home page
       this.$router.push("/home");
     } else {
-      console.log("this.quiz");
-      console.log(this.quiz[0]);
       this.startTimer();
     }
   },
   computed: {
     ...mapState({
-      canWinStatus: "canWinStatus",
+      userAnswers: "userAnswers",
     }),
     circleDasharray() {
       return `${(this.timeFraction * FULL_DASH_ARRAY).toFixed(0)} 283`;
@@ -206,7 +212,7 @@ export default {
   },
   methods: {
     ...mapActions({
-      persistCanWinStatus: "persistCanWinStatus",
+      persistupdateUserAnswers: "persistupdateUserAnswers",
     }),
     lastQuestion(question_num) {
       if (question_num != question_num) {
@@ -260,39 +266,75 @@ export default {
     },
     // Logic to loop through questions goes here
     async goToNextQuestion(correct, selectedchoice) {
-      // update answer using API
-      await this.updateAnswerOnBackend(
-        this.counter + 1,
-        correct,
-        selectedchoice,
-      );
       this.isDisabled = false;
       this.canTimeout = true;
       // prevent counter from incrementing to 10
-      if (this.counter < 8) {
+      if (this.counter < this.quiz.length - 1) {
         this.counter += 1;
-      } else {
-        let sessionID = this.$store.state.sessionDetails.session.id;
-        let mswaliUserId = this.$store.state.mswaliId;
-        let markplayedsessionurl = `solo-play/mark-played-session&user_id=${mswaliUserId}&session_id=${sessionID}`;
-        let markPlayedSession = await this.$axios.post(
-          `/apiproxy/${markplayedsessionurl}`,
-        );
-        let postplayerinsessionurl = `solo-play/post-player-in-session&user_id=${mswaliUserId}&session_id=${sessionID}`;
-        let trackPlayerSession = await this.$axios.post(
-          `/apiproxy/${postplayerinsessionurl}`,
-        );
-        let markfinishdgameurl = `solo-play/mark-finished-game&user_id=${mswaliUserId}&session_id=${sessionID}`;
-        let markFinishedGame = await this.$axios.post(
-          `/apiproxy/${markfinishdgameurl}`,
-        );
-        this.$router.push("/results");
+        let answerObject = {
+          selectedchoice: selectedchoice,
+          correctAnswer: correct,
+          question_number: this.counter,
+          question_id: this.quiz[this.counter].question_id,
+        };
+        this.userAnswersList.push(answerObject);
+      } else if (this.counter <= this.quiz.length) {
+        this.showLoadingScore = true;
+        let answerObject = {
+          question_number: (this.counter += 1),
+          selectedchoice: selectedchoice,
+          correctAnswer: correct,
+          question_id: this.quiz[this.counter - 1].question_id,
+        };
+        this.userAnswersList.push(answerObject);
+        let parsedobj = JSON.parse(JSON.stringify(this.userAnswersList));
+        console.log(parsedobj);
+
+        await this.persistupdateUserAnswers(parsedobj);
+        this.$router.push("/loading-score");
+        // post all answers here
+        // try {
+        //   for (var i = 0; i < this.quiz.length; i++) {
+        //     // illegal bandit should be removed once feature is stable
+        //     await this.updateAnswerOnBackend(
+        //       this.userAnswersList[i].question_number,
+        //       this.userAnswersList[i].correctAnswer,
+        //       this.userAnswersList[i].selectedchoice,
+        //       this.userAnswersList[i].question_id,
+        //     );
+        //   }
+        // } catch (e) {
+        //   console.log(e);
+        //   console.log("Posting answers to backend error");
+        // }
+        // try {
+        //   let markplayedsessionurl = `solo-play/mark-played-session&user_id=${this.mswaliUserId}&session_id=${this.sessionID}`;
+        //   let markPlayedSession = await this.$axios.post(
+        //     `/apiproxy/${markplayedsessionurl}`,
+        //   );
+        //   let postplayerinsessionurl = `solo-play/post-player-in-session&user_id=${this.mswaliUserId}&session_id=${this.sessionID}`;
+        //   let trackPlayerSession = await this.$axios.post(
+        //     `/apiproxy/${postplayerinsessionurl}`,
+        //   );
+        //   let markfinishdgameurl = `solo-play/mark-finished-game&user_id=${this.mswaliUserId}&session_id=${this.sessionID}`;
+        //   let markFinishedGame = await this.$axios.post(
+        //     `/apiproxy/${markfinishdgameurl}`,
+        //   );
+        //   this.showLoadingScore = false;
+        //   this.$router.push("/results");
+        // } catch (e) {
+        //   console.log(e);
+        //   console.log("Error marking session as complete");
+        // }
       }
     },
-    async updateAnswerOnBackend(questionNumber, answer, selectedchoice) {
-      let sessionID = this.$store.state.sessionDetails.session.id;
-      let mswaliUserId = this.$store.state.mswaliId;
-      let questionId = this.quiz[this.counter].question_id;
+    async updateAnswerOnBackend(
+      questionNumber,
+      answer,
+      selectedchoice,
+      questionId,
+    ) {
+      // let questionId = this.quiz[this.counter].question_id;
       let answerValue;
       let timeoutValue;
       if (answer === 1) {
@@ -313,8 +355,10 @@ export default {
       } else if (answer == "") {
       }
       let updateQuestionAnswer = await this.$axios.put(
-        `/apiproxy/solo-play/update-score&session_id=${sessionID}&question_id=${questionId}&user_id=${mswaliUserId}&user_response=timeout&user_text=${selectedchoice}&question=${questionNumber}&timeout=${timeoutValue}&correct=${answerValue}`,
+        `/apiproxy/solo-play/update-score&session_id=${this.sessionID}&question_id=${questionId}&user_id=${this.mswaliUserId}&user_response=timeout&user_text=${selectedchoice}&question=${questionNumber}&timeout=${timeoutValue}&correct=${answerValue}`,
       );
+      console.log(updateQuestionAnswer);
+      console.log("Answer posted to backend");
     },
     showMsgBoxTwo() {
       this.boxTwo = "";

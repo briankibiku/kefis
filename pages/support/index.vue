@@ -90,7 +90,7 @@
 
                   <div class="row d-flex justify-content-center">
                     <div>
-                      <a href="https://wa.me/254795583651" target="blank">
+                      <a href="https://wa.me/254794583651" target="blank">
                         <img
                           src="~/assets/whatsapp.png"
                           height="40"
