@@ -21,15 +21,18 @@ export default {
     };
   },
   mounted() {
-    this.updaScore();
-    this.endSessionFunction();
+    setTimeout(() => {
+      this.navigateToResults();
+      this.updateScore();
+      this.endSessionFunction();
+    }, 2000);
   },
   async fetch() {
     this.quiz = this.$store.state.triviaQuestions;
   },
 
   methods: {
-    updaScore() {
+    updateScore() {
       try {
         for (var i = 0; i < this.quiz.length; i++) {
           // illegal bandit should be removed once feature is stable
@@ -94,11 +97,13 @@ export default {
           `/apiproxy/${markfinishdgameurl}`,
         );
         this.showLoadingScore = false;
-        this.$router.push("/results");
       } catch (e) {
         console.log(e);
         console.log("Error marking session as complete");
       }
+    },
+    navigateToResults() {
+      this.$router.push("/results");
     },
   },
 };
