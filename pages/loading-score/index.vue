@@ -26,7 +26,7 @@ export default {
       console.log("Navigation done");
       this.updateScore();
       this.endSessionFunction();
-    }, 1000);
+    }, 4000);
   },
   async fetch() {
     this.quiz = this.$store.state.triviaQuestions;

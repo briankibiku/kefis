@@ -120,6 +120,7 @@ export default {
       }
     },
     async fetchSessionQuestions(sessionID) {
+      console.log(`SESSION ID WHILE GETTING QUESTIONS ${sessionID}`);
       try {
         let soloplayproxy = `solo-play/fetch-questions&session_id=${sessionID}  `;
         let sessionQuestionsResponse = await this.$axios.get(
@@ -138,6 +139,17 @@ export default {
         toaster: toaster,
         solid: true,
       });
+    },
+    errorGettingSessionToast(toaster) {
+      this.$bvToast.toast(
+        `We encoutered a problem while setting up your game, please try later`,
+        {
+          title: `Error`,
+          variant: "danger",
+          toaster: toaster,
+          solid: true,
+        },
+      );
     },
     errorToast(toaster) {
       this.$bvToast.toast(
@@ -224,6 +236,11 @@ export default {
         await this.persistCanWinStatus(
           this.$store.state.sessionDetails.can_win,
         );
+        console.log(`SESSION FETCHED `);
+        console.log(sessionResponse.data.session.id);
+        console.log(
+          `SESSION IN STTAE ${this.$store.state.sessionDetails.session.id}`,
+        );
         this.banner = await this.$store.state.sessionDetails.banner;
         this.prize = await this.$store.state.sessionDetails.rate;
         let gameRate = this.$store.state.sessionDetails.session.rate;
@@ -290,7 +307,7 @@ export default {
         }
       } catch (e) {
         // stop loading
-        this.sessionIsNotLiveToast();
+        this.errorGettingSessionToast();
         await this.$store.dispatch("delayTwoSeconds");
         window.location.reload();
       }
