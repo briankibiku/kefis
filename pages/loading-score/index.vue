@@ -23,9 +23,10 @@ export default {
   mounted() {
     setTimeout(() => {
       this.navigateToResults();
+      console.log("Navigation done");
       this.updateScore();
       this.endSessionFunction();
-    }, 2000);
+    }, 1000);
   },
   async fetch() {
     this.quiz = this.$store.state.triviaQuestions;

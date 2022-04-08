@@ -13,7 +13,7 @@
       ref="button"
       :disabled="busy"
       @click="
-        callback($event);
+        // callback($event);
         onClick();
         navigateToQuiz();
       "
