@@ -47,7 +47,6 @@
       -->
       <div>
         <RoundedGoldLoadingButton
-          @click="onSubmit()"
           buttonText="Play Again"
           style="font-size: 24px; font-weight: bold; margin-bottom: 20px"
         />
@@ -98,6 +97,16 @@ export default {
       totalTimeouts: this.$store.state.trivia_score.timeouts,
       unAttempted: 0,
       // token: nuxtStorage.localStorage.getItem('Token')
+    };
+  },
+  mounted() {
+    window.location.hash = "no-back-button";
+    // Again because Google Chrome doesn't insert
+    // the first hash into the history
+    window.location.hash = "Again-No-back-button";
+
+    window.onhashchange = function () {
+      window.location.hash = "no-back-button";
     };
   },
   methods: {

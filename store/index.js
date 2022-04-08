@@ -223,6 +223,10 @@ export const actions = {
     const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
     await delay(2000);
   },
+  async delayHalfSeconds() {
+    const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
+    await delay(500);
+  },
   startPersistance({ commit }, payload) {
     commit("updateUserAnswers", payload);
     commit("updateUserAnswersPersistance", true);
