@@ -222,6 +222,14 @@ export default {
     ...mapActions({
       persistupdateUserAnswers: "persistupdateUserAnswers",
     }),
+
+    async preventBack() {
+      window.history.forward();
+    },
+    // // setTimeout(preventBack(), 0);
+    //  setTimeout(() => preventBack(), 2000);
+    // window.onunload=function(){null};
+
     lastQuestion(question_num) {
       if (question_num != question_num) {
         return true;
