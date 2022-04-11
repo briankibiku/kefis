@@ -274,7 +274,7 @@ export default {
         // user selected correct answer
         this.isCorrect = true;
       }
-      await this.$store.dispatch("delayHalfSeconds"),
+      await this.$store.dispatch("delayFourSeconds"),
         await this.goToNextQuestion(answer, selectedchoice);
       this.forceRerender();
       this.resetTimer();

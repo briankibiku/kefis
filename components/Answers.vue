@@ -23,17 +23,8 @@
             <b-table
               striped
               hover
-              :items="this.userAnswers.resp"
+              :items="this.mergedAnswersList"
               :fields="fields"
-              :per-page="perPage"
-              :current-page="currentPage"
-            ></b-table>
-
-            <b-table
-              striped
-              hover
-              :items="this.items[0].picked"
-              :fields="answerfields"
               :per-page="perPage"
               :current-page="currentPage"
             ></b-table>
@@ -58,8 +49,7 @@ export default {
       mergedAnswersList: [],
       userHasNeverPlayed: false,
       isTable: false,
-      picked: [],
-      userAnswers: {},
+      userAnswers: [],
       items: [
         {
           question: [],
@@ -69,7 +59,12 @@ export default {
         },
       ],
       answerfields: [{ key: "picked", label: "Your Ans" }],
-      fields: ["question", "answer", { key: "label", label: "Answer" }],
+      fields: [
+        "question",
+        { key: "answer", label: "Answer" },
+        { key: "label", label: "Correct Choice" },
+        { key: "picked", label: "Your Choice" },
+      ],
     };
   },
   mounted() {
@@ -93,8 +88,12 @@ export default {
       this.userAnswers = await this.$axios.$get(
         `/apiproxy/solo-play/show-my-answers&msisdn=${loggedINPhone}`,
       );
+      this.mergedAnswersList = this.userAnswers.resp.map((item, i) =>
+        Object.assign({}, item, this.userAnswers.choices_picked[i]),
+      );
+      console.log(this.mergedAnswersList);
       for (let i = 0; i <= 9; i++) {
-        if (this.userAnswers.choices_picked[i].timeout === 1) {
+        if (this.mergedAnswersList.choices_picked[i].timeout === 1) {
           this.items[0].picked.push({ picked: "Timeout" });
         } else {
           this.items[0].picked.push({
