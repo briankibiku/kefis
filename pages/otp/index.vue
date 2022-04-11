@@ -322,7 +322,7 @@ export default {
             // update user authentication status
             await this.authenticateUser(true);
             if (this.$store.state.isExistingUser) {
-              // if it is not a new user redirect to home
+              // if it is not a new user redirect to home k
               await this.getuserName();
               // stop loading
               await this.goToHomePage();
