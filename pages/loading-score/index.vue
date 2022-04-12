@@ -22,10 +22,7 @@ export default {
   },
   mounted() {
     setTimeout(() => {
-      this.navigateToResults();
-      console.log("Navigation done");
       this.updateScore();
-      this.endSessionFunction();
     }, 4000);
   },
   async fetch() {
@@ -33,17 +30,35 @@ export default {
   },
 
   methods: {
-    updateScore() {
+    async updateScore() {
       try {
+        // console.log(parsedobj);
+        let decodedResponse = JSON.stringify(this.userAnswersList);
+        // post answers to backend
+        let postAnswerToBackendResponse = await this.$axios.post(
+          `/apiproxy/solo-play/update-session-score&resp=${decodedResponse}`,
+        );
+        if (postAnswerToBackendResponse.data.message === "response saved") {
+          console.log("answers posted to backend");
+          try {
+            this.endSessionFunction();
+            console.log("session closed");
+            this.navigateToResults();
+          } catch (e) {
+            console.log("Error ending session");
+          }
+        } else {
+          console.log("The answers could not be saved");
+        }
         for (var i = 0; i < this.quiz.length; i++) {
           // illegal bandit should be removed once feature is stable
-          this.updateAnswerOnBackend(
-            this.userAnswersList[i].question_number,
-            this.userAnswersList[i].correctAnswer,
-            this.userAnswersList[i].selectedchoice,
-            this.userAnswersList[i].question_id,
+          let answerPayload = this.userAnswersList;
+          await this.updateAnswerOnBackend(
+            answerPayload.userAnswersList[i].question_number,
+            answerPayload.userAnswersList[i].correctAnswer,
+            answerPayload.userAnswersList[i].picked,
+            answerPayload.userAnswersList[i].question_id,
           );
-          console.log(`Done positing answer for QN: ${i}`);
         }
       } catch (e) {
         console.log(e);
@@ -77,11 +92,9 @@ export default {
         await this.$store.commit("updateQuizTimeouts", this.timeouts);
       } else if (answer == "") {
       }
-      let updateQuestionAnswer = await this.$axios.put(
-        `/apiproxy/solo-play/update-score&session_id=${this.sessionID}&question_id=${questionId}&user_id=${this.mswaliUserId}&user_response=timeout&user_text=${selectedchoice}&question=${questionNumber}&timeout=${timeoutValue}&correct=${answerValue}`,
-      );
-      console.log(updateQuestionAnswer);
-      console.log("Answer posted to backend");
+      // let updateQuestionAnswer = await this.$axios.put(
+      //   `/apiproxy/solo-play/update-score&session_id=${this.sessionID}&question_id=${questionId}&user_id=${this.mswaliUserId}&user_response=timeout&user_text=${selectedchoice}&question=${questionNumber}&timeout=${timeoutValue}&correct=${answerValue}`,
+      // );
     },
     async endSessionFunction() {
       try {

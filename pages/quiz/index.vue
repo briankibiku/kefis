@@ -132,7 +132,11 @@ export default {
       canWin: true,
       error: null,
       dummyQuiz: [],
-      userAnswersList: [],
+      userAnswersPayload: {
+        userID: "",
+        gamesessionID: "",
+        userAnswersList: [],
+      },
       correctChoice: "",
       quiz: [],
       boxTwo: "",
@@ -226,10 +230,6 @@ export default {
     async preventBack() {
       window.history.forward();
     },
-    // // setTimeout(preventBack(), 0);
-    //  setTimeout(() => preventBack(), 2000);
-    // window.onunload=function(){null};
-
     lastQuestion(question_num) {
       if (question_num != question_num) {
         return true;
@@ -280,6 +280,15 @@ export default {
       this.resetTimer();
       this.showFeedback = false;
     },
+    userResponseLogic(correct) {
+      if (correct === 1) {
+        return "correct";
+      } else if (correct === 0) {
+        return "wrong";
+      } else {
+        return "timeout";
+      }
+    },
     // Logic to loop through questions goes here
     async goToNextQuestion(correct, selectedchoice) {
       this.isDisabled = false;
@@ -288,60 +297,33 @@ export default {
       if (this.counter < this.quiz.length - 1) {
         this.counter += 1;
         let answerObject = {
-          selectedchoice: selectedchoice,
           correctAnswer: correct,
-          question_number: this.counter,
           question_id: this.quiz[this.counter].question_id,
+          question_number: this.counter,
+          userResponse: this.userResponseLogic(correct),
+          picked: selectedchoice ? selectedchoice : "timeout",
+          correct: correct,
+          timeout: this.userResponseLogic(correct) == "timeout" ? 1 : 0,
         };
-        this.userAnswersList.push(answerObject);
+        this.userAnswersPayload.userAnswersList.push(answerObject);
       } else if (this.counter <= this.quiz.length) {
         this.showLoadingScore = true;
         let answerObject = {
-          question_number: (this.counter += 1),
-          selectedchoice: selectedchoice,
           correctAnswer: correct,
           question_id: this.quiz[this.counter - 1].question_id,
+          question_number: (this.counter += 1),
+          userResponse: this.userResponseLogic(correct),
+          picked: selectedchoice ? selectedchoice : "timeout",
+          correct: correct,
+          timeout: this.userResponseLogic(correct) == "timeout" ? 1 : 0,
         };
-        this.userAnswersList.push(answerObject);
-        let parsedobj = JSON.parse(JSON.stringify(this.userAnswersList));
-        console.log(parsedobj);
+        this.userAnswersPayload.userAnswersList.push(answerObject);
+        this.userAnswersPayload.userID = this.mswaliUserId;
+        this.userAnswersPayload.gamesessionID = this.sessionID;
+        let parsedobj = JSON.parse(JSON.stringify(this.userAnswersPayload));
 
         await this.persistupdateUserAnswers(parsedobj);
         this.$router.push("/loading-score");
-        // post all answers here
-        // try {
-        //   for (var i = 0; i < this.quiz.length; i++) {
-        //     // illegal bandit should be removed once feature is stable
-        //     await this.updateAnswerOnBackend(
-        //       this.userAnswersList[i].question_number,
-        //       this.userAnswersList[i].correctAnswer,
-        //       this.userAnswersList[i].selectedchoice,
-        //       this.userAnswersList[i].question_id,
-        //     );
-        //   }
-        // } catch (e) {
-        //   console.log(e);
-        //   console.log("Posting answers to backend error");
-        // }
-        // try {
-        //   let markplayedsessionurl = `solo-play/mark-played-session&user_id=${this.mswaliUserId}&session_id=${this.sessionID}`;
-        //   let markPlayedSession = await this.$axios.post(
-        //     `/apiproxy/${markplayedsessionurl}`,
-        //   );
-        //   let postplayerinsessionurl = `solo-play/post-player-in-session&user_id=${this.mswaliUserId}&session_id=${this.sessionID}`;
-        //   let trackPlayerSession = await this.$axios.post(
-        //     `/apiproxy/${postplayerinsessionurl}`,
-        //   );
-        //   let markfinishdgameurl = `solo-play/mark-finished-game&user_id=${this.mswaliUserId}&session_id=${this.sessionID}`;
-        //   let markFinishedGame = await this.$axios.post(
-        //     `/apiproxy/${markfinishdgameurl}`,
-        //   );
-        //   this.showLoadingScore = false;
-        //   this.$router.push("/results");
-        // } catch (e) {
-        //   console.log(e);
-        //   console.log("Error marking session as complete");
-        // }
       }
     },
     async updateAnswerOnBackend(
@@ -350,7 +332,6 @@ export default {
       selectedchoice,
       questionId,
     ) {
-      // let questionId = this.quiz[this.counter].question_id;
       let answerValue;
       let timeoutValue;
       if (answer === 1) {
