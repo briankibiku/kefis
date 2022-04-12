@@ -40,11 +40,9 @@
       <p class="heading3">
         Points Earned: <strong> {{ this.myScore }} </strong>
       </p>
-      <!--
       <p class="heading3">
         View your answers <u><a href="/my-answers">here</a></u>
       </p>
-      -->
       <div>
         <RoundedGoldLoadingButton
           buttonText="Play Again"
