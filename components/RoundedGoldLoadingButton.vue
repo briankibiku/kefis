@@ -115,12 +115,10 @@ export default {
         await this.persistUserCredits(walletCreditsFromAPI);
         this.walletBalanceFromAPI = this.$store.state.walletBalance;
       } catch (e) {
-        console.log(e);
         this.errorToast();
       }
     },
     async fetchSessionQuestions(sessionID) {
-      console.log(`SESSION ID WHILE GETTING QUESTIONS ${sessionID}`);
       try {
         let soloplayproxy = `solo-play/fetch-questions&session_id=${sessionID}  `;
         let sessionQuestionsResponse = await this.$axios.get(
@@ -128,7 +126,6 @@ export default {
         );
         await this.persistTriviaQuestions(sessionQuestionsResponse.data.data);
       } catch (e) {
-        console.log(e);
         this.errorToast();
       }
     },
@@ -235,11 +232,6 @@ export default {
         await this.persistSessionDetails(sessionResponse.data);
         await this.persistCanWinStatus(
           this.$store.state.sessionDetails.can_win,
-        );
-        console.log(`SESSION FETCHED `);
-        console.log(sessionResponse.data.session.id);
-        console.log(
-          `SESSION IN STTAE ${this.$store.state.sessionDetails.session.id}`,
         );
         this.banner = await this.$store.state.sessionDetails.banner;
         this.prize = await this.$store.state.sessionDetails.rate;
