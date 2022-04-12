@@ -88,19 +88,18 @@ export default {
       this.userAnswers = await this.$axios.$get(
         `/apiproxy/solo-play/show-my-answers&msisdn=${loggedINPhone}`,
       );
-      this.mergedAnswersList = this.userAnswers.resp.map((item, i) =>
-        Object.assign({}, item, this.userAnswers.choices_picked[i]),
-      );
-      console.log(this.mergedAnswersList);
-      for (let i = 0; i <= 9; i++) {
-        if (this.mergedAnswersList.choices_picked[i].timeout === 1) {
+      for (let i = 0; i < this.userAnswers.resp.length; i++) {
+        if (this.userAnswers.choices_picked[i].timeout === 1) {
           this.items[0].picked.push({ picked: "Timeout" });
-        } else {
+        } else if (this.userAnswers.choices_picked[i].timeout === 0) {
           this.items[0].picked.push({
             picked: this.userAnswers.choices_picked[i].picked,
           });
         }
       }
+      this.mergedAnswersList = this.userAnswers.resp.map((item, i) =>
+        Object.assign({}, item, this.items[0].picked[i]),
+      );
       if (this.userAnswers.has_played) {
         this.questionAnswers2 = this.userAnswers.resp;
         // this.fillItemsList();
