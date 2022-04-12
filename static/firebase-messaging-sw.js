@@ -20,13 +20,14 @@ const messaging = firebase.messaging();
 
 messaging.onBackgroundMessage(function (payload) {
   console.log('Received background message ', payload);
+  console.log(payload)
   const notification = payload.data;
   const notificationTitle = notification.title;
   const notificationOptions = {
     body: notification.body,
-    icon: '~/static/icon.png'
+    icon: 'https://drive.google.com/uc?export=view&id=1POv_L5u3szPLhs9aFAjFomGINTo4ds3n'
   };
-
+  self.registration.hideNotification();
   self.registration.showNotification(notificationTitle,
     notificationOptions);
 });
