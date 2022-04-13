@@ -60,11 +60,39 @@ export default {
             answerPayload.userAnswersList[i].question_id,
           );
         }
+        await this.awardWinner();
       } catch (e) {
         console.log(e);
         console.log("Posting answers to backend error");
       }
       //
+    },
+    async awardWinner() {
+      let correctAttempts = this.$store.state.trivia_score.correct;
+      try {
+        if (correctAttempts == 9) {
+          let awardPrize = this.$store.state.sessionDetails.session.prize;
+          let mswaliUserId = this.$store.state.mswaliId;
+          let sessionID = this.$store.state.sessionDetails.session.id;
+          // update trackwinner
+          let trackUserResponse = await this.$axios.post(
+            `/apiproxy/solo-play/post-winner&user_id=${mswaliUserId}&session_id=${sessionID}`,
+          );
+          // award winner game play amount of the sessionl
+          let awardUserResponse = await this.$axios.post(
+            `/apiproxy/api/give-prize&user_id=${mswaliUserId}&amount=${awardPrize}`,
+          );
+          this.$store.commit("updateQuizScore", "");
+          this.$store.commit("updateQuizWrongs", "");
+          this.$store.commit("updateQuizTimeouts", "");
+          this.makeToast(), await this.$store.dispatch("delayTwoSeconds");
+          this.$router.push("/home");
+        } else {
+          console.log("you are not a winner");
+        }
+      } catch (e) {
+        console.log("Error encountered while awarding winner");
+      }
     },
     async updateAnswerOnBackend(
       questionNumber,

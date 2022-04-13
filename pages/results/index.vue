@@ -109,29 +109,11 @@ export default {
   },
   methods: {
     async onSubmit() {
-      if (this.correctAttempts == 9) {
-        let awardPrize = this.$store.state.sessionDetails.session.prize;
-        let mswaliUserId = this.$store.state.mswaliId;
-        let sessionID = this.$store.state.sessionDetails.session.id;
-        // update trackwinner
-        let trackUserResponse = await this.$axios.post(
-          `http://cms.mswali.co.ke/mswali/mswali_app/backend/web/index.php?r=solo-play/post-winner&user_id=${mswaliUserId}&session_id=${sessionID}`,
-        );
-        // award winner game play amount of the sessionl
-        let awardUserResponse = await this.$axios.post(
-          `http://cms.mswali.co.ke/mswali/mswali_app/backend/web/index.php?r=api/give-prize&user_id=${mswaliUserId}&amount=${awardPrize}`,
-        );
-      } else {
-        this.$store.commit("updateQuizScore", "");
-        this.$store.commit("updateQuizWrongs", "");
-        this.$store.commit("updateQuizTimeouts", "");
-        // track user
-        // let trackUserResponse = await this.$axios.post(
-        //   `http://cms.mswali.co.ke/mswali/mswali_app/backend/web/index.php?r=solo-play/post-winner&user_id=${mswaliUserId}&session_id=${sessionID}`,
-        // );
-        this.makeToast(), await this.$store.dispatch("delayTwoSeconds");
-        this.$router.push("/home");
-      }
+      this.$store.commit("updateQuizScore", "");
+      this.$store.commit("updateQuizWrongs", "");
+      this.$store.commit("updateQuizTimeouts", "");
+      this.makeToast(), await this.$store.dispatch("delayTwoSeconds");
+      this.$router.push("/home");
     },
     makeToast(toaster) {
       this.$bvToast.toast("Thanks for playing, please play again", {
