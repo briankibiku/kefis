@@ -98,6 +98,18 @@
       </div>
     </button>
     <button
+      class="rounded-button-transparent"
+      @click="feedback()"
+      style="text-align: left; background-color: transparent"
+    >
+      <div class="menu">
+        <!--
+        <font-awesome-icon :icon="['fas', 'share']" /> 
+      -->
+        Feedback
+      </div>
+    </button>
+    <button
       @click="logOut()"
       class="rounded-button-transparent"
       style="
@@ -153,6 +165,9 @@ export default {
     },
     navigateToHome() {
       return this.$router.push("/home");
+    },
+    feedback() {
+      return this.$router.push("/feedback");
     },
     navigateToBuySubscription() {
       return this.$router.push("/buy-subscription");

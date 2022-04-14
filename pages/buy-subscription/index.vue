@@ -10,7 +10,7 @@
           <div class="row" style="padding-left: 0px">
             <div>
               <!-- salutations, wallet card, statistics cards go here -->
-              <div class="d-flex flex-row" style="margin-inline: 10em">
+              <div class="d-flex flex-row" style="margin: auto">
                 <BuySubscriptionComponent />
               </div>
             </div>

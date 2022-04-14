@@ -7,9 +7,53 @@ export const state = () => ({
       value: "music",
     },
   ],
+  survey: [
+    {
+      id: 1,
+      question: "How would you feel if you could no longer play mSwali?",
+      choices: [
+        {
+          choice: "Very disappointed",
+          index: "1"
+        },
+        {
+          choice: "Somewhat disappointed",
+          index: "2"
+        },
+        {
+          choice: "Not disappointed",
+          index: "3"
+        },
+      ],
+    },
+    {
+      id: 2,
+      question:
+        "Rate your mSwali Quiz experience with 0 being the lowest and 10 the Highest",
+      choices: [
+        {
+          choice: "0 to 3 Horrible",
+          index: "1"
+        },
+        {
+          choice: "4 to 5 Poor",
+          index: "2"
+        },
+        {
+          choice: "6 to 8 Okay",
+          index: "3"
+        },
+        {
+          choice: "9 to 10 Excellent",
+          index: "4"
+        },
+      ],
+    },
+  ],
   test_quiz: {
     data: [
       {
+        question_id: "1234",
         question: "Who sang the line 'Nchi ya kitu kidogo 1'?",
         choices: [
           {
@@ -33,7 +77,7 @@ export const state = () => ({
             correct: false,
           },
         ],
-      },
+      }
     ],
   },
 

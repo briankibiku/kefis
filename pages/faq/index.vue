@@ -1,8 +1,7 @@
 <template>
   <div>
     <AppWrapper requiresSmallAndLargeScreenViews="false">
-      <template v-slot:large-screen>
-        <Faq /> </template
+      <template v-slot:large-screen> <Faq /> </template
     ></AppWrapper>
   </div>
 </template>

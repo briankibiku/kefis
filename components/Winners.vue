@@ -72,7 +72,6 @@
             aria-controls="my-table"
           ></b-pagination>
         </div>
-        <a href="/home" style="color: #bbb">Home</a>
       </div>
     </div>
   </div>

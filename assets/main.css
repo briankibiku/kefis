@@ -495,7 +495,7 @@ p {
 .wallet-card {
   margin-bottom: 20px;
   padding: 20px;
-  width: 84vw;
+  width: 84%;
   border-radius: 15px;
   box-shadow: 0 0 50px #ccc;
 }

@@ -3,27 +3,9 @@
     <!--Big screen device code begins here-->
     <div
       class="d-none d-md-block d-lg-none d-none d-lg-block d-xl-none d-none d-xl-block"
-      style="padding: 40px"
+      style="padding: 0px"
     >
-      <div class="row" style="padding-left: 50px">
-        <!--Big screen sidebar navigation starts here-->
-        <div
-          id="col1"
-          style="
-            justify-content: center;
-            align-items: center;
-            text-align: center;
-          "
-        >
-          <div style="text-align: left">
-            <NuxtLink to="/home">
-              <LogoPurple style="height: 27px; width: 120px" />
-            </NuxtLink>
-          </div>
-          <LargeScreenNavBar />
-        </div>
-        <!--Big screen sidebar navigation starts here-->
-
+      <div class="row">
         <div id="col2">
           <!-- salutations, wallet card, statistics cards go here -->
           <div class="d-flex flex-row">
@@ -108,8 +90,7 @@
     </div>
     <!--Small screen begins here-->
     <div class="d-block d-sm-none d-none d-sm-block d-md-none">
-      <div class="painted-background" style="padding: 20px">
-        <NavigationBar />
+      <div style="padding: 20px">
         <div>
           <div class="row" style="padding-left: 20px">
             <div class="col-3">
@@ -144,7 +125,7 @@
           </div>
           <hr />
 
-          <div class="wallet-card">
+          <div class="wallet-card" style="margin: auto; width: 100%">
             <div
               class="d-flex flex-row padding-10 justify-content-between"
               style="margin-bottom: 10px"
@@ -246,11 +227,13 @@ export default {
   computed: {
     ...mapState({
       walletBalance: "walletBalance",
+      userCredits: "userCredits",
     }),
   },
   methods: {
     ...mapActions({
       persistwalletBalance: "persistwalletBalance",
+      persistUserCredits: "persistUserCredits",
     }),
     async daySalutatuins() {
       var d = new Date();

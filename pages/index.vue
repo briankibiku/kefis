@@ -54,9 +54,9 @@ export default {
     this.$nextTick(() => {
       this.$nuxt.$loading.start();
       if (this.$store.state.isAuthenticated) {
-        setTimeout(() => (window.location.href = "/home"), 2000);
+        setTimeout(() => (window.location.href = "/home"), 500);
       } else {
-        setTimeout(() => (window.location.href = "/login"), 2000);
+        setTimeout(() => (window.location.href = "/login"), 500);
       }
     });
   },

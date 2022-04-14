@@ -121,118 +121,101 @@
 
     <!--Small screen device code begins here-->
     <div class="d-block d-sm-none d-none d-sm-block d-md-none" v-if="!loading">
-      <div class="painted-background" style="padding: 20px">
+      <div class="painted-background text-center">
         <NavigationBar />
-        <div>
-          <div class="row" style="padding-left: 20px">
-            <div class="col-3">
-              <b-avatar variant="light"></b-avatar>
+        <!--Salutations go here-->
+        <div class="row" style="padding: 20px; margin: auto">
+          <div class="col-3">
+            <b-avatar variant="light"></b-avatar>
+          </div>
+          <div class="col-6" style="text-align: left">
+            <Salutations />
+          </div>
+          <div
+            class="col-3"
+            style="
+              width: 50px;
+              height: 50px;
+              justify-content: center;
+              align-items: center;
+              text-align: center;
+              display: flex;
+              border-radius: 10px;
+            "
+          >
+            <font-awesome-icon :icon="['fas', 'bell']" style="color: #160d3d" />
+          </div>
+        </div>
+        <!--Day quiz info-->
+        <div class="wallet-card text-center" style="margin: auto; width: 80%">
+          <div>
+            <div class="subheading2">
+              {{ banner }}
             </div>
-
-            <div class="col-6" style="text-align: left">
-              <Salutations />
-            </div>
-            <div
-              class="col-3"
-              style="
-                width: 50px;
-                height: 50px;
-                justify-content: center;
-                align-items: center;
-                text-align: center;
-                display: flex;
-                border-radius: 10px;
-              "
-            >
-              <font-awesome-icon
-                :icon="['fas', 'bell']"
-                style="color: #160d3d"
-              />
+            <div class="center-align-content heading2 prize-card">
+              KES {{ prize }}
             </div>
           </div>
         </div>
-        <div class="row">
-          <div class="center-align-content">
-            <div class="col">
-              <!--Day quiz info-->
-              <div class="wallet-card" style="width: 80vw">
-                <div>
-                  <div class="subheading2">
-                    {{ banner }}
-                  </div>
-                  <div class="center-align-content heading2 prize-card">
-                    KES {{ prize }}
-                  </div>
-                </div>
-              </div>
-              <!-- start quiz button -->
-              <div class="col" style="margin-inline: 20px; width: 100%">
-                <RoundedGoldLoadingButton
-                  buttonText="Play NOW to WIN"
-                  showIcon="true"
-                  style="font-size: 24px; font-weight: bold"
+        <br />
+        <!--Play Quiz button-->
+        <RoundedGoldLoadingButton
+          buttonText="Play NOW to WIN"
+          showIcon="true"
+          style="font-size: 24px; font-weight: bold"
+        />
+        <br />
+        <br />
+        <!-- wallet card go here -->
+        <div class="wallet-card" style="margin: auto; width: 80%">
+          <div class="d-flex justify-content-between">
+            <div class="subheading1">Wallet Balance</div>
+            <div>
+              <b-button
+                style="background-color: transparent; border: none"
+                @click="toggleShowBalance()"
+              >
+                <font-awesome-icon
+                  :icon="['fas', 'eye']"
+                  style="color: #91919f"
                 />
-              </div>
-              <!-- wallet card go here -->
-              <div class="wallet-card" style="width: 80vw">
-                <div class="d-flex justify-content-between">
-                  <div class="subheading1">Wallet Balance</div>
-                  <div>
-                    <b-button
-                      style="background-color: transparent; border: none"
-                      @click="toggleShowBalance()"
-                    >
-                      <font-awesome-icon
-                        :icon="['fas', 'eye']"
-                        style="color: #91919f"
-                      />
-                    </b-button>
-                  </div>
-                </div>
-                <div class="heading2" v-if="showBalance">
-                  KES {{ this.walletBalanceFromAPI }}
-                </div>
-                <div v-if="!showBalance">
-                  <div
-                    class="heading4"
-                    style="
-                      font-size: 24px;
-                      font-weight: 800;
-                      font-family: 'Nunito Sans', sans-serif;
-                      color: #160d3d;
-                    "
-                  >
-                    ******
-                  </div>
-                </div>
-                <div class="subheading4">
-                  Credits: {{ this.creditsBalanceFromState }}
-                </div>
-                <b-button class="outline-button" href="/deposit"
-                  >Deposit</b-button
-                >
-              </div>
-
-              <!-- stats card go here -->
-              <div
-                class="scrollable"
-                style="display: flex; flex-direction: row"
-              >
-                <div>
-                  <img src="~/assets/stats.svg" alt="" height="220px" />
-                </div>
-              </div>
-              <!-- promo & ads card go here -->
-              <div
-                class="scrollable"
-                style="display: flex; flex-direction: row"
-              >
-                <img src="~/assets/promo.svg" height="220px" />
-                <img src="~/assets/promo_two.svg" height="220px" />
-                <img src="~/assets/promo_three.svg" height="220px" />
-              </div>
+              </b-button>
             </div>
           </div>
+          <div class="heading2" v-if="showBalance">
+            KES {{ this.walletBalanceFromAPI }}
+          </div>
+          <div v-if="!showBalance">
+            <div
+              class="heading4"
+              style="
+                font-size: 24px;
+                font-weight: 800;
+                font-family: 'Nunito Sans', sans-serif;
+                color: #160d3d;
+              "
+            >
+              ******
+            </div>
+          </div>
+          <div class="subheading4">
+            Credits: {{ this.creditsBalanceFromState }}
+          </div>
+          <b-button class="outline-button" href="/deposit">Deposit</b-button>
+        </div>
+        <br />
+
+        <!-- stats card go here -->
+        <div class="scrollable" style="display: flex; flex-direction: row">
+          <div>
+            <img src="~/assets/stats.svg" alt="" height="220px" />
+          </div>
+        </div>
+        <!-- promo & ads card go here -->
+        <div class="scrollable" style="display: flex; flex-direction: row">
+          <img src="~/assets/promo.svg" height="220px" />
+          <img src="~/assets/promo_two.svg" height="220px" />
+          <img src="~/assets/promo_three.svg" height="220px" />
         </div>
       </div>
     </div>
@@ -251,6 +234,7 @@ import RoundedCyanLoadingButton from "../../components/Buttons/RoundedCyanLoadin
 import Salutations from "../../components/Salutations.vue";
 import RoundedGoldLoadingButton from "../../components/RoundedGoldLoadingButton.vue";
 import ConfirmationModal from "../../components/ConfirmationModal.vue";
+import NavigationBar from "../../components/NavigationBar/index.vue";
 export default {
   data() {
     return {
@@ -465,6 +449,7 @@ export default {
     Salutations,
     RoundedGoldLoadingButton,
     ConfirmationModal,
+    NavigationBar,
   },
 };
 </script>

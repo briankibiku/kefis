@@ -1,7 +1,10 @@
 <template>
-  <Wallet />
+  <AppWrapper requiresSmallAndLargeScreenViews="false">
+    <template v-slot:large-screen>
+      <Wallet />
+    </template>
+  </AppWrapper>
 </template>
 <script>
-export default {
-};
+export default {};
 </script>
