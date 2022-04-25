@@ -29,6 +29,7 @@
 
 <script>
 import { mapState, mapActions } from "vuex";
+import ls from "localstorage-slim";
 export default {
   data() {
     return {
@@ -124,18 +125,24 @@ export default {
         let sessionQuestionsResponse = await this.$axios.get(
           `/apiproxy/${soloplayproxy}`,
         );
-        await this.persistTriviaQuestions(sessionQuestionsResponse.data.data);
+        ls.set("triviaQuestionsList", sessionQuestionsResponse.data.data, {
+          encrypt: true,
+        });
+        await this.persistTriviaQuestions(ls.get("triviaQuestionsList"));
       } catch (e) {
         this.errorToast();
       }
     },
     sessionIsNotLiveToast(toaster) {
-      this.$bvToast.toast(`The game will be on from 10AM-10PM, check later`, {
-        title: `Session is not Live`,
-        variant: "danger",
-        toaster: toaster,
-        solid: true,
-      });
+      this.$bvToast.toast(
+        `The game will be on from 10AM-10PM, check later thanks`,
+        {
+          title: `Session is not Live`,
+          variant: "danger",
+          toaster: toaster,
+          solid: true,
+        },
+      );
     },
     errorGettingSessionToast(toaster) {
       this.$bvToast.toast(

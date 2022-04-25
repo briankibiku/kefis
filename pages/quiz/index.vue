@@ -96,10 +96,11 @@
 </template>
 
 <script>
+import ls from "localstorage-slim";
 import { mapState, mapActions } from "vuex";
-import RoundedCyanLoadingButton from "../../components/Buttons/RoundedCyanLoadingButton.vue";
 import BaseTimer from "../../components/BaseTimer.vue";
 import ConfirmationModal from "../../components/ConfirmationModal.vue";
+import RoundedCyanLoadingButton from "../../components/Buttons/RoundedCyanLoadingButton.vue";
 
 const FULL_DASH_ARRAY = 283;
 const WARNING_THRESHOLD = 7;
@@ -154,7 +155,8 @@ export default {
     };
   },
   async fetch() {
-    this.quiz = this.$store.state.triviaQuestions;
+    let trivia = ls.get("triviaQuestionsList", { decrypt: true });
+    this.quiz = trivia;
   },
   watch: {
     timeLeft(newValue) {
