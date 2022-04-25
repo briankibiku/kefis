@@ -48,12 +48,21 @@
               >Share</span
             ></b-nav-item
           >
+          <b-nav-item href="/feedback"
+            ><span class="heading4" style="color: #160d3d"
+              >Feedback</span
+            ></b-nav-item
+          >
           <b-button
             @click="logOut()"
             style="background-color: transparent; color: #160d3d; border: none"
           >
             <span class="heading4"> Logout </span>
           </b-button>
+          <RoundedGoldLoadingButton
+            buttonText="Play NOW to WIN"
+            style="font-size: 16px; font-weight: bold"
+          />
         </b-navbar-nav>
         <!-- <b-navbar-nav class="ml-auto">
           <b-nav-item-dropdown style="color: #160d3d" right>
@@ -73,6 +82,7 @@
 
 <script>
 import { mapState, mapActions } from "vuex";
+import RoundedGoldLoadingButton from "../RoundedGoldLoadingButton.vue";
 export default {
   head: {
     title: "Home",
@@ -89,7 +99,6 @@ export default {
       },
     ],
   },
-
   computed: {
     ...mapState({
       sessionDetails: "sessionDetails",
@@ -125,6 +134,7 @@ export default {
       return this.$router.push("/login");
     },
   },
+  components: { RoundedGoldLoadingButton },
 };
 </script>
 <style>

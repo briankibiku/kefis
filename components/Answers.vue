@@ -88,6 +88,7 @@ export default {
       this.userAnswers = await this.$axios.$get(
         `/apiproxy/solo-play/show-my-answers&msisdn=${loggedINPhone}`,
       );
+      let userAnswersz = { resp: [] };
       for (let i = 0; i < this.userAnswers.resp.length; i++) {
         if (this.userAnswers.choices_picked[i].timeout === 1) {
           this.items[0].picked.push({ picked: "Timeout" });

@@ -114,7 +114,7 @@ export default {
     }, integrations: [
       new BrowserTracing({
         routingInstrumentation: Sentry.vueRouterInstrumentation(router),
-        tracingOrigins: ["localhost", "https://quiz.mswali.co.ke", /^\//],
+        tracingOrigins: ["https://quiz.mswali.co.ke", /^\//],
       }),
     ],
     // Set tracesSampleRate to 1.0 to capture 100%

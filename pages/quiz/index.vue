@@ -75,10 +75,10 @@
                       v-on:click="showCorrectAnswer(item.correct, item.choice)"
                       :disabled="isDisabled"
                     >
-                      <span v-if="item.correct" class="text-choice">
+                      <span v-if="item.correct">
                         {{ item.choice }} . {{ item.answer_text }}</span
                       >
-                      <span v-else class="text-choice">
+                      <span v-else>
                         {{ item.choice }} . {{ item.answer_text }}
                       </span>
                     </button>
@@ -402,11 +402,10 @@ export default {
   transform: translate(-50%, -50%);
 }
 .text-choice {
-  font-style: normal;
-  font-weight: normal;
-  font-size: 14px;
+  font-size: 1.2em;
   line-height: 14px;
-
+  font-weight: 500;
+  font-family: "Nunito Sans", sans-serif;
   /* identical to box height, or 100% */
   letter-spacing: 0.02em;
 }
@@ -416,10 +415,9 @@ export default {
   text-align: center;
 }
 .quiz-content {
-  /* position: absolute; */
   padding: 20px;
   margin-top: 0px;
-  height: 100vh;
+  min-height: 100vh;
   width: 100%;
   background-color: #160d3d;
 }

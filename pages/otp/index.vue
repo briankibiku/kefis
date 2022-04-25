@@ -250,6 +250,17 @@ export default {
         solid: true,
       });
     },
+    verifyrequestError(toaster, variant = "danger") {
+      this.$bvToast.toast(
+        "We encountered an error while trying to verify your OTP, please retry again",
+        {
+          title: `Error`,
+          variant: variant,
+          toaster: toaster,
+          solid: true,
+        },
+      );
+    },
     emptyOTPFieldError(toaster) {
       this.$bvToast.toast("Enter OTP field, it is required", {
         title: `OTP field required`,
@@ -333,11 +344,12 @@ export default {
               await this.goToHomePage();
             }
           } else {
-            await this.app.$toast;
+            this.verifyOTPError();
+            this.forceRerender();
           }
         } catch (err) {
           // stop loading
-          this.verifyOTPError();
+          this.verifyrequestError();
           this.forceRerender();
         }
       } else {
