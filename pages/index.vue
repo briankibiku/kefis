@@ -9,6 +9,7 @@
           <br />
           <br />
           <p>@copyright mSwali {{ this.currentYear }}</p>
+          <p>v0.0.1</p>
         </div>
       </div>
     </div>
