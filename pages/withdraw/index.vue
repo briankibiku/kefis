@@ -182,7 +182,6 @@ export default {
             this.balanceAfterWithdraw = parseInt(this.balanceAfterWithdraw);
             if (this.balanceAfterWithdraw < 0) {
               // decline  withdrawal request
-              this.loading = false;
               await this.withdrawErrorToast();
               await this.$store.dispatch("delayTwoSeconds");
               await this.$router.push("/wallet");
