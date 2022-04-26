@@ -305,25 +305,6 @@ export default {
         showModal = false;
       }
     },
-    async deductGameSession() {
-      // deduct a session from the user
-      let deductsessionproxy = `api/deduct-free-games&user_id=${this.mswaliUserId}`;
-      let deductGameSessionResponse = await this.$axios.post(
-        `/apiproxy/${deductsessionproxy}`,
-      );
-      if (
-        deductGameSessionResponse.data.status_message ===
-        "daily plan balance updated"
-      ) {
-        await this.infoToast();
-        await this.$store.dispatch("delayTwoSeconds");
-        await this.$router.push("/quiz");
-      } else {
-        await this.errorToast();
-        await this.$store.dispatch("delayFiveSeconds");
-        await this.$router.push("/home");
-      }
-    },
     errorToast(toaster) {
       this.$bvToast.toast(
         `We encountered an error while processing your request, try again later`,

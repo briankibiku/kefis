@@ -138,14 +138,14 @@ export default {
         let sessionID = this.$store.state.sessionDetails.session.id;
         let isSessionLive = this.$store.state.sessionDetails.live;
         if (isSessionLive) {
-          if (userWalletBalance.data.data >= 50) {
+          if (userWalletBalance.data.data >= gameRate) {
             // step 6 if user has no credits and wallet balance >= rate notify user of insufficient balance
             // TODO: deduct the balance froom the wallet
             let gameratesubscriptionurl = `api/game-play&user_id=${this.mswaliUserId}&amount=50`;
             let dailyPlanResponse = await this.$axios.post(
               `/apiproxy/${gameratesubscriptionurl}`,
             );
-            if (dailyPlanResponse.data == null) {
+            if (dailyPlanResponse.data.status) {
               await this.fetchSessionQuestions(sessionID);
               await this.infoToast();
               await this.$store.dispatch("delayFiveSeconds");
@@ -194,7 +194,7 @@ export default {
             let gamePlayResponse = await this.$axios.post(
               `/apiproxy/${gameplay100url}`,
             );
-            if (gamePlayResponse.data == null) {
+            if (gamePlayResponse.data.status) {
               // subscribe to 4 sessions
               let dailyplanurl = `api/daily-plan&user_id=${this.mswaliUserId}`;
               let basicPlanResponse = await this.$axios.post(
@@ -253,7 +253,7 @@ export default {
             let gameplay200response = await this.$axios.post(
               `/apiproxy/${gameplay200url}`,
             );
-            if (gameplay200response.data == null) {
+            if (gameplay200response.data.status) {
               // subscribe to 10 sessions
               let premiumplanurl = `api/premium-daily-plan&user_id=${this.mswaliUserId}`;
               let premiumPlanResponse = await this.$axios.post(
