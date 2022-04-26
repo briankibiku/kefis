@@ -210,8 +210,6 @@ export default {
       let deductGameSessionResponse = await this.$axios.post(
         `/apiproxy/${deductsessionproxy}`,
       );
-      console.log("deductGameSessionResponse");
-      console.log(deductGameSessionResponse);
       if (
         deductGameSessionResponse.data.status_message ===
           "daily plan balance updated" ||
