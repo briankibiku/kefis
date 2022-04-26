@@ -191,20 +191,22 @@ export default {
               this.phoneNumber = this.$store.state.loggedinUserPhone;
               let withdrawurl = `api/log-payment-request&msisdn=${this.phoneNumber}&amount=${this.withdrawAmount}&type=WITHDRAWAL`;
               let res = await this.$axios.post(`/apiproxy/${withdrawurl}`);
-              if (res.data == "Successful") {
+              console.log("Wallet BALANCE");
+              console.log(res);
+              if (res.data.status) {
                 await this.persistwalletBalance(this.balanceAfterWithdraw);
-                await this.$store.dispatch("delay");
                 await this.withdrawSuccessfulToast();
+                await this.$store.dispatch("delayFourSeconds");
                 await this.$router.push("/wallet");
               } else {
                 await this.withdrawErrorToast();
-                await this.$store.dispatch("delayTwoSeconds");
+                await this.$store.dispatch("delayFourSeconds");
                 await this.$router.push("/wallet");
               }
             }
           } catch (err) {
             await this.withdrawErrorToast();
-            await this.$store.dispatch("delayTwoSeconds");
+            await this.$store.dispatch("delayFourSeconds");
             await this.$router.push("/wallet");
           }
         } else {
