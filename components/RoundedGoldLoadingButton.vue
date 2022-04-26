@@ -210,9 +210,12 @@ export default {
       let deductGameSessionResponse = await this.$axios.post(
         `/apiproxy/${deductsessionproxy}`,
       );
+      console.log("deductGameSessionResponse");
+      console.log(deductGameSessionResponse);
       if (
         deductGameSessionResponse.data.status_message ===
-        "daily plan balance updated"
+          "daily plan balance updated" ||
+        deductGameSessionResponse.data.status_message === "daily games balance "
       ) {
         await this.infoToast();
         await this.$store.dispatch("delayTwoSeconds");
@@ -283,6 +286,8 @@ export default {
             } else {
               // step 6 if user has an active subscription serve the questions
               if (userSubscriptionStatus.data) {
+                console.log("userSubscriptionStatus.data");
+                console.log(userSubscriptionStatus.data);
                 await this.fetchSessionQuestions(sessionID);
                 await this.fetchWalletBalance();
                 await this.deductGameSession();
