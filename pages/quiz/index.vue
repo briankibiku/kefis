@@ -324,7 +324,10 @@ export default {
         this.userAnswersPayload.gamesessionID = this.sessionID;
         let parsedobj = JSON.parse(JSON.stringify(this.userAnswersPayload));
 
-        await this.persistupdateUserAnswers(parsedobj);
+        ls.set("encryptedUserAnswers", parsedobj, {
+          encrypt: true,
+        });
+        await this.persistupdateUserAnswers(ls.get("triviaQuestionsList"));
         this.$router.push("/loading-score");
       }
     },

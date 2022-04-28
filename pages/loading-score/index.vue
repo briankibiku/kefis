@@ -8,6 +8,7 @@
 </template>
 
 <script>
+import ls from "localstorage-slim";
 import { mapState, mapActions } from "vuex";
 export default {
   data() {
@@ -18,7 +19,7 @@ export default {
       timeouts: 0,
       mswaliUserId: this.$store.state.mswaliId,
       sessionID: this.$store.state.sessionDetails.session.id,
-      userAnswersList: this.$store.state.userAnswers,
+      userAnswersList: ls.get("encryptedUserAnswers", { decrypt: true }),
     };
   },
   mounted() {
@@ -33,15 +34,18 @@ export default {
   computed: {
     ...mapState({
       triviaQuestions: "triviaQuestions",
+      userAnswers: "userAnswers",
     }),
   },
   methods: {
     ...mapActions({
       persistTriviaQuestions: "persistTriviaQuestions",
+      persistupdateUserAnswers: "persistupdateUserAnswers",
     }),
     async updateScore() {
       try {
         // console.log(parsedobj);
+        // let trivia = ls.get("encryptedUserAnswers", { decrypt: true });
         let decodedResponse = JSON.stringify(this.userAnswersList);
         // post answers to backend
         let postAnswerToBackendResponse = await this.$axios.post(
@@ -148,6 +152,8 @@ export default {
         console.log("session closed ✔️");
         this.showLoadingScore = false;
         await this.persistTriviaQuestions("");
+        await this.persistupdateUserAnswers("");
+        this.$store.commit("userAnswers", "");
       } catch (e) {
         console.log(e);
         console.log("Error marking session as complete");
