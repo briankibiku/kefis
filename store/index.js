@@ -255,6 +255,10 @@ export const actions = {
     const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
     await delay(30000);
   },
+  async delayTwentySeconds() {
+    const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
+    await delay(20000);
+  },
   async delayFourSeconds() {
     const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
     await delay(4000);
