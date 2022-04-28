@@ -180,7 +180,7 @@ export default {
             let mswaliUserId = this.$store.state.mswaliId;
             let getbalanceurl = `api/get-balance&user_id=${mswaliUserId}`;
             let response = await this.$axios.get(`/apiproxy/${getbalanceurl}`);
-            let balance = response.data.data;
+            let balance = Math.trunc(response.data.data);
             let initialBalance = this.$store.state.walletBalance;
             let totalAfterDeposit =
               parseInt(this.depositAmount) + parseInt(initialBalance);
@@ -190,11 +190,11 @@ export default {
               await this.persistwalletBalance(walletBalanceFromAPI);
               this.walletBalanceFromAPI = this.$store.state.walletBalance;
               await this.depositSuccessfulToast();
-              await this.$store.dispatch("delayTwoSeconds");
+              await this.$store.dispatch("delayFourSeconds");
               await this.$router.push("/wallet");
             } else {
               await this.depositErrorToast();
-              await this.$store.dispatch("delayTwoSeconds");
+              await this.$store.dispatch("delayFourSeconds");
               await this.$router.push("/wallet");
             }
             this.busy = false;
