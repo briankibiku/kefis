@@ -8,6 +8,7 @@
 </template>
 
 <script>
+import { mapState, mapActions } from "vuex";
 export default {
   data() {
     return {
@@ -29,7 +30,15 @@ export default {
     this.quiz = this.$store.state.triviaQuestions;
   },
 
+  computed: {
+    ...mapState({
+      triviaQuestions: "triviaQuestions",
+    }),
+  },
   methods: {
+    ...mapActions({
+      persistTriviaQuestions: "persistTriviaQuestions",
+    }),
     async updateScore() {
       try {
         // console.log(parsedobj);
@@ -39,10 +48,9 @@ export default {
           `/apiproxy/solo-play/update-session-score&resp=${decodedResponse}`,
         );
         if (postAnswerToBackendResponse.data.message === "response saved") {
-          console.log("answers posted to backend");
+          console.log("answers posted ✔️");
           try {
             this.endSessionFunction();
-            console.log("session closed");
             this.navigateToResults();
           } catch (e) {
             console.log("Error ending session");
@@ -50,17 +58,20 @@ export default {
         } else {
           console.log("The answers could not be saved");
         }
-        for (var i = 0; i < this.quiz.length; i++) {
-          // illegal bandit should be removed once feature is stable
+        for (var i = 0; i < this.userAnswersList.userAnswersList.length; i++) {
           let answerPayload = this.userAnswersList;
-          await this.updateAnswerOnBackend(
+          await this.updateAnswerOnState(
             answerPayload.userAnswersList[i].question_number,
             answerPayload.userAnswersList[i].correctAnswer,
             answerPayload.userAnswersList[i].picked,
             answerPayload.userAnswersList[i].question_id,
           );
         }
-        await this.awardWinner();
+        // console.log("🐛🐛");
+        let correctAttempts = this.$store.state.trivia_score.correct;
+        if (correctAttempts == 9) {
+          await this.awardWinner();
+        }
       } catch (e) {
         console.log(e);
         console.log("Posting answers to backend error");
@@ -82,11 +93,10 @@ export default {
           let awardUserResponse = await this.$axios.post(
             `/apiproxy/api/give-prize&user_id=${mswaliUserId}&amount=${awardPrize}`,
           );
+          console.log("winner AWARDED ✔️");
           this.$store.commit("updateQuizScore", "");
           this.$store.commit("updateQuizWrongs", "");
           this.$store.commit("updateQuizTimeouts", "");
-          this.makeToast(), await this.$store.dispatch("delayTwoSeconds");
-          this.$router.push("/home");
         } else {
           console.log("you are not a winner");
         }
@@ -94,7 +104,7 @@ export default {
         console.log("Error encountered while awarding winner");
       }
     },
-    async updateAnswerOnBackend(
+    async updateAnswerOnState(
       questionNumber,
       answer,
       selectedchoice,
@@ -120,9 +130,6 @@ export default {
         await this.$store.commit("updateQuizTimeouts", this.timeouts);
       } else if (answer == "") {
       }
-      // let updateQuestionAnswer = await this.$axios.put(
-      //   `/apiproxy/solo-play/update-score&session_id=${this.sessionID}&question_id=${questionId}&user_id=${this.mswaliUserId}&user_response=timeout&user_text=${selectedchoice}&question=${questionNumber}&timeout=${timeoutValue}&correct=${answerValue}`,
-      // );
     },
     async endSessionFunction() {
       try {
@@ -138,7 +145,9 @@ export default {
         let markFinishedGame = await this.$axios.post(
           `/apiproxy/${markfinishdgameurl}`,
         );
+        console.log("session closed ✔️");
         this.showLoadingScore = false;
+        await this.persistTriviaQuestions("");
       } catch (e) {
         console.log(e);
         console.log("Error marking session as complete");

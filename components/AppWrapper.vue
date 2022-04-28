@@ -90,7 +90,6 @@
 
 <script>
 import { mapState, mapActions } from "vuex";
-import RoundedCyanLoadingButton from "./Buttons/RoundedCyanLoadingButton.vue";
 import RoundedGoldLoadingButton from "./RoundedGoldLoadingButton.vue";
 export default {
   data() {
@@ -173,7 +172,6 @@ export default {
     },
   },
   components: {
-    RoundedCyanLoadingButton,
     RoundedGoldLoadingButton,
   },
 };

@@ -129,8 +129,10 @@ export default {
           encrypt: true,
         });
         await this.persistTriviaQuestions(ls.get("triviaQuestionsList"));
+        console.log("questions ✔️");
       } catch (e) {
         this.errorToast();
+        console.error(e);
       }
     },
     sessionIsNotLiveToast(toaster) {
@@ -284,8 +286,6 @@ export default {
             } else {
               // step 6 if user has an active subscription serve the questions
               if (userSubscriptionStatus.data) {
-                console.log("userSubscriptionStatus.data");
-                console.log(userSubscriptionStatus.data);
                 await this.fetchSessionQuestions(sessionID);
                 await this.fetchWalletBalance();
                 await this.deductGameSession();

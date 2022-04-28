@@ -198,7 +198,7 @@ export default {
                 await this.$store.dispatch("delayFourSeconds");
                 await this.$router.push("/wallet");
               } else {
-                await this.withdrawErrorToast();
+                await this.errorWithdrawToast();
                 await this.$store.dispatch("delayFourSeconds");
                 await this.$router.push("/wallet");
               }
@@ -223,6 +223,17 @@ export default {
         toaster: toaster,
         solid: true,
       });
+    },
+    errorWithdrawToast(toaster) {
+      this.$bvToast.toast(
+        `We encountered an error while processing your withdrawal`,
+        {
+          title: `Withdrawal Error`,
+          variant: "success",
+          toaster: toaster,
+          solid: true,
+        },
+      );
     },
     amountErrorToast(toaster) {
       this.$bvToast.toast(`You cannot withdraw amount less than KSH 10`, {
