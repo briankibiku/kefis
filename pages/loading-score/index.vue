@@ -23,9 +23,10 @@ export default {
     };
   },
   mounted() {
+    this.updateScore();
     setTimeout(() => {
-      this.updateScore();
-    }, 4000);
+      this.navigateToResults();
+    }, 5000);
   },
   async fetch() {
     this.quiz = this.$store.state.triviaQuestions;
@@ -55,7 +56,6 @@ export default {
           console.log("answers posted ✔️");
           try {
             this.endSessionFunction();
-            this.navigateToResults();
           } catch (e) {
             console.log("Error ending session");
           }
