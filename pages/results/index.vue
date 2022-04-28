@@ -50,9 +50,7 @@
         />
         <b-button
           type="submit"
-          @click="onSubmit()"
-          href="https://mswali.co.ke/?page_id=198"
-          target="blank"
+          @click="onNavigateToFeedback()"
           form="otp-form"
           style="width: 240px"
           class="outline-button-cyan"
@@ -114,6 +112,13 @@ export default {
       this.$store.commit("updateQuizTimeouts", "");
       this.makeToast(), await this.$store.dispatch("delayTwoSeconds");
       this.$router.push("/home");
+    },
+    async onNavigateToFeedback() {
+      this.$store.commit("updateQuizScore", "");
+      this.$store.commit("updateQuizWrongs", "");
+      this.$store.commit("updateQuizTimeouts", "");
+      this.makeToast(), await this.$store.dispatch("delayTwoSeconds");
+      this.$router.push("/feedback");
     },
     makeToast(toaster) {
       this.$bvToast.toast("Thanks for playing, please play again", {

@@ -142,7 +142,6 @@ export default {
             );
             // stop loading
             await this.peristUserPhone(this.phoneNumber);
-            console.log(this.$store.state.loggedinUserPhone);
             await this.$store.commit("updateSignUpPhone", this.phoneNumber);
             await this.$store.commit("updateSignUpOTP", res);
             this.$router.push("/otp");
