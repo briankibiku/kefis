@@ -128,6 +128,7 @@ export default {
         ls.set("triviaQuestionsList", sessionQuestionsResponse.data.data, {
           encrypt: true,
         });
+        // await this.persistTriviaQuestions(sessionQuestionsResponse.data.data);
         await this.persistTriviaQuestions(ls.get("triviaQuestionsList"));
         console.log("questions ✔️");
       } catch (e) {
