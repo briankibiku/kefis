@@ -1,5 +1,5 @@
 <template>
-  <section class="purple-bg">
+  <section class="purple-background">
     <div
       style="width: 300px; padding-top: 30px"
       class="center-align-content-body"
@@ -41,28 +41,32 @@
         Points Earned: <strong> {{ this.myScore }} </strong>
       </p>
       <p class="heading3">
-        View your answers <u><a href="/my-answers">here</a></u>
+        View your answers
+        <u><a href="/my-answers" style="color: #ffff00">here</a></u>
       </p>
       <div>
         <RoundedGoldLoadingButton
           buttonText="Play Again"
           style="font-size: 24px; font-weight: bold; margin-bottom: 20px"
         />
-        <b-button
-          type="submit"
+        <button
           @click="onNavigateToFeedback()"
-          form="otp-form"
-          style="width: 240px"
+          style="
+            width: 240px;
+            background-color: cyan;
+            color: #160d3d;
+            border: none;
+          "
           class="outline-button-cyan"
         >
           <span class="btn-label"><center>Give Feedback</center></span>
-        </b-button>
+        </button>
         <button
           class="text-button"
           style="color: #bbb; margin-top: 20px"
           @click="onSubmit()"
         >
-          <span class="btn-label"
+          <span class="btn-label" style="color: #fff"
             ><center>
               Go to Home Page
               <font-awesome-icon

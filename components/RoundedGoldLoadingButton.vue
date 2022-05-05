@@ -236,6 +236,7 @@ export default {
       let mswaliUserId = this.$store.state.mswaliId;
       // start loading
       try {
+        await this.persistSessionDetails("");
         let sessionresponseurl = `solo-play/get-solo-session&user_id=${this.mswaliUserId}`;
         let sessionResponse = await this.$axios.get(
           `/apiproxy/${sessionresponseurl}`,

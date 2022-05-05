@@ -6,14 +6,20 @@
         <div class="heading3">Processing your score...</div>
       </div>
     </div>
-    <div class="quiz-content" v-if="this.quiz.length > 0 && !showLoadingScore">
+    <div
+      class="purple-background"
+      v-if="this.quiz.length > 0 && !showLoadingScore"
+    >
       <!-- <Notification :message="this.error" v-if="error" /> -->
-      <div class="heading3" style="text-align: center; color: #fff">
+      <div
+        class="heading3 purple_bg"
+        style="text-align: center; margin-bottom: 10px; color: #ffff00"
+      >
         Question {{ this.counter + 1 }} of
         {{ this.quiz.length }}
       </div>
       <!-- base timer goes here  -->
-      <div style="margin-top: 60px">
+      <div v-if="!isDisabled" style="margin-top: 60px">
         <BaseTimer class="center" :key="rebuildbasetimer" />
       </div>
       <div v-if="showFeedback" class="subheading4" style="color: #fff">
@@ -25,14 +31,23 @@
         >
           <!--<img src="~/assets/cancel.png" alt="" height="40" width="40" />-->
           😢 Wrong answer, the correct answer is
-          {{ this.correctChoice }}.
-          <div v-if="this.counter + 1 != 9" style="color: #ffb500">
-            Loading next question...
+          {{ this.correctChoice }}
+          <div
+            v-if="this.counter + 1 != 9"
+            class="answer_display center-align-item text-center heading4"
+          >
+            <div>
+              <div class="rainbow-text">Fun Fact</div>
+              {{ funFact }}
+            </div>
           </div>
           <div v-if="this.counter + 1 == 9" style="color: #ffb500">
             Loading your results...
           </div>
-          <img src="~/assets/loading.gif" alt="" height="90" width="100" />
+          <!--
+
+            <img src="~/assets/loading.gif" alt="" height="90" width="100" />
+          -->
         </div>
         <div
           v-if="isCorrect"
@@ -42,13 +57,21 @@
         >
           <img src="~/assets/win_emoji.png" alt="" height="40" width="55" />
           You seleceted the correct answer.
-          <div v-if="this.counter + 1 != 9" style="color: #ffb500">
-            Loading next question...
+          <div
+            v-if="this.counter + 1 != 9"
+            class="answer_display center-align-item text-center heading4"
+          >
+            <div>
+              <div class="rainbow-text">Fun Fact</div>
+              {{ funFact }}
+            </div>
           </div>
           <div v-if="this.counter + 1 == 9" style="color: #ffb500">
             Loading your results...
           </div>
-          <img src="~/assets/loading.gif" alt="" height="90" width="100" />
+          <!--
+            <img src="~/assets/loading.gif" alt="" height="90" width="100" />
+          -->
         </div>
       </div>
       <b-row>
@@ -57,39 +80,66 @@
             <span class="loading"></span>
           </p>
           <p v-else-if="$fetchState.error">An error occurred :(</p>
-          <div v-else class="card-content">
+          <div v-else class="card-content text-center">
             <div class="question-title">
               {{ this.quiz[this.counter].question }}
             </div>
-            <div class="grid-container resize-choices">
-              <div
-                class="choices"
-                v-for="item in this.quiz[this.counter].choices"
-                :key="item.label"
-              >
-                <center>
-                  <p class="field">
-                    <button
-                      class="outline-button-cyan click"
-                      id="answerBtn"
-                      v-on:click="showCorrectAnswer(item.correct, item.choice)"
-                      :disabled="isDisabled"
-                    >
-                      <span v-if="item.correct">
-                        {{ item.choice }} . {{ item.answer_text }}</span
-                      >
-                      <span v-else>
-                        {{ item.choice }} . {{ item.answer_text }}
-                      </span>
-                    </button>
-                  </p>
-                </center>
-              </div>
+            <br />
+            <div
+              class=""
+              v-for="item in this.quiz[this.counter].choices"
+              :key="item.label"
+            >
+              <p class="field">
+                <button
+                  class="choices-container"
+                  v-on:click="showCorrectAnswer(item.correct, item.choice)"
+                  :disabled="isDisabled"
+                >
+                  <span v-if="item.correct">
+                    {{ item.choice }} . {{ item.answer_text }}</span
+                  >
+                  <span v-else>
+                    {{ item.choice }} . {{ item.answer_text }}
+                  </span>
+
+                  <img
+                    v-if="item.correct === 1 && isDisabled"
+                    src="~/assets/check.png"
+                    alt=""
+                    height="25"
+                    width="25"
+                    style="margin-left: 10px"
+                    @click="nextQuestion()"
+                  />
+                </button>
+              </p>
             </div>
+            <button
+              class="continue-btn"
+              v-if="isDisabled"
+              @click="loadNextQuestion()"
+            >
+              Next Question
+              <font-awesome-icon
+                :icon="['fas', 'chevron-right']"
+                style="color: #160d3d"
+              />
+            </button>
             <br />
             <br />
           </div>
         </b-col>
+        <audio autoplay>
+          <source
+            src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3"
+            type="audio/mp3"
+          />
+          <p>
+            If you are reading this, it is because your browser does not support
+            the audio element.
+          </p>
+        </audio>
       </b-row>
     </div>
   </div>
@@ -125,6 +175,8 @@ const TIME_LIMIT = 20;
 export default {
   data() {
     return {
+      funFact:
+        "This is where our fun fact will appear, it will have more information on the question asked making it a learning point for our users",
       counter: 0,
       mswaliUserId: this.$store.state.mswaliId,
       sessionID: this.$store.state.sessionDetails.session.id,
@@ -253,7 +305,7 @@ export default {
     timeoutToast(toaster) {
       this.$bvToast.toast(`You ran out of time while answering the question`, {
         title: `Timeout!`,
-        variant: "danger",
+        variant: "info",
         toaster: toaster,
         solid: true,
       });
@@ -276,11 +328,55 @@ export default {
         // user selected correct answer
         this.isCorrect = true;
       }
-      await this.$store.dispatch("delayFourSeconds"),
-        await this.goToNextQuestion(answer, selectedchoice);
-      this.forceRerender();
-      this.resetTimer();
-      this.showFeedback = false;
+      // await this.$store.dispatch("delayFourSeconds"),
+      //   await this.goToNextQuestion(answer, selectedchoice);
+
+      // prevent counter from incrementing to 10
+      if (this.counter < this.quiz.length - 1) {
+        let answerObject = {
+          correctAnswer: answer,
+          question_id: this.quiz[this.counter + 1].question_id,
+          question_number: this.counter,
+          userResponse: this.userResponseLogic(answer),
+          picked: selectedchoice ? selectedchoice : "timeout",
+          correct: answer,
+          timeout: this.userResponseLogic(answer) == "timeout" ? 1 : 0,
+        };
+        this.userAnswersPayload.userAnswersList.push(answerObject);
+      } else if (this.counter <= this.quiz.length) {
+        await this.$store.dispatch("delayFourSeconds");
+        this.showLoadingScore = true;
+        let answerObject = {
+          correctAnswer: answer,
+          question_id: this.quiz[this.counter - 1].question_id,
+          question_number: (this.counter += 1),
+          userResponse: this.userResponseLogic(answer),
+          picked: selectedchoice ? selectedchoice : "timeout",
+          correct: answer,
+          timeout: this.userResponseLogic(answer) == "timeout" ? 1 : 0,
+        };
+        this.userAnswersPayload.userAnswersList.push(answerObject);
+        this.userAnswersPayload.userID = this.mswaliUserId;
+        this.userAnswersPayload.gamesessionID = this.sessionID;
+        let parsedobj = JSON.parse(JSON.stringify(this.userAnswersPayload));
+
+        ls.set("encryptedUserAnswers", parsedobj, {
+          encrypt: true,
+        });
+        await this.persistupdateUserAnswers(ls.get("triviaQuestionsList"));
+        await this.$router.push("/loading-score");
+      }
+      // end of loading answer to state
+    },
+    async loadNextQuestion() {
+      if (this.counter <= this.quiz.length) {
+        this.counter += 1;
+        this.isDisabled = false;
+        this.canTimeout = true;
+        this.forceRerender();
+        this.resetTimer();
+        this.showFeedback = false;
+      }
     },
     userResponseLogic(correct) {
       if (correct === 1) {
@@ -399,12 +495,42 @@ export default {
 </script>
 
 <style scoped>
+.fun-fact {
+  width: 30%;
+  text-align: center;
+}
+.rainbow-text {
+  background-image: linear-gradient(to left, violet, blue, red, blue);
+  -webkit-background-clip: text;
+  color: transparent;
+  font-size: 20px;
+}
 .center {
   margin: 0;
   position: absolute;
   top: 20%;
   left: 50%;
   transform: translate(-50%, -50%);
+}
+.choices-container {
+  background-color: beige;
+  color: #160d3d;
+  border-radius: 10px;
+  border: none;
+  padding: 10px;
+  width: 80vw;
+}
+.continue-btn {
+  background-color: #ffb500;
+  color: #160d3d;
+  border: none;
+  margin-top: 10px;
+  padding: 10px;
+  font-size: 16px;
+  font-weight: 600;
+  font-family: "Nunito Sans", sans-serif;
+  position: relative;
+  width: 80vw;
 }
 .text-choice {
   font-size: 1.2em;
@@ -502,5 +628,37 @@ export default {
   justify-content: center;
   font-size: 18px;
   color: #fff;
+}
+@media only screen and (min-width: 600px) {
+  .choices-container {
+    background-color: beige;
+    color: #160d3d;
+    border-radius: 10px;
+    border: none;
+    padding: 10px;
+    width: 35vw;
+  }
+  .answer_display {
+    color: #160d3d;
+    margin-block: 5px;
+    width: 40%;
+    text-align: center;
+    background-color: beige;
+    box-shadow: none;
+    border-radius: 10px;
+    padding: 20px;
+  }
+}
+@media only screen and (max-width: 600px) {
+  .answer_display {
+    color: #160d3d;
+    margin-block: 5px;
+    width: 90%;
+    text-align: center;
+    background-color: beige;
+    box-shadow: none;
+    border-radius: 10px;
+    padding: 20px;
+  }
 }
 </style>
