@@ -176,7 +176,11 @@ export default {
   data() {
     return {
       funFact:
+<<<<<<< HEAD
         "This is where our fun fact will appear, it will have more information on the question asked making it a learning point for our users",
+=======
+        "Wazito FC earned a promotion to Kenyan Premier League for the,Wazito FC earned a promotion to Kenyan Premier League for the,Wazito FC earned a promotion to Kenyan Premier League for the",
+>>>>>>> fix: enhance gameplay
       counter: 0,
       mswaliUserId: this.$store.state.mswaliId,
       sessionID: this.$store.state.sessionDetails.session.id,
