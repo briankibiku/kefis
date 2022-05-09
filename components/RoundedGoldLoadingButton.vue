@@ -130,7 +130,6 @@ export default {
         });
         // await this.persistTriviaQuestions(sessionQuestionsResponse.data.data);
         await this.persistTriviaQuestions(ls.get("triviaQuestionsList"));
-        console.log("questions ✔️");
       } catch (e) {
         this.errorToast();
         console.error(e);
@@ -313,7 +312,7 @@ export default {
         // stop loading
         this.errorGettingSessionToast();
         await this.$store.dispatch("delayTwoSeconds");
-        window.location.reload();
+        // window.location.reload();
       }
     },
   },

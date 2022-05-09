@@ -57,7 +57,7 @@
         <!--
         <font-awesome-icon :icon="['fas', 'trophy']" />
       -->
-        Rankings
+        Leaderboard
       </div>
     </button>
     <button

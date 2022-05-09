@@ -53,7 +53,6 @@ export default {
           `/apiproxy/solo-play/update-session-score&resp=${decodedResponse}`,
         );
         if (postAnswerToBackendResponse.data.message === "response saved") {
-          console.log("answers posted ✔️");
           try {
             this.endSessionFunction();
           } catch (e) {
@@ -72,7 +71,6 @@ export default {
           );
         }
         // console.log("🐛🐛");
-        let correctAttempts = this.$store.state.trivia_score.correct;
         await this.awardWinner();
       } catch (e) {
         console.log(e);
@@ -83,7 +81,8 @@ export default {
     async awardWinner() {
       let correctAttempts = this.$store.state.trivia_score.correct;
       try {
-        if (correctAttempts == 9) {
+        let trivia = ls.get("triviaQuestionsList", { decrypt: true });
+        if (correctAttempts == trivia.length) {
           let awardPrize = this.$store.state.sessionDetails.session.prize;
           let mswaliUserId = this.$store.state.mswaliId;
           let sessionID = this.$store.state.sessionDetails.session.id;
@@ -95,12 +94,10 @@ export default {
           let awardUserResponse = await this.$axios.post(
             `/apiproxy/api/give-prize&user_id=${mswaliUserId}&amount=${awardPrize}`,
           );
-          console.log("winner AWARDED ✔️");
           this.$store.commit("updateQuizScore", "");
           this.$store.commit("updateQuizWrongs", "");
           this.$store.commit("updateQuizTimeouts", "");
         } else {
-          console.log("you are not a winner");
         }
       } catch (e) {
         console.log("Error encountered while awarding winner");
@@ -143,12 +140,10 @@ export default {
         let markPlayedSession = await this.$axios.post(
           `/apiproxy/${markplayedsessionurl}`,
         );
-        console.log(markPlayedSession);
         let markfinishdgameurl = `solo-play/mark-finished-game&user_id=${this.mswaliUserId}&session_id=${this.sessionID}`;
         let markFinishedGame = await this.$axios.post(
           `/apiproxy/${markfinishdgameurl}`,
         );
-        console.log("session closed ✔️");
         this.showLoadingScore = false;
         await this.persistTriviaQuestions("");
         await this.persistupdateUserAnswers("");

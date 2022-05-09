@@ -1,5 +1,5 @@
 <template>
-  <section class="purple-background">
+  <section class="purple-bg">
     <div
       style="width: 300px; padding-top: 30px"
       class="center-align-content-body"

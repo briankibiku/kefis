@@ -295,6 +295,15 @@ export default {
         this.showBalance = true;
       }
     },
+    navigateToShare() {
+      return this.$router.push("/share");
+    },
+    navigateToWinners() {
+      return this.$router.push("/winners");
+    },
+    navigateToWallet() {
+      return this.$router.push("/wallet");
+    },
     navigateToLogin() {
       return this.$router.push("/login");
     },
@@ -447,6 +456,7 @@ export default {
   align-items: center;
   text-align: center;
 }
+
 .container-fluid-edited {
   width: auto;
   padding: 20px;

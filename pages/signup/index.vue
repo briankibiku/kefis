@@ -14,26 +14,22 @@
             <div class="heading2">Signup your account</div>
             <div class="text1">with your mobile number and a user name</div>
             <br />
-            <form action="">
-              <div class="form-group">
-                <input
-                  class="rounded-border-input"
-                  type="text"
-                  v-model="phoneNumber"
-                  required
-                  placeholder="+25470 12 123 456"
-                />
-              </div>
-
-              <div class="form-group">
-                <input
-                  class="rounded-border-input"
-                  type="text"
-                  v-model="userName"
-                  placeholder="Username"
-                />
-              </div>
-            </form>
+            <input
+              class="rounded-border-input"
+              type="text"
+              v-model="phoneNumber"
+              required
+              placeholder="0712 123 456"
+              v-on:keyup.enter="signUpuser"
+            />
+            <input
+              class="rounded-border-input"
+              type="text"
+              v-model="userName"
+              placeholder="Username"
+              style="margin-block: 20px"
+              v-on:keyup.enter="signUpuser"
+            />
             <RoundedCyanLoadingButton
               buttonText="Sign Up"
               showIcon="true"

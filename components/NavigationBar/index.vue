@@ -30,7 +30,7 @@
           >
           <b-nav-item href="/winners"
             ><span class="heading4" style="color: #160d3d"
-              >Rankings</span
+              >Leaderboard</span
             ></b-nav-item
           >
           <b-nav-item href="/support"
