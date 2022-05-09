@@ -137,14 +137,15 @@ export default {
     },
     async endSessionFunction() {
       try {
-        let markplayedsessionurl = `solo-play/mark-played-session&user_id=${this.mswaliUserId}&session_id=${this.sessionID}`;
-        let markPlayedSession = await this.$axios.post(
-          `/apiproxy/${markplayedsessionurl}`,
-        );
         let postplayerinsessionurl = `solo-play/post-player-in-session&user_id=${this.mswaliUserId}&session_id=${this.sessionID}`;
         let trackPlayerSession = await this.$axios.post(
           `/apiproxy/${postplayerinsessionurl}`,
         );
+        let markplayedsessionurl = `solo-play/mark-played-session&user_id=${this.mswaliUserId}&session_id=${this.sessionID}`;
+        let markPlayedSession = await this.$axios.post(
+          `/apiproxy/${markplayedsessionurl}`,
+        );
+        console.log(markPlayedSession);
         let markfinishdgameurl = `solo-play/mark-finished-game&user_id=${this.mswaliUserId}&session_id=${this.sessionID}`;
         let markFinishedGame = await this.$axios.post(
           `/apiproxy/${markfinishdgameurl}`,
