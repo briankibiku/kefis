@@ -228,7 +228,7 @@ export default {
       counter: 0,
       selectedAnswer: "",
       mswaliUserId: this.$store.state.mswaliId,
-      sessionID: this.$store.state.sessionDetails.session.id,
+      // sessionID: this.$store.state.sessionDetails.session.id,
       number: 1,
       quiz_score: 0,
       canWin: true,
