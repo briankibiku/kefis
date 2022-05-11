@@ -73,9 +73,7 @@ export default {
         }
         // console.log("🐛🐛");
         let correctAttempts = this.$store.state.trivia_score.correct;
-        if (correctAttempts == 9) {
-          await this.awardWinner();
-        }
+        await this.awardWinner();
       } catch (e) {
         console.log(e);
         console.log("Posting answers to backend error");
