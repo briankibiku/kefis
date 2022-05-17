@@ -64,6 +64,13 @@ export default {
       userName: "",
     };
   },
+  mounted() {
+    if (this.$store.state.isAuthenticated) {
+      this.$router.push("/home");
+    } else {
+      return;
+    }
+  },
   methods: {
     showMissingFieldsToast(toaster, variant = "danger") {
       this.$bvToast.toast("Make sure you have filled up all fields", {
