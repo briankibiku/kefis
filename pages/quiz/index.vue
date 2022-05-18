@@ -6,91 +6,190 @@
         <div class="heading3">Processing your score...</div>
       </div>
     </div>
-    <div class="quiz-content" v-if="this.quiz.length > 0 && !showLoadingScore">
+    <div class="purple-bg" v-if="this.quiz.length > 0 && !showLoadingScore">
       <!-- <Notification :message="this.error" v-if="error" /> -->
-      <div class="heading3" style="text-align: center; color: #fff">
+      <div
+        class="heading3 purple_bg"
+        style="text-align: center; margin-bottom: 10px; color: #ffff00"
+      >
         Question {{ this.counter + 1 }} of
         {{ this.quiz.length }}
       </div>
       <!-- base timer goes here  -->
-      <div style="margin-top: 60px">
+      <div v-if="!isDisabled" style="margin-top: 60px">
         <BaseTimer class="center" :key="rebuildbasetimer" />
       </div>
       <div v-if="showFeedback" class="subheading4" style="color: #fff">
         <div
-          v-if="!isCorrect"
-          class="text-center heading3 animate__animated animate__fadeInLeft"
+          v-if="showTimeout"
+          class="text-center answer_display center-align-item heading3 animate__animated animate__tada"
           align-v="center"
-          style="color: #fff"
         >
           <!--<img src="~/assets/cancel.png" alt="" height="40" width="40" />-->
-          😢 Wrong answer, the correct answer is
-          {{ this.correctChoice }}.
-          <div v-if="this.counter + 1 != 9" style="color: #ffb500">
-            Loading next question...
+          <div>
+            😢 Timeout! You ran out of time to answer the question
+            <div
+              v-if="this.counter + 1 != this.quiz.length"
+              class="text-center heading4"
+            >
+              <!--
+              <div>
+                <div class="rainbow-text">Fun Fact</div>
+              {{ funFact }}
+            </div>
+              -->
+            </div>
+            <div
+              v-if="this.counter + 1 == this.quiz.length"
+              style="color: #ffb500"
+            >
+              Loading your results...
+            </div>
           </div>
-          <div v-if="this.counter + 1 == 9" style="color: #ffb500">
-            Loading your results...
-          </div>
-          <img src="~/assets/loading.gif" alt="" height="90" width="100" />
+
+          <!--
+
+            <img src="~/assets/loading.gif" alt="" height="90" width="100" />
+          -->
         </div>
         <div
-          v-if="isCorrect"
-          class="text-center heading3 animate__animated animate__fadeInRight"
+          v-if="!isCorrect && !showTimeout"
+          class="text-center answer_display center-align-item heading3 animate__animated animate__tada"
           align-v="center"
-          style="color: #fff"
         >
+          <!--<img src="~/assets/cancel.png" alt="" height="40" width="40" />-->
+          <div>
+            😢 Wrong answer, the correct answer is
+            {{ this.correctChoice }}
+            <div
+              v-if="this.counter + 1 != this.quiz.length"
+              class="text-center heading4"
+            >
+              <!--
+              <div>
+                <div class="rainbow-text">Fun Fact</div>
+              {{ funFact }}
+            </div>
+              -->
+            </div>
+            <div
+              v-if="this.counter + 1 == this.quiz.length"
+              style="color: #ffb500"
+            >
+              Loading your results...
+            </div>
+          </div>
+
+          <!--
+
+            <img src="~/assets/loading.gif" alt="" height="90" width="100" />
+          -->
+        </div>
+        <div
+          v-if="isCorrect && !showTimeout"
+          class="text-center answer_display center-align-item heading3 animate__animated animate__tada"
+          align-v="center"
+        >
+          <!--
+
           <img src="~/assets/win_emoji.png" alt="" height="40" width="55" />
-          You seleceted the correct answer.
-          <div v-if="this.counter + 1 != 9" style="color: #ffb500">
-            Loading next question...
+        -->
+          <div>
+            😀 You seleceted the correct answer.
+            <div
+              v-if="this.counter + 1 != this.quiz.length"
+              class="text-center heading4"
+            >
+              <!--
+              <div>
+                <div class="rainbow-text">Fun Fact</div>
+              {{ funFact }}
+            </div>
+          -->
+            </div>
+            <div
+              v-if="this.counter + 1 == this.quiz.length"
+              style="color: #ffb500"
+            >
+              Loading your results...
+            </div>
           </div>
-          <div v-if="this.counter + 1 == 9" style="color: #ffb500">
-            Loading your results...
-          </div>
-          <img src="~/assets/loading.gif" alt="" height="90" width="100" />
+          <!--
+            <img src="~/assets/loading.gif" alt="" height="90" width="100" />
+          -->
         </div>
       </div>
-      <b-row>
-        <b-col>
-          <p v-if="$fetchState.pending" class="container center-align-content">
-            <span class="loading"></span>
-          </p>
-          <p v-else-if="$fetchState.error">An error occurred :(</p>
-          <div v-else class="card-content">
-            <div class="question-title">
-              {{ this.quiz[this.counter].question }}
-            </div>
-            <div class="grid-container resize-choices">
-              <div
-                class="choices"
-                v-for="item in this.quiz[this.counter].choices"
-                :key="item.label"
+      <div class="text-center">
+        <div class="question-title">
+          {{ this.quiz[this.counter].question }}
+        </div>
+        <br />
+        <div
+          class=""
+          v-for="item in this.quiz[this.counter].choices"
+          :key="item.label"
+        >
+          <p class="field">
+            <button
+              class="choices-container text-left"
+              style="padding-left: 30px"
+              v-on:click="showCorrectAnswer(item.correct, item.choice)"
+              :disabled="isDisabled"
+            >
+              <span v-if="item.correct">
+                {{ item.choice }} . {{ item.answer_text }}</span
               >
-                <center>
-                  <p class="field">
-                    <button
-                      class="outline-button-cyan click"
-                      id="answerBtn"
-                      v-on:click="showCorrectAnswer(item.correct, item.choice)"
-                      :disabled="isDisabled"
-                    >
-                      <span v-if="item.correct">
-                        {{ item.choice }} . {{ item.answer_text }}</span
-                      >
-                      <span v-else>
-                        {{ item.choice }} . {{ item.answer_text }}
-                      </span>
-                    </button>
-                  </p>
-                </center>
-              </div>
-            </div>
-            <br />
-            <br />
-          </div>
-        </b-col>
-      </b-row>
+              <span v-else> {{ item.choice }} . {{ item.answer_text }} </span>
+
+              <img
+                v-if="item.correct === 1 && isDisabled"
+                src="~/assets/check.png"
+                alt=""
+                height="25"
+                width="25"
+                style="margin-left: 10px"
+              />
+              <img
+                v-if="
+                  item.correct === 0 &&
+                  isDisabled &&
+                  selectedAnswer === item.choice
+                "
+                src="~/assets/cancel.png"
+                alt=""
+                height="25"
+                width="25"
+                style="margin-left: 10px"
+              />
+            </button>
+          </p>
+        </div>
+        <button
+          class="continue-btn"
+          v-if="isDisabled && !hideNextButton"
+          @click="loadNextQuestion()"
+        >
+          Next Question
+          <font-awesome-icon
+            :icon="['fas', 'chevron-right']"
+            style="color: #160d3d"
+          />
+        </button>
+        <br />
+        <br />
+      </div>
+      <!--
+          <audio autoplay>
+            <source
+              src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3"
+              type="audio/mp3"
+            />
+            <p>
+              If you are reading this, it is because your browser does not support
+              the audio element.
+            </p>
+          </audio>
+        -->
     </div>
   </div>
 </template>
@@ -125,7 +224,9 @@ const TIME_LIMIT = 20;
 export default {
   data() {
     return {
+      funFact: "This is where our fun fact will appear",
       counter: 0,
+      selectedAnswer: "",
       mswaliUserId: this.$store.state.mswaliId,
       sessionID: this.$store.state.sessionDetails.session.id,
       number: 1,
@@ -133,6 +234,7 @@ export default {
       canWin: true,
       error: null,
       dummyQuiz: [],
+      canTimeOut: true,
       userAnswersPayload: {
         userID: "",
         gamesessionID: "",
@@ -150,21 +252,21 @@ export default {
       timePassed: 0,
       timerInterval: null,
       isDisabled: false,
-      canTimeout: true,
+      showTimeout: false,
       showLoadingScore: false,
+      hideNextButton: false,
     };
   },
   async fetch() {
     let trivia = ls.get("triviaQuestionsList", { decrypt: true });
+    this.quiz = "";
     this.quiz = trivia;
   },
   watch: {
     timeLeft(newValue) {
-      if (newValue === 0 && this.canTimeout) {
-        this.resetTimer();
-        this.goToNextQuestion("timeout");
+      if (newValue === 0 && this.canTimeOut) {
+        this.showCorrectAnswer("timeout");
         this.timeoutToast();
-        this.forceRerender();
       }
     },
   },
@@ -253,7 +355,7 @@ export default {
     timeoutToast(toaster) {
       this.$bvToast.toast(`You ran out of time while answering the question`, {
         title: `Timeout!`,
-        variant: "danger",
+        variant: "info",
         toaster: toaster,
         solid: true,
       });
@@ -263,6 +365,8 @@ export default {
       this.isDisabled = true;
       this.canTimeout = false;
       this.showFeedback = true;
+      this.selectedAnswer = selectedchoice;
+
       // register correct choice before hand
       for (var i = 0; i < 4; i++) {
         if (this.quiz[this.counter].choices[i].correct === 1) {
@@ -275,49 +379,36 @@ export default {
       } else if (answer === 1) {
         // user selected correct answer
         this.isCorrect = true;
+      } else if (answer === "timeout") {
+        this.showTimeout = true;
       }
-      await this.$store.dispatch("delayFourSeconds"),
-        await this.goToNextQuestion(answer, selectedchoice);
-      this.forceRerender();
-      this.resetTimer();
-      this.showFeedback = false;
-    },
-    userResponseLogic(correct) {
-      if (correct === 1) {
-        return "correct";
-      } else if (correct === 0) {
-        return "wrong";
-      } else {
-        return "timeout";
-      }
-    },
-    // Logic to loop through questions goes here
-    async goToNextQuestion(correct, selectedchoice) {
-      this.isDisabled = false;
-      this.canTimeout = true;
+      // await this.$store.dispatch("delayFourSeconds"),
+      //   await this.goToNextQuestion(answer, selectedchoice);
+
       // prevent counter from incrementing to 10
       if (this.counter < this.quiz.length - 1) {
-        this.counter += 1;
         let answerObject = {
-          correctAnswer: correct,
-          question_id: this.quiz[this.counter].question_id,
+          correctAnswer: answer,
+          question_id: this.quiz[this.counter + 1].question_id,
           question_number: this.counter,
-          userResponse: this.userResponseLogic(correct),
+          userResponse: this.userResponseLogic(answer),
           picked: selectedchoice ? selectedchoice : "timeout",
-          correct: correct,
-          timeout: this.userResponseLogic(correct) == "timeout" ? 1 : 0,
+          correct: answer,
+          timeout: this.userResponseLogic(answer) == "timeout" ? 1 : 0,
         };
         this.userAnswersPayload.userAnswersList.push(answerObject);
       } else if (this.counter <= this.quiz.length) {
+        this.hideNextButton = true;
+        await this.$store.dispatch("delayFourSeconds");
         this.showLoadingScore = true;
         let answerObject = {
-          correctAnswer: correct,
+          correctAnswer: answer,
           question_id: this.quiz[this.counter - 1].question_id,
           question_number: (this.counter += 1),
-          userResponse: this.userResponseLogic(correct),
+          userResponse: this.userResponseLogic(answer),
           picked: selectedchoice ? selectedchoice : "timeout",
-          correct: correct,
-          timeout: this.userResponseLogic(correct) == "timeout" ? 1 : 0,
+          correct: answer,
+          timeout: this.userResponseLogic(answer) == "timeout" ? 1 : 0,
         };
         this.userAnswersPayload.userAnswersList.push(answerObject);
         this.userAnswersPayload.userID = this.mswaliUserId;
@@ -328,39 +419,29 @@ export default {
           encrypt: true,
         });
         await this.persistupdateUserAnswers(ls.get("triviaQuestionsList"));
-        this.$router.push("/loading-score");
+        await this.$router.push("/loading-score");
+      }
+      // end of loading answer to state
+    },
+    async loadNextQuestion() {
+      if (this.counter <= this.quiz.length) {
+        this.counter += 1;
+        this.isDisabled = false;
+        this.canTimeout = true;
+        this.showTimeout = false;
+        this.forceRerender();
+        this.resetTimer();
+        this.showFeedback = false;
       }
     },
-    async updateAnswerOnBackend(
-      questionNumber,
-      answer,
-      selectedchoice,
-      questionId,
-    ) {
-      let answerValue;
-      let timeoutValue;
-      if (answer === 1) {
-        answerValue = 1;
-        timeoutValue = 0;
-        this.correctScore += 1;
-        await this.$store.commit("updateQuizScore", this.correctScore);
-      } else if (answer === 0) {
-        answerValue = 0;
-        timeoutValue = 0;
-        this.wrongScore += 1;
-        await this.$store.commit("updateQuizWrongs", this.wrongScore);
-      } else if (answer === "timeout") {
-        answerValue = 0;
-        timeoutValue = 1;
-        this.timeouts += 1;
-        await this.$store.commit("updateQuizTimeouts", this.timeouts);
-      } else if (answer == "") {
+    userResponseLogic(correct) {
+      if (correct === 1) {
+        return "correct";
+      } else if (correct === 0) {
+        return "wrong";
+      } else {
+        return "timeout";
       }
-      let updateQuestionAnswer = await this.$axios.put(
-        `/apiproxy/solo-play/update-score&session_id=${this.sessionID}&question_id=${questionId}&user_id=${this.mswaliUserId}&user_response=timeout&user_text=${selectedchoice}&question=${questionNumber}&timeout=${timeoutValue}&correct=${answerValue}`,
-      );
-      console.log(updateQuestionAnswer);
-      console.log("Answer posted to backend");
     },
     showMsgBoxTwo() {
       this.boxTwo = "";
@@ -399,12 +480,41 @@ export default {
 </script>
 
 <style scoped>
+.fun-fact {
+  width: 30%;
+  text-align: center;
+}
+.rainbow-text {
+  background-image: linear-gradient(to left, violet, blue, red, blue);
+  -webkit-background-clip: text;
+  color: transparent;
+  font-size: 20px;
+}
 .center {
   margin: 0;
   position: absolute;
   top: 20%;
   left: 50%;
   transform: translate(-50%, -50%);
+}
+.choices-container {
+  background-color: beige;
+  color: #160d3d;
+  border-radius: 10px;
+  border: none;
+  padding: 10px;
+  width: 80vw;
+}
+.continue-btn {
+  background-color: #ffb500;
+  color: #160d3d;
+  border: none;
+  /* margin-top: 10px; */
+  padding: 10px;
+  font-size: 16px;
+  font-weight: 600;
+  font-family: "Nunito Sans", sans-serif;
+  width: 80vw;
 }
 .text-choice {
   font-size: 1.2em;
@@ -502,5 +612,37 @@ export default {
   justify-content: center;
   font-size: 18px;
   color: #fff;
+}
+@media only screen and (min-width: 600px) {
+  .choices-container {
+    background-color: beige;
+    color: #160d3d;
+    border-radius: 10px;
+    border: none;
+    padding: 10px;
+    width: 35vw;
+  }
+  .answer_display {
+    color: #160d3d;
+    margin-block: 5px;
+    width: 40%;
+    text-align: center;
+    background-color: beige;
+    box-shadow: none;
+    border-radius: 10px;
+    padding: 15px;
+  }
+}
+@media only screen and (max-width: 600px) {
+  .answer_display {
+    color: #160d3d;
+    margin-block: 5px;
+    width: 90%;
+    text-align: center;
+    background-color: beige;
+    box-shadow: none;
+    border-radius: 10px;
+    padding: 15px;
+  }
 }
 </style>

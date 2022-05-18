@@ -23,23 +23,25 @@
               <div class="heading2">Welcome to mSwali</div>
               <div class="text1">Enter your number to continue</div>
               <br />
-              <form action="">
-                <div class="form-group">
-                  <input
-                    class="rounded-border-input"
-                    type="number"
-                    placeholder="0712 345 678"
-                    v-model="phoneNumber"
-                    required
-                    style="margin-bottom: 10px"
-                  />
-                </div>
-              </form>
-              <RoundedCyanLoadingButton
-                buttonText="Proceed"
-                showIcon="true"
-                @click="checkUserExists()"
-              />
+              <div>
+                <input
+                  class="rounded-border-input"
+                  type="number"
+                  placeholder="0712 345 678"
+                  v-model="phoneNumber"
+                  required
+                  style="margin-bottom: 10px"
+                  v-on:keyup.enter="checkUserExists"
+                />
+              </div>
+              <div>
+                <RoundedCyanLoadingButton
+                  buttonText="Proceed"
+                  showIcon="true"
+                  id="loginbtn"
+                  @click="checkUserExists()"
+                />
+              </div>
             </div>
           </div>
         </div>

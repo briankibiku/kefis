@@ -179,6 +179,15 @@
   overflow-x: hidden;
   background: linear-gradient(to bottom, #1ceded 5%, #f0f0f0 30%);
 }
+.purple-background {  
+  padding: 30px;
+  min-height: 100vh;
+  width: 100%;
+  text-align: center;
+  background-image: url("~/assets/quiz_bg.svg");
+  background-repeat: no-repeat;
+  background-size: cover;
+}
 .bg-image-overlay {
   background-image: url("~/assets/overlay.png");
   background-repeat: no-repeat;
@@ -253,6 +262,7 @@
   background: linear-gradient(to right, #80029f, #05c5ab);
 }
 .purple-bg {
+  padding: 30px;
   background-color: #160d3d;
   width: 100%;
   min-height: 100vh;
@@ -293,7 +303,7 @@
   color: #160d3d;
 }
 .heading3 {
-  font-size: 20px;
+  font-size: 17px;
   font-weight: 600;
   font-family: "Nunito Sans", sans-serif;
   color: #160d3d;

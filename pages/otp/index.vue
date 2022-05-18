@@ -73,19 +73,16 @@
               </div>
 
               <div class="form-section">
-                <form action="">
-                  <div class="form-group">
-                    <input
-                      class="rounded-border-input"
-                      type="number"
-                      placeholder=". . . ."
-                      v-model="signUpOTP"
-                      required
-                      maxlength="4"
-                      style="text-align: center"
-                    />
-                  </div>
-                </form>
+                <input
+                  class="rounded-border-input"
+                  type="number"
+                  placeholder=". . . ."
+                  v-model="signUpOTP"
+                  required
+                  maxlength="4"
+                  style="text-align: center"
+                  v-on:keyup.enter="verifyOTP"
+                />
               </div>
 
               <p

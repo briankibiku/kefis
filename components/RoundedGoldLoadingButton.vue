@@ -130,7 +130,6 @@ export default {
         });
         // await this.persistTriviaQuestions(sessionQuestionsResponse.data.data);
         await this.persistTriviaQuestions(ls.get("triviaQuestionsList"));
-        console.log("questions ✔️");
       } catch (e) {
         this.errorToast();
         console.error(e);
@@ -236,6 +235,7 @@ export default {
       let mswaliUserId = this.$store.state.mswaliId;
       // start loading
       try {
+        await this.persistSessionDetails("");
         let sessionresponseurl = `solo-play/get-solo-session&user_id=${this.mswaliUserId}`;
         let sessionResponse = await this.$axios.get(
           `/apiproxy/${sessionresponseurl}`,
@@ -312,7 +312,7 @@ export default {
         // stop loading
         this.errorGettingSessionToast();
         await this.$store.dispatch("delayTwoSeconds");
-        window.location.reload();
+        // window.location.reload();
       }
     },
   },

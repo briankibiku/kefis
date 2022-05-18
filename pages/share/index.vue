@@ -46,6 +46,22 @@
                       @click="submit()"
                       buttonText="Share"
                     />
+                    <br />
+                    <div class="heading4 text-center">or</div>
+                    <br />
+                    <div class="heading4 text-center">
+                      <img
+                        src="~/assets/twitter.png"
+                        height="30"
+                        width="30"
+                        alt=""
+                      />
+                      <a
+                        href="https://twitter.com/intent/tweet?text=I%27m%20playing%20mSwali%20Join%20me%20at%20@mSwali_KE&url=http://quiz.mswali.co.ke/&hashtags=mSwali"
+                        target="blank"
+                        >Share on Twitter</a
+                      >
+                    </div>
                     <div
                       class="d-flex flex-row padding-10 justify-content-center"
                       style="margin-bottom: 10px"
@@ -71,7 +87,7 @@
             </div>
             <div class="heading3">Share</div>
             <div class="subheading3" style="margin-block: 10px">
-              Enter number you wish to share with are receive referral credits
+              Enter number you wish to share with and receive referral credits
             </div>
             <input
               class="rounded-border-input"
@@ -86,6 +102,17 @@
               buttonText="Proceed"
               style="width: 240px"
             />
+            <br />
+            <br />
+            <div class="heading4 text-center">or</div>
+            <div class="heading4 text-center">
+              <img src="~/assets/twitter.png" height="30" width="30" alt="" />
+              <a
+                href="https://twitter.com/intent/tweet?text=I%27m%20playing%20mSwali%20Join%20me%20at%20@mSwali_KE&url=http://quiz.mswali.co.ke/&hashtags=mSwali"
+                target="blank"
+                >Share on Twitter</a
+              >
+            </div>
             <br />
             <a @click="$router.back()" style="color: #bbb">Back</a>
             <br />

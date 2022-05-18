@@ -39,6 +39,8 @@ export default {
     color: 'purple',
     height: '5px',
   },
+  // disable server side rendering 
+  // ssr: false,
 
   // Plugins to run before rendering page: https://go.nuxtjs.dev/config-plugins
   plugins: [{ src: "~/plugins/persistedState.client.js" }, "~/plugins/salutations.js"],

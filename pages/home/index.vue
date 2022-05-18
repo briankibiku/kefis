@@ -447,6 +447,7 @@ export default {
   align-items: center;
   text-align: center;
 }
+
 .container-fluid-edited {
   width: auto;
   padding: 20px;
