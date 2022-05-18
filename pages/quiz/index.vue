@@ -252,7 +252,7 @@ export default {
       timePassed: 0,
       timerInterval: null,
       isDisabled: false,
-      showTimeout: false,
+      showTimeout: true,
       showLoadingScore: false,
       hideNextButton: false,
     };
@@ -264,7 +264,7 @@ export default {
   },
   watch: {
     timeLeft(newValue) {
-      if (newValue === 0 && this.canTimeOut) {
+      if (newValue === 0 && this.canTimeOut && this.showTimeout) {
         this.showCorrectAnswer("timeout");
         this.timeoutToast();
       }
@@ -360,13 +360,16 @@ export default {
         solid: true,
       });
     },
+    diableTimeOut(answered) {
+      answered ? (this.showTimeout = false) : (this.showTimeout = true);
+    },
     // show answer function
     async showCorrectAnswer(answer, selectedchoice) {
       this.isDisabled = true;
       this.canTimeout = false;
       this.showFeedback = true;
       this.selectedAnswer = selectedchoice;
-
+      this.diableTimeOut(true);
       // register correct choice before hand
       for (var i = 0; i < 4; i++) {
         if (this.quiz[this.counter].choices[i].correct === 1) {
@@ -432,6 +435,7 @@ export default {
         this.forceRerender();
         this.resetTimer();
         this.showFeedback = false;
+        this.diableTimeOut(false);
       }
     },
     userResponseLogic(correct) {
@@ -473,6 +477,9 @@ export default {
 
     startTimer() {
       this.timerInterval = setInterval(() => (this.timePassed += 1), 1000);
+    },
+    stopTimer() {
+      this.timerInterval = setInterval(null);
     },
   },
   components: { RoundedCyanLoadingButton, BaseTimer, ConfirmationModal },

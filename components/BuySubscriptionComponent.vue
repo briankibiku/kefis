@@ -57,6 +57,7 @@
 
 <script>
 import { mapState, mapActions } from "vuex";
+import ls from "localstorage-slim";
 export default {
   data() {
     return {
@@ -117,7 +118,19 @@ export default {
       let sessionQuestionsResponse = await this.$axios.get(
         `/apiproxy/${soloplayproxy}`,
       );
-      await this.persistTriviaQuestions(sessionQuestionsResponse.data.data);
+
+      ls.set("triviaQuestionsList", sessionQuestionsResponse.data.data, {
+        encrypt: true,
+      });
+      await this.persistTriviaQuestions(ls.get("triviaQuestionsList"));
+    },
+    async fetchSessionDetails() {
+      // fetch session details
+      let sessionresponseurl = `solo-play/get-solo-session&user_id=${this.mswaliUserId}`;
+      let sessionResponse = await this.$axios.get(
+        `/apiproxy/${sessionresponseurl}`,
+      );
+      return sessionResponse.data.session.id;
     },
     async buydailyPlan() {
       try {
@@ -130,6 +143,7 @@ export default {
         let sessionResponse = await this.$axios.get(
           `/apiproxy/${sessionresponseurl}`,
         );
+        await this.persistSessionDetails("");
         await this.persistSessionDetails(sessionResponse.data);
         await this.persistCanWinStatus(
           this.$store.state.sessionDetails.can_win,
@@ -146,6 +160,7 @@ export default {
               `/apiproxy/${gameratesubscriptionurl}`,
             );
             if (dailyPlanResponse.data.status) {
+              let sessionID = await this.fetchSessionDetails();
               await this.fetchSessionQuestions(sessionID);
               await this.infoToast();
               await this.$store.dispatch("delayFiveSeconds");
@@ -204,6 +219,7 @@ export default {
                 basicPlanResponse.data.status_message === "daily plan activated"
               ) {
                 // serve questions if daily plan was bought sucessfully
+                let sessionID = await this.fetchSessionDetails();
                 await this.fetchSessionQuestions(sessionID);
                 await this.infoToast();
                 await this.$store.dispatch("delayTwoSeconds");
@@ -264,6 +280,7 @@ export default {
                 "daily plan activated"
               ) {
                 // serve questions if daily plan was bought sucessfully
+                let sessionID = await this.fetchSessionDetails();
                 await this.fetchSessionQuestions(sessionID);
                 await this.infoToast();
                 await this.$store.dispatch("delayTwoSeconds");
