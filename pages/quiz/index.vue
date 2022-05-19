@@ -385,7 +385,7 @@ export default {
       } else if (answer === "timeout") {
         this.showTimeout = true;
       }
-      // await this.$store.dispatch("delayFourSeconds"),
+      // await this.$store.dispatch("delayFourSeconds");,
       //   await this.goToNextQuestion(answer, selectedchoice);
 
       // prevent counter from incrementing to 10
