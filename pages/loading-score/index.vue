@@ -70,7 +70,6 @@ export default {
             answerPayload.userAnswersList[i].question_id,
           );
         }
-        // console.log("🐛🐛");
         await this.awardWinner();
       } catch (e) {
         console.log(e);
