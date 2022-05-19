@@ -219,7 +219,7 @@ const COLOR_CODES = {
   },
 };
 
-const TIME_LIMIT = 20;
+const TIME_LIMIT = 15;
 
 export default {
   data() {
@@ -627,12 +627,23 @@ export default {
     border-radius: 10px;
     border: none;
     padding: 10px;
-    width: 35vw;
+    width: 30vw;
+  }
+  .continue-btn {
+    background-color: #ffb500;
+    color: #160d3d;
+    border: none;
+    /* margin-top: 10px; */
+    padding: 10px;
+    font-size: 16px;
+    font-weight: 600;
+    font-family: "Nunito Sans", sans-serif;
+    width: 30vw;
   }
   .answer_display {
     color: #160d3d;
     margin-block: 5px;
-    width: 40%;
+    width: 40vw;
     text-align: center;
     background-color: beige;
     box-shadow: none;
