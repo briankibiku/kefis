@@ -392,7 +392,7 @@ export default {
       if (this.counter < this.quiz.length - 1) {
         let answerObject = {
           correctAnswer: answer,
-          question_id: this.quiz[this.counter + 1].question_id,
+          question_id: this.quiz[this.counter].question_id,
           question_number: this.counter,
           userResponse: this.userResponseLogic(answer),
           picked: selectedchoice ? selectedchoice : "timeout",
@@ -406,8 +406,8 @@ export default {
         this.showLoadingScore = true;
         let answerObject = {
           correctAnswer: answer,
-          question_id: this.quiz[this.counter - 1].question_id,
-          question_number: (this.counter += 1),
+          question_id: this.quiz[this.counter].question_id,
+          question_number: this.counter,
           userResponse: this.userResponseLogic(answer),
           picked: selectedchoice ? selectedchoice : "timeout",
           correct: answer,
