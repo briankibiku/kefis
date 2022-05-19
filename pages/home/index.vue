@@ -150,7 +150,11 @@
         <div class="wallet-card text-center" style="margin: auto; width: 80%">
           <div>
             <div class="subheading2">
-              {{ banner }}
+              Win 100/= for 10 Correct Answers
+              <!--
+
+                {{s banner }}
+              -->
             </div>
             <div class="center-align-content heading2 prize-card">
               KES {{ prize }}
