@@ -157,7 +157,11 @@
               -->
             </div>
             <div class="center-align-content heading2 prize-card">
-              KES {{ prize }}
+              WIN Big with Mswali 
+              <!--
+
+                KES{{ prize }}
+              -->
             </div>
           </div>
         </div>
@@ -370,7 +374,6 @@ export default {
       let sessionResponse = await this.$axios.get(
         `/apiproxy/${sessionresponseurl}`,
       );
-      console.log(sessionResponse)
       await this.persistSessionDetails(sessionResponse.data);
       await this.persistCanWinStatus(this.$store.state.sessionDetails.can_win);
       this.banner = await this.$store.state.sessionDetails.banner;
