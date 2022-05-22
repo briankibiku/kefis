@@ -36,6 +36,7 @@ export default {
       busy: false,
       timeout: null,
       show: false,
+      isSunday: false,
       mswaliUserId: this.$store.state.mswaliId,
     };
   },
@@ -240,6 +241,8 @@ export default {
         let sessionResponse = await this.$axios.get(
           `/apiproxy/${sessionresponseurl}`,
         );
+        console.log("GONE IN 60 SECS")
+        console.log(sessionResponse)
         await this.persistSessionDetails(sessionResponse.data);
         await this.persistCanWinStatus(
           this.$store.state.sessionDetails.can_win,
@@ -249,8 +252,15 @@ export default {
         let gameRate = this.$store.state.sessionDetails.session.rate;
         let sessionID = this.$store.state.sessionDetails.session.id;
         let isSessionLive = this.$store.state.sessionDetails.live;
+
+        // check if it is sunday for the bible quiz
+        var date = new Date();
+        switch(date.getDay()){
+            case 0:         this.isSunday = true; break;
+            default:this.isSunday = false;
+        }
         // step 2 check if the game session is live for user to play
-        if (isSessionLive) {
+        if (isSessionLive || this.isSunday) {
           // step 3 check if rate is > 0 or = 0
           if (gameRate > 0) {
             // step 4 check if user has active subscriptions
@@ -312,7 +322,7 @@ export default {
         // stop loading
         this.errorGettingSessionToast();
         await this.$store.dispatch("delayTwoSeconds");
-        // window.location.reload();
+        window.location.reload();
       }
     },
   },
