@@ -241,8 +241,6 @@ export default {
         let sessionResponse = await this.$axios.get(
           `/apiproxy/${sessionresponseurl}`,
         );
-        console.log("GONE IN 60 SECS")
-        console.log(sessionResponse)
         await this.persistSessionDetails(sessionResponse.data);
         await this.persistCanWinStatus(
           this.$store.state.sessionDetails.can_win,
