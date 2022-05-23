@@ -49,18 +49,12 @@
           buttonText="Play Again"
           style="font-size: 24px; font-weight: bold; margin-bottom: 20px"
         />
-        <button
-          @click="onNavigateToFeedback()"
-          style="
-            width: 240px;
-            background-color: cyan;
-            color: #160d3d;
-            border: none;
-          "
-          class="outline-button-cyan"
-        >
-          <span class="btn-label"><center>Give Feedback</center></span>
-        </button>
+        <div>
+          <img src="~/assets/twitter.png" height="30" width="30" alt="" />
+          <a :href="shareOnTwitter" target="blank" style="color: #fff"
+            >Share on Twitter</a
+          >
+        </div>
         <button
           class="text-button"
           style="color: #bbb; margin-top: 20px"
@@ -96,6 +90,7 @@ export default {
       totalFailed: this.$store.state.trivia_score.wrong,
       totalTimeouts: this.$store.state.trivia_score.timeouts,
       unAttempted: 0,
+      shareOnTwitter: `https://twitter.com/intent/tweet?text=I%20scored%20${this.$store.state.trivia_score.correct}/10%20on%20mSwali.%20To%20learn%20and%20WIN%20play%20mSwali%20at%20https://quiz.mswali.co.ke&hashtags=mSwali`,
       // token: nuxtStorage.localStorage.getItem('Token')
     };
   },

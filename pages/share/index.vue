@@ -108,7 +108,7 @@
             <div class="heading4 text-center">
               <img src="~/assets/twitter.png" height="30" width="30" alt="" />
               <a
-                href="https://twitter.com/intent/tweet?text=I%27m%20playing%20mSwali%20Join%20me%20at%20@mSwali_KE&url=http://quiz.mswali.co.ke/&hashtags=mSwali"
+                href="https://twitter.com/intent/tweet?text=I%27m%20playing%20mSwali%20Join%20me%20at%20@mSwali_KE&url=https://quiz.mswali.co.ke&hashtags=mSwali"
                 target="blank"
                 >Share on Twitter</a
               >
