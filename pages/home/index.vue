@@ -150,18 +150,10 @@
         <div class="wallet-card text-center" style="margin: auto; width: 80%">
           <div>
             <div class="subheading2">
-              Win 100/= for 10 Correct Answers
-              <!--
-
-                {{s banner }}
-              -->
+              {{ banner }}
             </div>
             <div class="center-align-content heading2 prize-card">
-              WIN Big with Mswali 
-              <!--
-
-                KES{{ prize }}
-              -->
+              KES {{ prize }}
             </div>
           </div>
         </div>
