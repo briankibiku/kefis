@@ -49,7 +49,7 @@ export default {
   components: true,
 
   // Modules for dev and build (recommended): https://go.nuxtjs.dev/config-modules
-  buildModules: ["@nuxtjs/pwa", "@nuxtjs/google-fonts"],
+  buildModules: ['@nuxtjs/pwa', "@nuxtjs/google-fonts"],
 
   // Modules: https://go.nuxtjs.dev/config-modules
   modules: [
@@ -142,9 +142,6 @@ export default {
   // Build Configuration: https://go.nuxtjs.dev/config-build
   build: {},
   pwa: {
-    mobileAppIOS: true,
-    mobileApp: true,
-    icon: false, // disables the icon module
     workbox: {
       importScripts: ['/firebase-auth-sw.js'],
       // by default the workbox module will not install the service worker in dev environment to avoid conflicts with HMR
