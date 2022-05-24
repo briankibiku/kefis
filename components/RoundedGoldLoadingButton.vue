@@ -122,7 +122,8 @@ export default {
     },
     async fetchSessionQuestions(sessionID) {
       try {
-        let soloplayproxy = `solo-play/fetch-questions&session_id=${sessionID}  `;
+        let sessionID = this.$store.state.sessionDetails.session.id.toString();
+        let soloplayproxy = `solo-play/fetch-trivia-questions&session_id=${sessionID}`;
         let sessionQuestionsResponse = await this.$axios.get(
           `/apiproxy/${soloplayproxy}`,
         );
@@ -253,9 +254,12 @@ export default {
 
         // check if it is sunday for the bible quiz
         var date = new Date();
-        switch(date.getDay()){
-            case 0:         this.isSunday = true; break;
-            default:this.isSunday = false;
+        switch (date.getDay()) {
+          case 0:
+            this.isSunday = true;
+            break;
+          default:
+            this.isSunday = false;
         }
         // step 2 check if the game session is live for user to play
         if (isSessionLive || this.isSunday) {

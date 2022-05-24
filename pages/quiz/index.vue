@@ -255,12 +255,16 @@ export default {
       showTimeout: true,
       showLoadingScore: false,
       hideNextButton: false,
+      decryptedQuestions: [],
+      correctChoice: "",
+      decryptedChoices: [],
     };
   },
   async fetch() {
     let trivia = ls.get("triviaQuestionsList", { decrypt: true });
     this.quiz = "";
-    this.quiz = trivia;
+    this.questions = trivia;
+    this.decryptQuestions();
   },
   watch: {
     timeLeft(newValue) {
@@ -303,6 +307,62 @@ export default {
         seconds = `0${seconds}`;
       }
       return `${minutes}:${seconds}`;
+    },
+    decryptQuestions() {
+      let sessionID = this.$store.state.sessionDetails.session.id.toString();
+      var CryptoJS = require("crypto-js");
+      var Sha256 = CryptoJS.SHA256;
+      var Hex = CryptoJS.enc.Hex;
+      var Utf8 = CryptoJS.enc.Utf8;
+      var Base64 = CryptoJS.enc.Base64;
+      var AES = CryptoJS.AES;
+      var secret_key = sessionID;
+      var secret_iv = "SnJtNG96c3ZvRVV6WlU5MjhOOUZvUT09";
+      var key = Sha256(secret_key).toString(Hex).substr(0, 32); // Use the first 32 bytes (see 2.)
+      var iv = Sha256(secret_iv).toString(Hex).substr(0, 16);
+
+      for (let i = 0; i < this.questions.length; i++) {
+        // convert from Base64 to Utf8
+        var questionBase64 = Base64.parse(this.questions[i].question).toString(
+          Utf8,
+        );
+        //decrypt question
+        var decryptedQuestion = AES.decrypt(questionBase64, Utf8.parse(key), {
+          iv: Utf8.parse(iv),
+        }).toString(Utf8);
+
+        this.decryptedChoices = [];
+        for (let j = 0; j < 4; j++) {
+          // convert from Base64 to Utf8
+          var correctBase64 = Base64.parse(
+            this.questions[i].choices[j].correct,
+          ).toString(Utf8);
+          //decrypt correct
+          var decryptedCorrect = AES.decrypt(correctBase64, Utf8.parse(key), {
+            iv: Utf8.parse(iv),
+          }).toString(Utf8);
+          var decryptedCorrect =
+            parseInt(decryptedCorrect) -
+            parseInt(this.questions[i].choices[j].id);
+          let decryptedChoiceObject = {
+            id: this.questions[i].choices[j].id,
+            choice: this.questions[i].choices[j].choice,
+            answer_text: this.questions[i].choices[j].answer_text,
+            correct: parseInt(decryptedCorrect),
+            inserted_at: this.questions[i].choices[j].inserted_at,
+            question_id: this.questions[i].choices[j].question_id,
+          };
+          this.decryptedChoices.push(decryptedChoiceObject);
+        }
+        let decryptedQuestionObject = {
+          question: decryptedQuestion,
+          question_id: this.questions[i].question_id,
+          session_id: this.questions[i].session_id,
+          choices: this.decryptedChoices,
+        };
+        this.decryptedQuestions.push(decryptedQuestionObject);
+      }
+      this.quiz = this.decryptedQuestions;
     },
     timeLeft() {
       return TIME_LIMIT - this.timePassed;
@@ -376,13 +436,13 @@ export default {
           this.correctChoice = this.quiz[this.counter].choices[i].choice;
         }
       }
-      if (answer === 0) {
+      if (answer == 0) {
         // user selected wrong answer
         this.isCorrect = false;
-      } else if (answer === 1) {
+      } else if (answer == 1) {
         // user selected correct answer
         this.isCorrect = true;
-      } else if (answer === "timeout") {
+      } else if (answer == "timeout") {
         this.showTimeout = true;
       }
       // await this.$store.dispatch("delayFourSeconds");,

@@ -107,6 +107,10 @@ export default {
         this.validatePhoneNumber(this.phoneNumber)
       ) {
         try {
+          const registerUser = await axios.get(
+            `/apiproxy/api/create-user&account_number=${this.phoneNumber}&username=${this.userName}`,
+            config,
+          );
           // send user an OTP and direct them to verify
           const result = await axios.get(
             `/apiproxy/api/generate-otp&msisdn=${this.phoneNumber}`,
