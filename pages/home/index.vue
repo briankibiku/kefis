@@ -124,7 +124,7 @@
       <div class="painted-background text-center">
         <NavigationBar />
         <!--Salutations go here-->
-        <div class="row" style="padding: 20px; margin: auto">
+        <div class="row" style="padding: 10px; margin: 5px">
           <div class="col-3">
             <b-avatar variant="light"></b-avatar>
           </div>
@@ -548,6 +548,7 @@ export default {
 .wallet-card {
   margin-bottom: 20px;
   padding: 20px;
+  margin: 10px;
   width: 50vw;
   border-radius: 15px;
   box-shadow: 0 0 50px #ccc;
