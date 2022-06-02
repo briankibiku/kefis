@@ -1,10 +1,10 @@
 <template>
   <div>
-    <div class="row">
+    <div>
       <div>
         <div
           v-if="userHasNeverPlayed"
-          class="center-align-item text-center"
+          class="centered-container"
           style="width: 240px"
         >
           <div>
@@ -12,13 +12,13 @@
             <div class="heading3 text-center">
               You have not played mSwali yet. play to view your answers
             </div>
-            <RoundedCyanArrowButton
-              @click="navigateToHome()"
-              buttonText="Play Quiz"
+            <RoundedGoldLoadingButton
+              buttonText="Play NOW to WIN"
+              style="font-size: 24px; font-weight: bold"
             />
           </div>
         </div>
-        <div v-if="!userHasNeverPlayed">
+        <div v-if="!userHasNeverPlayed" class="row">
           <div class="d-flex flex-direction-row">
             <b-table
               striped
@@ -88,20 +88,20 @@ export default {
       this.userAnswers = await this.$axios.$get(
         `/apiproxy/solo-play/show-my-answers&msisdn=${loggedINPhone}`,
       );
-      let userAnswersz = { resp: [] };
-      for (let i = 0; i < this.userAnswers.resp.length; i++) {
-        if (this.userAnswers.choices_picked[i].timeout === 1) {
-          this.items[0].picked.push({ picked: "Timeout" });
-        } else if (this.userAnswers.choices_picked[i].timeout === 0) {
-          this.items[0].picked.push({
-            picked: this.userAnswers.choices_picked[i].picked,
-          });
-        }
-      }
-      this.mergedAnswersList = this.userAnswers.resp.map((item, i) =>
-        Object.assign({}, item, this.items[0].picked[i]),
-      );
       if (this.userAnswers.has_played) {
+        let userAnswersz = { resp: [] };
+        for (let i = 0; i < this.userAnswers.resp.length; i++) {
+          if (this.userAnswers.choices_picked[i].timeout === 1) {
+            this.items[0].picked.push({ picked: "Timeout" });
+          } else if (this.userAnswers.choices_picked[i].timeout === 0) {
+            this.items[0].picked.push({
+              picked: this.userAnswers.choices_picked[i].picked,
+            });
+          }
+        }
+        this.mergedAnswersList = this.userAnswers.resp.map((item, i) =>
+          Object.assign({}, item, this.items[0].picked[i]),
+        );
         this.questionAnswers2 = this.userAnswers.resp;
         // this.fillItemsList();
       } else {

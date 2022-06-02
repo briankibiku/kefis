@@ -80,12 +80,14 @@ export default {
     ...mapState({
       isExistingUser: "isExistingUser",
       loggedinUserPhone: "loggedinUserPhone",
+      newUserPhone: "newUserPhone",
     }),
   },
   methods: {
     ...mapActions({
       peristIsExistingUSer: "peristIsExistingUSer",
       peristUserPhone: "peristUserPhone",
+      persistupdateNewUserPhone: "persistupdateNewUserPhone",
     }),
     showMissingFieldsToast(toaster, variant = "danger") {
       this.$bvToast.toast("Enter a valid phone number to proceed", {
@@ -134,6 +136,7 @@ export default {
             await this.peristUserPhone(this.phoneNumber);
             await this.$store.commit("updateSignUpPhone", this.phoneNumber);
             this.$router.push("/accept-signup");
+            await this.persistupdateNewUserPhone(this.phoneNumber);
           } else {
             // update state that the user is an existing user and not need to show modal
             await this.peristIsExistingUSer(true);
