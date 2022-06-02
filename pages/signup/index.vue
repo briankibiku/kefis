@@ -11,17 +11,9 @@
             <br />
             <div class="player-container"></div>
             <br />
-            <div class="heading2">Signup your account</div>
-            <div class="text1">with your mobile number and a user name</div>
+            <div class="heading2">Let's get to knw you</div>
+            <div class="text1">Enter user name for {{ this.phoneNumber }}</div>
             <br />
-            <input
-              class="rounded-border-input"
-              type="text"
-              v-model="phoneNumber"
-              required
-              placeholder="0712 123 456"
-              v-on:keyup.enter="signUpuser"
-            />
             <input
               class="rounded-border-input"
               type="text"
@@ -60,7 +52,7 @@ export default {
       status: "not_accepted",
       show_error: false,
       loading: false,
-      phoneNumber: "",
+      phoneNumber: this.$store.state.newUserPhone,
       userName: "",
     };
   },
@@ -107,7 +99,7 @@ export default {
         this.validatePhoneNumber(this.phoneNumber)
       ) {
         try {
-          const registerUser = await axios.get(
+          const registerUser = await axios.post(
             `/apiproxy/api/create-user&account_number=${this.phoneNumber}&username=${this.userName}`,
             config,
           );

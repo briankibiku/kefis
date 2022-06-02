@@ -100,6 +100,7 @@ export const state = () => ({
     timeouts: 0,
   },
   lastName: "",
+  newUserPhone: "",
   signUpPhone: "",
   signUpName: "",
   signUpOTP: "",
@@ -228,6 +229,9 @@ export const mutations = {
   updateCanWinStatus(state, payload) {
     state.canWinStatus = payload;
   },
+  updateNewUserPhone(state, payload) {
+    state.newUserPhone = payload;
+  },
   SET_STATE(state, payload) {
     state.persistedState = payload;
   },
@@ -314,5 +318,8 @@ export const actions = {
   },
   persistupdateUserAnswers({ commit }, payload) {
     commit("updateUserAnswersPayload", payload);
+  },
+  persistupdateNewUserPhone({ commit }, payload) {
+    commit("updateNewUserPhone", payload);
   },
 };
