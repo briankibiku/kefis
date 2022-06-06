@@ -113,8 +113,9 @@ export default {
         solid: true,
       });
     },
-    async fetchSessionQuestions(sessionID) {
-      let soloplayproxy = `solo-play/fetch-questions&session_id=${sessionID}  `;
+    async fetchSessionQuestions() {
+      let sessionID = this.$store.state.sessionDetails.session.id.toString();
+      let soloplayproxy = `solo-play/fetch-trivia-questions&session_id=${sessionID}`;
       let sessionQuestionsResponse = await this.$axios.get(
         `/apiproxy/${soloplayproxy}`,
       );
