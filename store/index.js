@@ -109,6 +109,7 @@ export const state = () => ({
   mswaliId: "",
   walletBalance: "",
   userCredits: "",
+  gameSubs: "",
   isExistingUser: false,
   // question & answer variables
   persistedAnswers: null,
@@ -172,7 +173,9 @@ export const mutations = {
   updatewalletBalance(state, payload) {
     state.walletBalance = payload;
   },
-
+  updategameSubs(state, payload) {
+    state.gameSubs = payload;
+  },
   updateSignUpName(state, payload) {
     state.signUpName = payload;
   },
@@ -297,6 +300,9 @@ export const actions = {
   },
   persistwalletBalance({ commit }, payload) {
     commit("updatewalletBalance", payload);
+  },
+  persistgameSubs({ commit }, payload) {
+    commit("updategameSubs", payload);
   },
   peristIsExistingUSer({ commit }, payload) {
     commit("updateisExistingUser", payload);

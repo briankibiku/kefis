@@ -17,7 +17,8 @@ export default ({ store }) => {
       "isExistingUser",
       "userCredits",
       "canWinStatus",
-      "userAnswers"
+      "userAnswers",
+      "gameSubs"
     ],
   })(store);
 };

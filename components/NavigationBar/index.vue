@@ -1,5 +1,14 @@
 <template>
-  <div style="padding-bottom: 20px">
+  <div
+    style="
+      padding-bottom: 20px;
+      /* background-color: #1ceded; */
+      width: 100%;
+      /* position: fixed; */
+      margin-bottom: 190px;
+      /* z-index: 100; */
+    "
+  >
     <b-navbar toggleable="lg" type="light">
       <b-navbar-brand>
         <a href="/home">
@@ -43,9 +52,9 @@
               >FAQs</span
             ></b-nav-item
           >
-          <b-nav-item href="/share"
+          <b-nav-item href="/tournament"
             ><span class="heading4" style="color: #160d3d"
-              >Share</span
+              >Tournaments</span
             ></b-nav-item
           >
           <b-nav-item href="/feedback"
@@ -58,6 +67,12 @@
             style="background-color: transparent; color: #160d3d; border: none"
           >
             <span class="heading4"> Logout </span>
+          </b-button>
+          <b-button
+            href="/share"
+            style="background-color: transparent; color: #160d3d; border: none"
+          >
+            <font-awesome-icon :icon="['fas', 'share']" />
           </b-button>
           <RoundedGoldLoadingButton
             buttonText="Play NOW to WIN"

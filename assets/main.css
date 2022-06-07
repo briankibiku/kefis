@@ -52,6 +52,18 @@
   padding: 10px;
   width: 100%;
 }
+.tournament-btn {
+  background-color: cyan;
+  border: none;
+  font-family: "Nunito Sans", sans-serif;
+  padding-block: 10px;
+  padding-inline: 20px;
+  text-align: center;
+  align-items: center;
+  justify-content: center;
+  align-self: center;
+  border-radius: 10px;
+}
 .rounded-button-transparent {
   background-color: transparent;
   color: #160d3d;

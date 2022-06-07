@@ -82,10 +82,12 @@
                     </div>
                     <div class="subheading4">
                       Credits: {{ this.creditsBalanceFromState }}
+                      Remaining games:
+                      {{ this.gameSubBalanceFromState }}
                     </div>
                   </div>
                   <div class="heading2" v-if="showBalance">
-                    KES {{ this.walletBalanceFromAPI }}
+                    KES {{ this.walletBalanceFromState }}
                   </div>
                   <div v-if="!showBalance">
                     <div
@@ -183,7 +185,7 @@
             </div>
           </div>
           <div class="heading2" v-if="showBalance">
-            KES {{ this.walletBalanceFromAPI }}
+            KES {{ this.walletBalanceFromState }}
           </div>
           <div v-if="!showBalance">
             <div
@@ -193,6 +195,7 @@
                 font-weight: 800;
                 font-family: 'Nunito Sans', sans-serif;
                 color: #160d3d;
+                text-align: center;
               "
             >
               ******
@@ -200,6 +203,10 @@
           </div>
           <div class="subheading4">
             Credits: {{ this.creditsBalanceFromState }}
+          </div>
+          <div class="subheading4">
+            Remaining games:
+            {{ this.gameSubBalanceFromState }}
           </div>
           <b-button class="outline-button" href="/deposit">Deposit</b-button>
         </div>
@@ -250,8 +257,9 @@ export default {
       greetings: "",
       showBalance: false,
       mswaliUserId: this.$store.state.mswaliId,
-      walletBalanceFromAPI: this.$store.state.walletBalance,
-      creditsBalanceFromState: this.$store.state.userCredits,
+      walletBalanceFromState: "",
+      creditsBalanceFromState: "",
+      gameSubBalanceFromState: "",
       banner: "",
       prize: "",
       allowBuySubscription: false,
@@ -276,6 +284,7 @@ export default {
       triviaQuestions: "triviaQuestions",
       userCredits: "userCredits",
       canWinStatus: "canWinStatus",
+      gameSubs: "gameSubs",
     }),
   },
   methods: {
@@ -287,6 +296,7 @@ export default {
       persistTriviaQuestions: "persistTriviaQuestions",
       persistUserCredits: "persistUserCredits",
       persistCanWinStatus: "persistCanWinStatus",
+      persistgameSubs: "persistgameSubs",
     }),
     toggleShowBalance() {
       if (this.showBalance) {
@@ -360,6 +370,12 @@ export default {
       await this.persistwalletBalance(walletBalanceFromAPI);
       await this.persistUserCredits(walletCreditsFromAPI);
       this.walletBalanceFromAPI = this.$store.state.walletBalance;
+
+      // populate the balances here
+
+      this.walletBalanceFromState = Math.trunc(response.data.data);
+      this.creditsBalanceFromState = response.data.credit_balance;
+      this.gameSubBalanceFromState = response.data.game_subs;
     },
     async getSessionDetails() {
       let sessionresponseurl = `solo-play/get-solo-session&user_id=${this.mswaliUserId}`;
