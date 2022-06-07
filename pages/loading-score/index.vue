@@ -20,13 +20,13 @@ export default {
       mswaliUserId: this.$store.state.mswaliId,
       sessionID: this.$store.state.sessionDetails.session.id,
       userAnswersList: ls.get("encryptedUserAnswers", { decrypt: true }),
+      correctAnswersCount: 0,
+      wrongAnswersCount: 0,
+      timeoutedAnswersCount: 0,
     };
   },
   mounted() {
     this.updateScore();
-    setTimeout(() => {
-      this.navigateToResults();
-    }, 5000);
   },
   async fetch() {
     this.quiz = this.$store.state.triviaQuestions;
@@ -64,13 +64,12 @@ export default {
         for (var i = 0; i < this.userAnswersList.userAnswersList.length; i++) {
           let answerPayload = this.userAnswersList;
           await this.updateAnswerOnState(
-            answerPayload.userAnswersList[i].question_number,
             answerPayload.userAnswersList[i].correctAnswer,
-            answerPayload.userAnswersList[i].picked,
-            answerPayload.userAnswersList[i].question_id,
           );
         }
         await this.awardWinner();
+        await this.$store.dispatch("delayTwoSeconds");
+        await this.navigateToResults();
       } catch (e) {
         console.log(e);
         console.log("Posting answers to backend error");
@@ -93,22 +92,13 @@ export default {
           let awardUserResponse = await this.$axios.post(
             `/apiproxy/api/give-prize&user_id=${mswaliUserId}&amount=${awardPrize}`,
           );
-          this.$store.commit("updateQuizScore", "");
-          this.$store.commit("updateQuizWrongs", "");
-          this.$store.commit("updateQuizTimeouts", "");
         } else {
         }
       } catch (e) {
         console.log("Error encountered while awarding winner");
       }
     },
-    async updateAnswerOnState(
-      questionNumber,
-      answer,
-      selectedchoice,
-      questionId,
-    ) {
-      // let questionId = this.quiz[this.counter].question_id;
+    async updateAnswerOnState(answer) {
       let answerValue;
       let timeoutValue;
       if (answer === 1) {
@@ -146,7 +136,6 @@ export default {
         this.showLoadingScore = false;
         await this.persistTriviaQuestions("");
         await this.persistupdateUserAnswers("");
-        this.$store.commit("userAnswers", "");
       } catch (e) {
         console.log(e);
         console.log("Error marking session as complete");
