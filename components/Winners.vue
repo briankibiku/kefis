@@ -78,7 +78,6 @@
 </template>
 
 <script>
-import axios from "axios";
 export default {
   data() {
     return {
@@ -91,7 +90,7 @@ export default {
       teamPerPage: 8,
       teamCurrentPage: 1,
       topScoreView: true,
-      fields: ["name", "score", "phone"],
+      fields: ["name", "score"],
       teamFields: ["team_name", "score"],
     };
   },
