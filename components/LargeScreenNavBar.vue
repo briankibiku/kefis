@@ -87,6 +87,18 @@
     </button>
     <button
       class="rounded-button-transparent"
+      @click="navigateTotournaments()"
+      style="text-align: left; background-color: transparent"
+    >
+      <div class="menu">
+        <!--
+        <font-awesome-icon :icon="['fas', 'share']" /> 
+      -->
+        Tournaments
+      </div>
+    </button>
+    <button
+      class="rounded-button-transparent"
       @click="sharemSwali()"
       style="text-align: left; background-color: transparent"
     >
@@ -174,6 +186,9 @@ export default {
     },
     navigateToAnswers() {
       return this.$router.push("/my-answers");
+    },
+    navigateTotournaments() {
+      return this.$router.push("/view-tournament");
     },
     navigateToWallet() {
       return this.$router.push("/wallet");
