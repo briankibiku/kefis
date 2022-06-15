@@ -128,6 +128,10 @@
             width="230"
           />
         </div>
+
+        <div v-if="this.quiz[this.counter].media === 'AUDIO' && !isDisabled">
+          <img src="~/assets/soundbar.gif" alt="" height="100" width="230" />
+        </div>
         <div class="question-title">
           {{ this.quiz[this.counter].question }}
         </div>
