@@ -105,7 +105,8 @@ export default {
       let tournamentsTeamsResponse = await this.$axios.$get(
         `/apiproxy/team-play/get-tournament`,
       );
-
+      console.log(tournamentsTeamsResponse);
+      console.log("LIVE TURNAMENTS");
       if (tournamentsTeamsResponse.status) {
         this.tournamentTeams = tournamentsTeamsResponse.teams;
         this.tournamentName = tournamentsTeamsResponse.data.tournament_name;

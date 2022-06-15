@@ -120,6 +120,14 @@
         </div>
       </div>
       <div class="text-center">
+        <div v-if="this.quiz[this.counter].media === 'IMAGE'">
+          <img
+            :src="this.quiz[this.counter].media_link"
+            alt=""
+            height="100"
+            width="230"
+          />
+        </div>
         <div class="question-title">
           {{ this.quiz[this.counter].question }}
         </div>
@@ -178,18 +186,11 @@
         <br />
         <br />
       </div>
-      <!--
-          <audio autoplay>
-            <source
-              src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3"
-              type="audio/mp3"
-            />
-            <p>
-              If you are reading this, it is because your browser does not support
-              the audio element.
-            </p>
-          </audio>
-        -->
+      <div v-if="this.quiz[this.counter].media === 'AUDIO' && !isDisabled">
+        <audio autoplay>
+          <source :src="this.quiz[this.counter].media_link" type="audio/mp3" />
+        </audio>
+      </div>
     </div>
   </div>
 </template>
@@ -197,9 +198,11 @@
 <script>
 import ls from "localstorage-slim";
 import { mapState, mapActions } from "vuex";
+import crypto from "crypto-js";
 import BaseTimer from "../../components/BaseTimer.vue";
 import ConfirmationModal from "../../components/ConfirmationModal.vue";
 import RoundedCyanLoadingButton from "../../components/Buttons/RoundedCyanLoadingButton.vue";
+import { thisExpression } from "@babel/types";
 
 const FULL_DASH_ARRAY = 283;
 const WARNING_THRESHOLD = 7;
@@ -320,7 +323,6 @@ export default {
       var secret_iv = "SnJtNG96c3ZvRVV6WlU5MjhOOUZvUT09";
       var key = Sha256(secret_key).toString(Hex).substr(0, 32); // Use the first 32 bytes (see 2.)
       var iv = Sha256(secret_iv).toString(Hex).substr(0, 16);
-
       for (let i = 0; i < this.questions.length; i++) {
         // convert from Base64 to Utf8
         var questionBase64 = Base64.parse(this.questions[i].question).toString(
@@ -352,6 +354,7 @@ export default {
             inserted_at: this.questions[i].choices[j].inserted_at,
             question_id: this.questions[i].choices[j].question_id,
           };
+
           this.decryptedChoices.push(decryptedChoiceObject);
         }
         let decryptedQuestionObject = {
@@ -359,6 +362,13 @@ export default {
           question_id: this.questions[i].question_id,
           session_id: this.questions[i].session_id,
           choices: this.decryptedChoices,
+          media_link: this.questions[i].media_link,
+          // == null
+          //   ? "TEXT"
+          //   : this.questions[i].media_link,
+          // "https://picsum.photos/500/300?random=5",
+          media: this.questions[i].media,
+          // "IMAGE",
         };
         this.decryptedQuestions.push(decryptedQuestionObject);
       }
