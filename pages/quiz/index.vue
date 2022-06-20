@@ -265,6 +265,7 @@ export default {
       decryptedQuestions: [],
       correctChoice: "",
       decryptedChoices: [],
+      audio_link: "",
     };
   },
   async fetch() {
@@ -361,22 +362,24 @@ export default {
 
           this.decryptedChoices.push(decryptedChoiceObject);
         }
+
+        console.log(this.questions[i].media_link);
         let decryptedQuestionObject = {
           question: decryptedQuestion,
           question_id: this.questions[i].question_id,
           session_id: this.questions[i].session_id,
           choices: this.decryptedChoices,
-          media_link: this.questions[i].media_link,
-          // == null
-          //   ? "TEXT"
-          //   : this.questions[i].media_link,
-          // "https://picsum.photos/500/300?random=5",
+          media_link:
+            this.questions[i].media === "AUDIO"
+              ? `http://161.35.6.91/audios/${this.questions[i].media_link}`
+              : this.questions[i].media_link,
           media: this.questions[i].media,
-          // "IMAGE",
         };
         this.decryptedQuestions.push(decryptedQuestionObject);
       }
       this.quiz = this.decryptedQuestions;
+      console.log(this.quiz);
+      console.log("NEW QUIZ");
     },
     timeLeft() {
       return TIME_LIMIT - this.timePassed;
