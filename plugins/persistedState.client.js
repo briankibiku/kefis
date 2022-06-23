@@ -18,7 +18,8 @@ export default ({ store }) => {
       "userCredits",
       "canWinStatus",
       "userAnswers",
-      "gameSubs"
+      "gameSubs",
+      "canNotify"
     ],
   })(store);
 };

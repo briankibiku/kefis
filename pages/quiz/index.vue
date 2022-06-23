@@ -120,18 +120,21 @@
         </div>
       </div>
       <div class="text-center">
-        <div v-if="this.quiz[this.counter].media === 'IMAGE'">
-          <img
-            :src="this.quiz[this.counter].media_link"
-            alt=""
-            height="100"
-            width="230"
-          />
-        </div>
+        <!--
 
+          <div v-if="this.quiz[this.counter].media === 'IMAGE'">
+            <img
+              :src="this.quiz[this.counter].media_link"
+              alt=""
+              height="100"
+              width="230"
+            />
+          </div>
         <div v-if="this.quiz[this.counter].media === 'AUDIO' && !isDisabled">
           <img src="~/assets/soundbar.gif" alt="" height="100" width="230" />
         </div>
+        -->
+
         <div class="question-title">
           {{ this.quiz[this.counter].question }}
         </div>
@@ -190,11 +193,13 @@
         <br />
         <br />
       </div>
-      <div v-if="this.quiz[this.counter].media === 'AUDIO' && !isDisabled">
-        <audio autoplay>
-          <source :src="this.quiz[this.counter].media_link" type="audio/mp3" />
+      <!--
+        <div v-if="this.quiz[this.counter].media === 'AUDIO' && !isDisabled">
+          <audio autoplay>
+            <source :src="this.quiz[this.counter].media_link" type="audio/mp3" />
         </audio>
       </div>
+          -->
     </div>
   </div>
 </template>
@@ -369,17 +374,15 @@ export default {
           question_id: this.questions[i].question_id,
           session_id: this.questions[i].session_id,
           choices: this.decryptedChoices,
-          media_link:
-            this.questions[i].media === "AUDIO"
-              ? `http://161.35.6.91/audios/${this.questions[i].media_link}`
-              : this.questions[i].media_link,
-          media: this.questions[i].media,
+          // media_link:
+          //   this.questions[i].media === "AUDIO"
+          //     ? `http://161.35.6.91/audios/${this.questions[i].media_link}`
+          //     : this.questions[i].media_link,
+          // media: this.questions[i].media,
         };
         this.decryptedQuestions.push(decryptedQuestionObject);
       }
       this.quiz = this.decryptedQuestions;
-      console.log(this.quiz);
-      console.log("NEW QUIZ");
     },
     timeLeft() {
       return TIME_LIMIT - this.timePassed;
