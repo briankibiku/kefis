@@ -63,6 +63,7 @@ export default {
     return {
       mswaliUserId: this.$store.state.mswaliId,
       loggedInUserNumber: this.$store.state.loggedinUserPhone,
+      disabledUser: this.$store.state.canNotify,
     };
   },
   computed: {
@@ -126,12 +127,19 @@ export default {
       await this.persistTriviaQuestions(ls.get("triviaQuestionsList"));
     },
     async fetchSessionDetails() {
-      // fetch session details
-      let sessionresponseurl = `solo-play/get-solo-session&user_id=${this.mswaliUserId}`;
-      let sessionResponse = await this.$axios.get(
-        `/apiproxy/${sessionresponseurl}`,
-      );
-      return sessionResponse.data.session.id;
+      if (this.disabledUser === 0) {
+        // fetch session details
+        let sessionresponseurl = `solo-play/get-solo-session&user_id=${this.mswaliUserId}`;
+        let sessionResponse = await this.$axios.get(
+          `/apiproxy/${sessionresponseurl}`,
+        );
+        return sessionResponse.data.session.id;
+      } else if (this.disabledUser === 1) {
+        // stop loading
+        this.errorGettingSessionToast();
+        await this.$store.dispatch("delayTwoSeconds");
+        window.location.reload();
+      }
     },
     async buydailyPlan() {
       try {
@@ -314,6 +322,17 @@ export default {
         toaster: toaster,
         solid: true,
       });
+    },
+    errorGettingSessionToast(toaster) {
+      this.$bvToast.toast(
+        `We encoutered a problem while setting up your game, please try later`,
+        {
+          title: `Error`,
+          variant: "danger",
+          toaster: toaster,
+          solid: true,
+        },
+      );
     },
     errorBuyToast(toaster) {
       this.$bvToast.toast(
