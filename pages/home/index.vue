@@ -231,6 +231,7 @@
 
 <script>
 import { mapState, mapActions } from "vuex";
+import axios from "axios";
 import NudgeArea from "../../components/NudgeArea.vue";
 import StatsCards from "../../components/StatsCards.vue";
 import LoadingBar from "../../components/LoadingBar.vue";
