@@ -164,6 +164,7 @@ export default {
       userCredits: "userCredits",
       walletBalance: "walletBalance",
       sessionDetails: "sessionDetails",
+      canNotify: "canNotify",
     }),
     remainingTime() {
       const timeLeft = this.timeLeft;
@@ -187,6 +188,7 @@ export default {
       persistwalletBalance: "persistwalletBalance",
       persistUserCredits: "persistUserCredits",
       persistSessionDetails: "persistSessionDetails",
+      peristCanNotify: "peristCanNotify",
     }),
     forceRerender() {
       this.rebuildverifybutton += 1;
@@ -286,6 +288,8 @@ export default {
         .trim();
       // persist username to state
       await this.peristUserName(lastNameFromApi);
+      let canNotifyUser = userProfile.data.data.disabled;
+      await this.peristCanNotify(canNotifyUser);
       this.lastName = this.$store.state.loggedinUserName;
       this.phoneNumber = this.$store.state.loggedinUserPhone;
     },

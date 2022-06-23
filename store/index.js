@@ -94,6 +94,7 @@ export const state = () => ({
   topTeams: {},
   topScoreSet: false,
   lastNameSet: false,
+  canNotify: "",
   trivia_score: {
     correct: 0,
     wrong: 0,
@@ -220,6 +221,9 @@ export const mutations = {
   updatelastNameSet(state, payload) {
     state.lastNameSet = payload;
   },
+  updatecanNotify(state, payload) {
+    state.canNotify = payload;
+  },
   addlastName(state, payload) {
     state.lastName = payload;
   },
@@ -294,6 +298,9 @@ export const actions = {
   },
   peristUserName({ commit }, payload) {
     commit("updateloggedinUserName", payload);
+  },
+  peristCanNotify({ commit }, payload) {
+    commit("updatecanNotify", payload);
   },
   persistMswaliId({ commit }, payload) {
     commit("updateMswaliId", payload);
