@@ -231,6 +231,7 @@
 
 <script>
 import { mapState, mapActions } from "vuex";
+import axios from "axios";
 import NudgeArea from "../../components/NudgeArea.vue";
 import StatsCards from "../../components/StatsCards.vue";
 import LoadingBar from "../../components/LoadingBar.vue";
@@ -285,6 +286,7 @@ export default {
       userCredits: "userCredits",
       canWinStatus: "canWinStatus",
       gameSubs: "gameSubs",
+      canNotify: "canNotify",
     }),
   },
   methods: {
@@ -297,6 +299,7 @@ export default {
       persistUserCredits: "persistUserCredits",
       persistCanWinStatus: "persistCanWinStatus",
       persistgameSubs: "persistgameSubs",
+      peristCanNotify: "peristCanNotify",
     }),
     toggleShowBalance() {
       if (this.showBalance) {
@@ -376,6 +379,12 @@ export default {
       this.walletBalanceFromState = Math.trunc(response.data.data);
       this.creditsBalanceFromState = response.data.credit_balance;
       this.gameSubBalanceFromState = response.data.game_subs;
+      // update user is disbled
+      let userProfile = await axios.get(
+        `/apiproxy/api/get-user&username=mast&account_number=${this.phoneNumber}`,
+      );
+      let canNotifyUser = await userProfile.data.data.disabled;
+      await this.peristCanNotify(canNotifyUser);
     },
     async getSessionDetails() {
       let sessionresponseurl = `solo-play/get-solo-session&user_id=${this.mswaliUserId}`;
