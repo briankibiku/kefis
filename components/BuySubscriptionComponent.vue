@@ -127,19 +127,19 @@ export default {
       await this.persistTriviaQuestions(ls.get("triviaQuestionsList"));
     },
     async fetchSessionDetails() {
-      if (this.disabledUser === 0) {
-        // fetch session details
-        let sessionresponseurl = `solo-play/get-solo-session&user_id=${this.mswaliUserId}`;
-        let sessionResponse = await this.$axios.get(
-          `/apiproxy/${sessionresponseurl}`,
-        );
-        return sessionResponse.data.session.id;
-      } else if (this.disabledUser === 1) {
-        // stop loading
-        this.errorGettingSessionToast();
-        await this.$store.dispatch("delayTwoSeconds");
-        window.location.reload();
-      }
+      // if (this.disabledUser === 0) {
+      // fetch session details
+      let sessionresponseurl = `solo-play/get-solo-session&user_id=${this.mswaliUserId}`;
+      let sessionResponse = await this.$axios.get(
+        `/apiproxy/${sessionresponseurl}`,
+      );
+      return sessionResponse.data.session.id;
+      // } else if (this.disabledUser === 1) {
+      //   // stop loading
+      //   this.errorGettingSessionToast();
+      //   await this.$store.dispatch("delayTwoSeconds");
+      //   window.location.reload();
+      // }
     },
     async buydailyPlan() {
       try {
