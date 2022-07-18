@@ -235,101 +235,110 @@ export default {
       let mswaliUserId = this.$store.state.mswaliId;
       // start loading
       try {
-        // if (this.disabledUser === 0) {
-        await this.persistSessionDetails("");
-        let sessionresponseurl = `solo-play/get-solo-session&user_id=${this.mswaliUserId}`;
-        let sessionResponse = await this.$axios.get(
-          `/apiproxy/${sessionresponseurl}`,
-        );
-        await this.persistSessionDetails(sessionResponse.data);
-        await this.persistCanWinStatus(
-          this.$store.state.sessionDetails.can_win,
-        );
-        this.banner = await this.$store.state.sessionDetails.banner;
-        this.prize = await this.$store.state.sessionDetails.rate;
-        let gameRate = this.$store.state.sessionDetails.session.rate;
-        let sessionID = this.$store.state.sessionDetails.session.id;
-        let isSessionLive = this.$store.state.sessionDetails.live;
+        if (this.disabledUser === 0) {
+          await this.persistSessionDetails("");
+          let sessionresponseurl = `solo-play/get-solo-session&user_id=${this.mswaliUserId}`;
+          let sessionResponse = await this.$axios.get(
+            `/apiproxy/${sessionresponseurl}`,
+          );
+          // check if session has alredy been played/marked as complete
+          if (sessionResponse.data.session.is_assigned === 0) {
+            await this.persistSessionDetails(sessionResponse.data);
+            await this.persistCanWinStatus(
+              this.$store.state.sessionDetails.can_win,
+            );
+            this.banner = await this.$store.state.sessionDetails.banner;
+            this.prize = await this.$store.state.sessionDetails.rate;
+            let gameRate = this.$store.state.sessionDetails.session.rate;
+            let sessionID = this.$store.state.sessionDetails.session.id;
+            let isSessionLive = this.$store.state.sessionDetails.live;
 
-        // check if it is sunday for the bible quiz
-        var date = new Date();
-        switch (date.getDay()) {
-          case 0:
-            this.isSunday = true;
-            break;
-          default:
-            this.isSunday = false;
-        }
-        // step 2 check if the game session is live for user to play
-        if (isSessionLive || this.isSunday) {
-          // step 3 check if rate is > 0 or = 0
-          if (gameRate > 0) {
-            // step 4 check if user has active subscriptions
-            let checkplanurl = `api/check-plan-status&user_id=${mswaliUserId}`;
-            let userSubscriptionStatus = await this.$axios.get(
-              `/apiproxy/${checkplanurl}`,
-            );
-            let getbalanceproxy = `api/get-balance&user_id=${mswaliUserId}`;
-            let userWalletBalance = await this.$axios.get(
-              `/apiproxy/${getbalanceproxy}`,
-            );
-            let creditsbalance = await Math.trunc(
-              userWalletBalance.data.credit_balance,
-            );
-            // step 5 play with credits logic starts here
-            if (creditsbalance > 0) {
-              // subtract a credit from user balance
-              let playwithcreditsurl = `api/play-with-credit&user_id=${mswaliUserId}`;
-              let creditDeduct = await this.$axios.post(
-                `/apiproxy/${playwithcreditsurl}`,
-              );
-              if (creditDeduct.data.message == "credit redeemed successfully") {
-                // if user has credits serve the questions and deduct a credit
-                await this.fetchSessionQuestions(sessionID);
-                await this.persistUserCredits(
-                  parseInt(this.$store.state.userCredits) - 1,
+            // check if it is sunday for the bible quiz
+            var date = new Date();
+            switch (date.getDay()) {
+              case 0:
+                this.isSunday = true;
+                break;
+              default:
+                this.isSunday = false;
+            }
+            // step 2 check if the game session is live for user to play
+            if (isSessionLive || this.isSunday) {
+              // step 3 check if rate is > 0 or = 0
+              if (gameRate > 0) {
+                // step 4 check if user has active subscriptions
+                let checkplanurl = `api/check-plan-status&user_id=${mswaliUserId}`;
+                let userSubscriptionStatus = await this.$axios.get(
+                  `/apiproxy/${checkplanurl}`,
                 );
-                // finish loading
+                let getbalanceproxy = `api/get-balance&user_id=${mswaliUserId}`;
+                let userWalletBalance = await this.$axios.get(
+                  `/apiproxy/${getbalanceproxy}`,
+                );
+                let creditsbalance = await Math.trunc(
+                  userWalletBalance.data.credit_balance,
+                );
+                // step 5 play with credits logic starts here
+                if (creditsbalance > 0) {
+                  // subtract a credit from user balance
+                  let playwithcreditsurl = `api/play-with-credit&user_id=${mswaliUserId}`;
+                  let creditDeduct = await this.$axios.post(
+                    `/apiproxy/${playwithcreditsurl}`,
+                  );
+                  if (
+                    creditDeduct.data.message == "credit redeemed successfully"
+                  ) {
+                    // if user has credits serve the questions and deduct a credit
+                    await this.fetchSessionQuestions(sessionID);
+                    await this.persistUserCredits(
+                      parseInt(this.$store.state.userCredits) - 1,
+                    );
+                    // finish loading
+                    await this.$router.push("/quiz");
+                    // save questions to serve in quiz page
+                  } else {
+                    this.problemPlayingWithCreditToast();
+                  }
+                } else {
+                  // step 6 if user has an active subscription serve the questions
+                  if (userSubscriptionStatus.data) {
+                    await this.fetchSessionQuestions(sessionID);
+                    await this.fetchWalletBalance();
+                    await this.deductGameSession();
+                    // deduct a session from the user
+                  } else {
+                    this.noActiveSubscriptionToast();
+                    await this.$store.dispatch("delayFiveSeconds");
+                    this.$router.push("/buy-subscription");
+                  }
+                }
+              } else if (gameRate == 0) {
+                await this.fetchSessionQuestions(sessionID);
+                // stop loading
                 await this.$router.push("/quiz");
-                // save questions to serve in quiz page
-              } else {
-                this.problemPlayingWithCreditToast();
               }
             } else {
-              // step 6 if user has an active subscription serve the questions
-              if (userSubscriptionStatus.data) {
-                await this.fetchSessionQuestions(sessionID);
-                await this.fetchWalletBalance();
-                await this.deductGameSession();
-                // deduct a session from the user
-              } else {
-                this.noActiveSubscriptionToast();
-                await this.$store.dispatch("delayFiveSeconds");
-                this.$router.push("/buy-subscription");
-              }
+              // stop loading
+              this.sessionIsNotLiveToast();
+              await this.$store.dispatch("delayTwoSeconds");
+              window.location.reload();
             }
-          } else if (gameRate == 0) {
-            await this.fetchSessionQuestions(sessionID);
-            // stop loading
-            await this.$router.push("/quiz");
+          } else {
+            this.errorGettingSessionToast();
+            await this.$store.dispatch("delayTwoSeconds");
+            window.location.reload();
           }
-        } else {
+        } else if (this.disabledUser === 1) {
           // stop loading
-          this.sessionIsNotLiveToast();
-          await this.$store.dispatch("delayTwoSeconds");
-          window.location.reload();
+          this.errorGettingSessionToast();
+          // await this.$store.dispatch("delayTwoSeconds");
+          // window.location.reload();
         }
-        // } else if (this.disabledUser === 1) {
-        //   // stop loading
-        //   this.errorGettingSessionToast();
-        //   await this.$store.dispatch("delayTwoSeconds");
-        //   window.location.reload();
-        // }
       } catch (e) {
         // stop loading
         this.errorGettingSessionToast();
-        await this.$store.dispatch("delayTwoSeconds");
-        window.location.reload();
+        // await this.$store.dispatch("delayTwoSeconds");
+        // window.location.reload();
       }
     },
   },

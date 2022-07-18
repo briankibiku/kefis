@@ -129,7 +129,6 @@ export default {
   axios: {
     proxy: true,
   },
-
   proxy: {
     "/apiproxy/": {
       target: `http://197.248.4.233/mswali/mswali_app/backend/web/index.php?r=`,

@@ -115,16 +115,21 @@ export default {
       });
     },
     async fetchSessionQuestions() {
-      let sessionID = this.$store.state.sessionDetails.session.id.toString();
-      let soloplayproxy = `solo-play/fetch-trivia-questions&session_id=${sessionID}`;
-      let sessionQuestionsResponse = await this.$axios.get(
-        `/apiproxy/${soloplayproxy}`,
-      );
+      if (this.$store.state.sessionDetails.session.is_assigned === 0) {
+        let sessionID = this.$store.state.sessionDetails.session.id.toString();
+        let soloplayproxy = `solo-play/fetch-trivia-questions&session_id=${sessionID}`;
+        let sessionQuestionsResponse = await this.$axios.get(
+          `/apiproxy/${soloplayproxy}`,
+        );
 
-      ls.set("triviaQuestionsList", sessionQuestionsResponse.data.data, {
-        encrypt: true,
-      });
-      await this.persistTriviaQuestions(ls.get("triviaQuestionsList"));
+        ls.set("triviaQuestionsList", sessionQuestionsResponse.data.data, {
+          encrypt: true,
+        });
+        await this.persistTriviaQuestions(ls.get("triviaQuestionsList"));
+      } else {
+        await this.errorToast();
+        await this.$store.dispatch("delayFiveSeconds");
+      }
     },
     async fetchSessionDetails() {
       // if (this.disabledUser === 0) {
