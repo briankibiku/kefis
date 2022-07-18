@@ -41,8 +41,8 @@
         Points Earned: <strong> {{ this.myScore }} </strong>
       </p>
       <p class="heading3">
-        View your answers
-        <u><a href="/my-answers" style="color: #ffff00">here</a></u>
+        Give
+        <u><a href="/feedback" style="color: #ffff00">feedback</a></u>
       </p>
       <div>
         <RoundedGoldLoadingButton
