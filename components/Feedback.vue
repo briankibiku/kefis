@@ -39,17 +39,12 @@ export default {
         {
           title: "Rate Us",
           body: "Did you enjoy playing mSwali?",
-          route: "rate-us",
+          route: "general-feedback",
         },
         {
           title: "Report problem",
           body: "Had any problem playing mSwali?",
           route: "report-problem",
-        },
-        {
-          title: "General feedback",
-          body: "Share your thoughts on mSwali?",
-          route: "general-feedback",
         },
       ],
     };
