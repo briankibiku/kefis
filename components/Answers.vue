@@ -1,35 +1,32 @@
 <template>
   <div>
-    <div>
+    <div
+      v-if="userHasNeverPlayed"
+      class="centered-container"
+      style="width: 240px"
+    >
       <div>
-        <div
-          v-if="userHasNeverPlayed"
-          class="centered-container"
-          style="width: 240px"
-        >
-          <div>
-            <img src="~/assets/win_big.png" alt="" />
-            <div class="heading3 text-center">
-              You have not played mSwali yet. play to view your answers
-            </div>
-            <RoundedGoldLoadingButton
-              buttonText="Play NOW to WIN"
-              style="font-size: 24px; font-weight: bold"
-            />
-          </div>
+        <img src="~/assets/win_big.png" alt="" />
+        <div class="heading3 text-center">
+          You have not played mSwali yet. play to view your answers
         </div>
-        <div v-if="!userHasNeverPlayed" class="row">
-          <div class="d-flex flex-direction-row">
-            <b-table
-              striped
-              hover
-              :items="this.mergedAnswersList"
-              :fields="fields"
-              :per-page="perPage"
-              :current-page="currentPage"
-            ></b-table>
-          </div>
-        </div>
+        <RoundedGoldLoadingButton
+          buttonText="Play NOW to WIN"
+          style="font-size: 24px; font-weight: bold"
+        />
+      </div>
+    </div>
+    <div v-if="!userHasNeverPlayed" class="row">
+      <div class="d-flex flex-direction-row">
+        <b-table
+          striped
+          hover
+          :items="this.mergedAnswersList"
+          :fields="fields"
+          :per-page="perPage"
+          :current-page="currentPage"
+          style="padding-inline: 20px"
+        ></b-table>
       </div>
     </div>
   </div>
@@ -60,10 +57,10 @@ export default {
       ],
       answerfields: [{ key: "picked", label: "Your Ans" }],
       fields: [
-        "question",
+        "ques",
         { key: "answer", label: "Answer" },
-        { key: "label", label: "Correct Choice" },
-        { key: "picked", label: "Your Choice" },
+        { key: "label", label: "Correct" },
+        { key: "picked", label: "Your" },
       ],
     };
   },
