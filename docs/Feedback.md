@@ -8,9 +8,10 @@ This feature allows a user to answer two questions regarding the imapct of mSwal
 This feature allows a user to report any problem encountered when interacting with the platform
 
 ## Project Folder Stucture 
-pwa
-|__
-|   pages
-|    |
-|    | -- feedback
-|__       
+``` pwa
+    |__
+    |   pages
+    |    |
+    |    | -- feedback
+    |__       
+``` 
