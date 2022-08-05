@@ -77,18 +77,3 @@ More information about the usage of this directory in [the documentation](https:
 This directory contains your Vuex store files. Creating a file in this directory automatically activates Vuex.
 
 More information about the usage of this directory in [the documentation](https://nuxtjs.org/docs/2.x/directory-structure/store).
-
-
-## Project Features and Functionality
-
-### Onboarding
-Onboarding feature covers new and existing user login/signup
-
-#### Signup 
-This feature is for completely new users who have never used the platform before
-
-#### Login 
-This feature is for users who have signed up on the platform and are continuing users
-
-### Loading Account
-Loading account feature involves the steps in which a user takes in order to load money to their mSwali wallets to be able to buy game subscriptions and pay mSwali.
