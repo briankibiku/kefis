@@ -8,11 +8,12 @@ This feature is for completely new users who have never used the platform before
 This feature is for users who have signed up on the platform and are continuing users
 
 ## Project Folder Stucture 
-pwa
-|__
-|   pages
-|    |
-|    | -- login
-|    | -- otp
-|    | -- signup
-|__       
+```    pwa
+    |__
+    |   pages
+    |    |
+    |    | -- login
+    |    | -- otp
+    |    | -- signup
+    |__       
+```

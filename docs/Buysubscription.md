@@ -16,9 +16,10 @@ mSwali subscriptions are divided into 3 categories
    This subscription is bought at KES 200 and the user receives 10 play sessions on purchasing
 
 ## Project Folder Stucture 
-pwa
-|__
-|   pages
-|    |
-|    | -- buy-subscription
-|__       
+``` pwa
+    |__
+    |   pages
+    |    |
+    |    | -- buy-subscription
+    |__       
+```
