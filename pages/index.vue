@@ -57,7 +57,7 @@ export default {
       if (this.$store.state.isAuthenticated) {
         setTimeout(() => (window.location.href = "/home"), 500);
       } else {
-        setTimeout(() => (window.location.href = "/login"), 500);
+        setTimeout(() => (window.location.href = "/email-login"), 5000);
       }
     });
   },

@@ -21,17 +21,16 @@
               </div>
               <br />
               <div class="heading2">Welcome to mSwali</div>
-              <div class="text1">Enter your number to continue</div>
-              <br />
-              <div>
+              <div class="text1">Enter your your email to continue</div>
+              <div class="column">
                 <input
                   class="rounded-border-input"
-                  type="number"
-                  placeholder="0712 345 678"
-                  v-model="phoneNumber"
+                  type="email"
+                  placeholder="janedoe@kq.co.ke"
+                  v-model="emailAddress"
                   required
                   style="margin-bottom: 10px"
-                  v-on:keyup.enter="checkUserExists"
+                  v-on:keyup.enter="signUpUserAndSendEmailOTP"
                 />
               </div>
               <div>
@@ -39,7 +38,7 @@
                   buttonText="Proceed"
                   showIcon="true"
                   id="loginbtn"
-                  @click="checkUserExists()"
+                  @click="signUpUserAndSendEmailOTP()"
                 />
               </div>
             </div>
@@ -63,8 +62,8 @@ export default {
   },
   data() {
     return {
-      phoneNumber: this.phoneNumber,
-      userName: this.userName,
+      emailAddress: "",
+      userName: "",
       loading: false,
     };
   },
@@ -80,7 +79,9 @@ export default {
     ...mapState({
       isExistingUser: "isExistingUser",
       loggedinUserPhone: "loggedinUserPhone",
+      loggedinUserEmail: "loggedinUserEmail",
       newUserPhone: "newUserPhone",
+      userDetails: "userDetails"
     }),
   },
   methods: {
@@ -88,10 +89,57 @@ export default {
       peristIsExistingUSer: "peristIsExistingUSer",
       peristUserPhone: "peristUserPhone",
       persistupdateNewUserPhone: "persistupdateNewUserPhone",
+      peristUserEmail: "peristUserEmail",
+      persistuserDetails: "persistuserDetails"
     }),
+    async signUpUserAndSendEmailOTP(){     
+      if (!!this.emailAddress) {
+        
+        try {
+          // register user first before attempt to send otp
+          const res = await axios.get(
+            `/apiproxy/corporate-tunnel/check-user&email=${this.emailAddress}`
+            // `/apiproxy/corporate-tunnel/create-user&username=${this.userName}&email=${this.emailAddress}`,
+          ); 
+          if(res.data.status === true){
+            // send OTP if user is saved
+          const sendOTPres = await axios.get(
+            `/apiproxy/corporate-tunnel/generate-otp&email=${this.emailAddress}`,
+          );  
+          if(sendOTPres.data == 202){
+            let userDetailsObject = {
+              'email': this.emailAddress,
+            }
+            await this.persistuserDetails(userDetailsObject)
+            // await this.$store.commit("updateUserDetails", userDetailsObject);
+            this.$router.push('/email-otp')
+          } else {
+          this.sendOTPErrorToast();
+          await this.$store.dispatch("delayTwoSeconds");
+          window.location.reload();  
+          }
+
+          } else {
+          this.notSignedUpToast();
+          await this.$store.dispatch("delayFiveSeconds");
+            this.$router.push('/email-signup')
+
+          }
+        } catch (e) {
+          console.log(e)
+          this.sendOTPErrorToast();
+          await this.$store.dispatch("delayTwoSeconds");
+          window.location.reload();          
+        }
+      } else {
+        this.showMissingFieldsToast();
+        await this.$store.dispatch("delayTwoSeconds");
+        window.location.reload();
+      }
+    },
     showMissingFieldsToast(toaster, variant = "danger") {
-      this.$bvToast.toast("Enter a valid phone number to proceed", {
-        title: `Phone number required`,
+      this.$bvToast.toast("All fields are required, make sure to fill all before proceeding", {
+        title: `Missing fields`,
         variant: variant,
         toaster: toaster,
         solid: true,
@@ -105,11 +153,19 @@ export default {
         solid: true,
       });
     },
+    notSignedUpToast(toaster, variant = "info") {
+      this.$bvToast.toast("We are redirecting you to register page", {
+        title: `You are not registered`,
+        variant: variant,
+        toaster: toaster,
+        solid: true,
+      });
+    },
     goToSignup() {
       return this.$router.push("/signup");
     },
     navigateToLogin() {
-      return this.$router.push("/login");
+      return this.$router.push("/email-login");
     },
     validatePhoneNumber(input_str) {
       var re = /^[\+]?[(]?[0-9]{3}[)]?[-\s\.]?[0-9]{3}[-\s\.]?[0-9]{4,6}$/im;
@@ -122,21 +178,23 @@ export default {
           Accept: "application/json",
         },
       };
-      if (!!this.phoneNumber && this.validatePhoneNumber(this.phoneNumber)) {
+
+      this.$router.push("/otp");
+      if (!!this.emailAddress) {
         try {
           // start loading
           this.$nuxt.$loading.start();
           const res = await axios.get(
-            `/apiproxy/api/get-user&username=mast&account_number=${this.phoneNumber}`,
+            `/apiproxy/email-tunnel/generate-otp&email=${this.emailAddress}`,
             config,
           );
           // check if user already exists
           if (!res.data.status) {
             // stop loading
-            await this.peristUserPhone(this.phoneNumber);
-            await this.$store.commit("updateSignUpPhone", this.phoneNumber);
-            this.$router.push("/accept-signup");
-            await this.persistupdateNewUserPhone(this.phoneNumber);
+            await this.peristUserEmail(this.emailAddress);
+            await this.$store.commit("updateSignUpEmail", this.emailAddress);
+            this.$router.push("/otp");
+            // await this.persistupdateNewUserPhone(this.emailAddress);
           } else {
             // update state that the user is an existing user and not need to show modal
             await this.peristIsExistingUSer(true);
@@ -210,5 +268,47 @@ export default {
 }
 #col2 {
   width: 50%;
+  color: #160d3d;
+  background-color: #fff;
+}
+.heading2 {
+  font-size: 24px;
+  font-weight: 800;
+  font-family: "Nunito Sans", sans-serif;
+  color: #160d3d;
+}
+
+.text1 {
+  font-size: 14px;
+  font-weight: 500;
+  font-family: "Nunito Sans", sans-serif;
+  color: #160d3d;
+}
+.column{
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+  align-items: center;
+}
+/* Small Devices, Phones and Desktop screens*/
+@media only screen and (max-width: 780px) {  
+#col2 {
+  width: 100%;
+  color: #fff;
+  background-color: #160d3d;
+}
+.heading2 {
+  font-size: 24px;
+  font-weight: 800;
+  font-family: "Nunito Sans", sans-serif;
+  color: #fff;
+}
+
+.text1 {
+  font-size: 14px;
+  font-weight: 500;
+  font-family: "Nunito Sans", sans-serif;
+  color: #fff;
+}
 }
 </style>

@@ -15,42 +15,6 @@
     <button
       class="rounded-button-transparent"
       style="text-align: left; background-color: transparent"
-      @click="navigateToBuySubscription()"
-    >
-      <div class="menu">
-        <!--
-        <font-awesome-icon :icon="['fas', 'dollar-sign']" />
-      -->
-        Buy Subscription
-      </div>
-    </button>
-    <button
-      class="rounded-button-transparent"
-      style="text-align: left; background-color: transparent"
-      @click="navigateToAnswers()"
-    >
-      <div class="menu">
-        <!--
-        <font-awesome-icon :icon="['fas', 'question-circle']" />
-      -->
-        My Answers
-      </div>
-    </button>
-    <button
-      class="rounded-button-transparent"
-      style="text-align: left; background-color: transparent"
-      @click="navigateToWallet()"
-    >
-      <div class="menu">
-        <!--
-        <font-awesome-icon :icon="['fas', 'wallet']" />
-      -->
-        Wallet
-      </div>
-    </button>
-    <button
-      class="rounded-button-transparent"
-      style="text-align: left; background-color: transparent"
       @click="navigateToRankings()"
     >
       <div class="menu">
@@ -58,6 +22,18 @@
         <font-awesome-icon :icon="['fas', 'trophy']" />
       -->
         Leaderboard
+      </div>
+    </button>
+    <button
+      class="rounded-button-transparent"
+      @click="navigateTotournaments()"
+      style="text-align: left; background-color: transparent"
+    >
+      <div class="menu">
+        <!--
+        <font-awesome-icon :icon="['fas', 'share']" /> 
+      -->
+        My Team
       </div>
     </button>
     <button
@@ -71,30 +47,6 @@
         <font-awesome-icon :icon="['fas', 'headset']" />
       -->
         Support
-      </div>
-    </button>
-    <button
-      class="rounded-button-transparent"
-      style="text-align: left; background-color: transparent"
-      @click="navigateToFAQ()"
-    >
-      <div class="menu">
-        <!--
-        <font-awesome-icon :icon="['fas', 'question']" />
-      -->
-        FAQs
-      </div>
-    </button>
-    <button
-      class="rounded-button-transparent"
-      @click="navigateTotournaments()"
-      style="text-align: left; background-color: transparent"
-    >
-      <div class="menu">
-        <!--
-        <font-awesome-icon :icon="['fas', 'share']" /> 
-      -->
-        Tournaments
       </div>
     </button>
     <button
@@ -159,6 +111,7 @@ export default {
       loggedinUserName: "loggedinUserName",
       loggedinUserPhone: "loggedinUserPhone",
       sessionDetails: "sessionDetails",
+      userDetails: "userDetails"
     }),
   },
   methods: {
@@ -167,13 +120,15 @@ export default {
       peristUserPhone: "peristUserPhone",
       peristAuthentication: "peristAuthentication",
       persistSessionDetails: "persistSessionDetails",
+      persistuserDetails: "persistuserDetails"
     }),
     async logOut() {
       await this.peristAuthentication(false);
       await this.persistSessionDetails("");
       await this.peristUserPhone("");
       await this.peristUserName("");
-      return this.$router.push("/login");
+      await this.persistuserDetails({});
+      return this.$router.push("/email-login");
     },
     navigateToHome() {
       return this.$router.push("/home");
@@ -188,7 +143,7 @@ export default {
       return this.$router.push("/my-answers");
     },
     navigateTotournaments() {
-      return this.$router.push("/view-tournament");
+      return this.$router.push("/my-team");
     },
     navigateToWallet() {
       return this.$router.push("/wallet");

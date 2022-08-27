@@ -8,6 +8,7 @@ export default ({ store }) => {
       "isAuthenticated",
       "loggedinUserName",
       "loggedinUserPhone",
+      "loggedinUserEmail",
       "newUserPhone",
       "mswaliId",
       "walletBalance",
@@ -19,7 +20,9 @@ export default ({ store }) => {
       "canWinStatus",
       "userAnswers",
       "gameSubs",
-      "canNotify"
+      "canNotify",
+      "userDetails",
+      "tournamentDetails",
     ],
   })(store);
 };

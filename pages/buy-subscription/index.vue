@@ -52,7 +52,7 @@ export default {
   },
   methods: {
     navigateToLogin() {
-      return this.$router.push("/login");
+      return this.$router.push("/email-login");
     },
     showMsgBoxTwo(prize) {
       this.boxTwo = "";

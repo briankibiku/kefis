@@ -1,6 +1,6 @@
 <template>
   <b-overlay
-    :show="busy"
+    :show="loading"
     rounded
     opacity="0.6"
     spinner-small
@@ -11,13 +11,14 @@
     <b-button
       class="rounded-button-cyan subheading4"
       ref="button"
+      :key="rebuildbutton"
       :disabled="busy"
       @click="
         // callback($event);
         onClick();
         navigateToQuiz();
       "
-      style="width: 260px; background-color: #ffb500"
+      style="width: 260px"
     >
       {{ buttonText }}
     </b-button>
@@ -30,25 +31,33 @@ import ls from "localstorage-slim";
 export default {
   data() {
     return {
-      busy: false,
+      busy: (this.disabled === 'true') ? true : false,
+      loading: false,
       timeout: null,
       show: false,
+      rebuildbutton: 0,
       isSunday: false,
       mswaliUserId: this.$store.state.mswaliId,
       disabledUser: this.$store.state.canNotify,
+      istournamentLive: null,
     };
   },
   props: {
     buttonText: String,
     showIcon: String,
     showloading: String,
+    disabled: String,
   },
-  mounted() {
+  mounted() { 
     if (this.showIcon == "true") {
       this.show = true;
     } else {
       this.show = false;
     }
+    // setTimeout(
+    //     () => this.istournamentLive === 0 && (this.forceRerender()),
+    //     5000,
+    //   );
   },
   beforeDestroy() {
     this.clearTimeout();
@@ -70,6 +79,25 @@ export default {
       persistSessionDetails: "persistSessionDetails",
       persistTriviaQuestions: "persistTriviaQuestions",
     }),
+    // forceRerender() {
+    //   this.rebuildbutton += 1;
+    //   this.disabled = 'true';
+    //   this.buttonText = 'Session is live: Play Now & Win';
+    //   console.log('is game live', this.istournamentLive)
+    //   console.log(this.buttonText)
+    //   console.log('<------RELOAD BUTTON------>')
+    // },
+    async getTournamentDetails() {
+      // fetch tournament details
+      let tournamentDetails = await axios.get(
+        `/apiproxy/tournament-play/get-tournament-session&user_id=${this.mswaliUserId}`,
+      );
+      await this.persisttournamentDetails(tournamentDetails);
+      this.istournamentLive =
+        this.$store.state.userDetails.tournament.data.data.game_on;
+      console.log(this.istournamentLive);
+      console.log("Live or NOT");
+    },
     clearTimeout() {
       if (this.timeout) {
         clearTimeout(this.timeout);
@@ -89,9 +117,11 @@ export default {
     },
     onClick() {
       this.busy = true;
+      this.loading = true;
       // Simulate an async request
       this.setTimeout(() => {
         this.busy = false;
+      this.loading = true;
       });
     },
     callback: function (e) {
@@ -121,7 +151,7 @@ export default {
     async fetchSessionQuestions(sessionID) {
       try {
         let sessionID = this.$store.state.sessionDetails.session.id.toString();
-        let soloplayproxy = `solo-play/fetch-trivia-questions&session_id=${sessionID}`;
+        let soloplayproxy = `tournament-play/fetch-trivia-questions&session_id=${sessionID}`;
         let sessionQuestionsResponse = await this.$axios.get(
           `/apiproxy/${soloplayproxy}`,
         );
@@ -237,7 +267,7 @@ export default {
       try {
         if (this.disabledUser === 0) {
           await this.persistSessionDetails("");
-          let sessionresponseurl = `solo-play/get-solo-session&user_id=${this.mswaliUserId}`;
+          let sessionresponseurl = `tournament-play/get-tournament-session&user_id=${this.mswaliUserId}`;
           let sessionResponse = await this.$axios.get(
             `/apiproxy/${sessionresponseurl}`,
           );
@@ -263,60 +293,11 @@ export default {
                 this.isSunday = false;
             }
             // step 2 check if the game session is live for user to play
-            if (isSessionLive || this.isSunday) {
-              // step 3 check if rate is > 0 or = 0
-              if (gameRate > 0) {
-                // step 4 check if user has active subscriptions
-                let checkplanurl = `api/check-plan-status&user_id=${mswaliUserId}`;
-                let userSubscriptionStatus = await this.$axios.get(
-                  `/apiproxy/${checkplanurl}`,
-                );
-                let getbalanceproxy = `api/get-balance&user_id=${mswaliUserId}`;
-                let userWalletBalance = await this.$axios.get(
-                  `/apiproxy/${getbalanceproxy}`,
-                );
-                let creditsbalance = await Math.trunc(
-                  userWalletBalance.data.credit_balance,
-                );
-                // step 5 play with credits logic starts here
-                if (creditsbalance > 0) {
-                  // subtract a credit from user balance
-                  let playwithcreditsurl = `api/play-with-credit&user_id=${mswaliUserId}`;
-                  let creditDeduct = await this.$axios.post(
-                    `/apiproxy/${playwithcreditsurl}`,
-                  );
-                  if (
-                    creditDeduct.data.message == "credit redeemed successfully"
-                  ) {
-                    // if user has credits serve the questions and deduct a credit
-                    await this.fetchSessionQuestions(sessionID);
-                    await this.persistUserCredits(
-                      parseInt(this.$store.state.userCredits) - 1,
-                    );
-                    // finish loading
-                    await this.$router.push("/quiz");
-                    // save questions to serve in quiz page
-                  } else {
-                    this.problemPlayingWithCreditToast();
-                  }
-                } else {
-                  // step 6 if user has an active subscription serve the questions
-                  if (userSubscriptionStatus.data) {
-                    await this.fetchSessionQuestions(sessionID);
-                    await this.fetchWalletBalance();
-                    await this.deductGameSession();
-                    // deduct a session from the user
-                  } else {
-                    this.noActiveSubscriptionToast();
-                    await this.$store.dispatch("delayFiveSeconds");
-                    this.$router.push("/buy-subscription");
-                  }
-                }
-              } else if (gameRate == 0) {
-                await this.fetchSessionQuestions(sessionID);
+            if (isSessionLive) {
+              // step 3 serve questions
+              await this.fetchSessionQuestions(sessionID);
                 // stop loading
                 await this.$router.push("/quiz");
-              }
             } else {
               // stop loading
               this.sessionIsNotLiveToast();

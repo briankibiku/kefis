@@ -158,7 +158,7 @@ export default {
       // return this.$router.push("/category");
     },
     navigateToLogin() {
-      return this.$router.push("/login");
+      return this.$router.push("/email-login");
     },
     async fecthUserBalance() {
       let mswaliUserId = this.$store.state.mswaliId;

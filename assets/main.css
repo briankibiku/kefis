@@ -189,7 +189,7 @@
   min-height: 100vh;
   text-align: center;
   overflow-x: hidden;
-  background: linear-gradient(to bottom, #1ceded 5%, #f0f0f0 30%);
+  background: linear-gradient(to bottom, #1ceded 5%, #f0f0f0 20%);
 }
 .purple-background {  
   padding: 30px;

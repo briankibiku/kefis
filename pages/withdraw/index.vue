@@ -154,7 +154,7 @@ export default {
       // return this.$router.push("/category");
     },
     navigateToLogin() {
-      return this.$router.push("/login");
+      return this.$router.push("/email-login");
     },
     async processWithdrawal() {
       // check if user has input amount they want to withdraw

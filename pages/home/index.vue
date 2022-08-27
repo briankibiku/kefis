@@ -32,8 +32,11 @@
         <!--Big screen sidebar navigation starts here-->
 
         <!--Search bar / Start quiz button / Profile -->
-        <div id="col2">
-          <div class="d-flex justify-content-around" style="height: 50px">
+        <div id="col2" style="background-color: #fff">
+          <div
+            class="d-flex justify-content-around"
+            style="height: 50px; background-color: #fff"
+          >
             <form action="" class="padding-right-10">
               <div class="form-group">
                 <input
@@ -44,10 +47,63 @@
                 />
               </div>
             </form>
-            <RoundedGoldLoadingButton
-              buttonText="Play NOW to WIN"
-              style="font-size: 24px; font-weight: bold"
-            />
+            <!--Play Quiz button-->
+            <!-- Admin buttons  -->
+            <div
+              v-if="
+                this.isAdminUser === 1 &&
+                this.istournamentLive === true &&
+                this.remainingRounds > 0 &&
+                !this.hasPlayed
+              "
+              :key="rebuildbutton"
+            >
+              <RoundedGoldLoadingButton
+                buttonText="Session is live: Play Now & Win"
+                disabled="false"
+                style="font-size: 18px; font-weight: bold"
+                :key="rebuildbutton"
+              />
+            </div>
+            <div
+              v-if="this.isAdminUser === 1 && this.istournamentLive === false"
+              :key="rebuildbutton"
+            >
+              <BeginSessionLoadingButton
+                buttonText="Let The Games Begin"
+                disabled="false"
+                style="font-size: 18px; font-weight: bold"
+              />
+            </div>
+
+            <!-- Normal Player buttons  -->
+        <div v-if="this.hasPlayed" class="heading4">You have already participated in this trivia. Please wait for the next round.</div>
+            <div
+              v-if="
+                this.isAdminUser === 0 &&
+                this.istournamentLive === true &&
+                this.remainingRounds > 0 &&
+                !this.hasPlayed
+              "
+              :key="rebuildbutton"
+            >
+              <RoundedGoldLoadingButton
+                buttonText="Session is live: Play Now & Win"
+                disabled="false"
+                style="font-size: 18px; font-weight: bold"
+                :key="rebuildbutton"
+              />
+            </div>
+            <div
+              v-if="this.isAdminUser === 0 && this.istournamentLive === false"
+              :key="rebuildbutton"
+            >
+              <RoundedGoldLoadingButton
+                buttonText="Game Not Live"
+                disabled="true"
+                style="font-size: 18px; font-weight: bold"
+              />
+            </div>
             <div class="d-flex align-items-center" style="flex-direction: row">
               <b-button class="text-button margin-horizontal-20" @click="">
                 <b-avatar variant="light"></b-avatar>
@@ -66,50 +122,62 @@
             <div class="row" style="flex-direction: column">
               <div class="row d-flex justify-content-start">
                 <Salutations />
-                <div class="wallet-card">
-                  <div class="d-flex justify-content-between">
-                    <div class="heading4">
-                      Wallet Balance
-                      <b-button
-                        style="background-color: transparent; border: none"
-                        @click="toggleShowBalance()"
+              </div>
+              <!-- stats card go here -->
+              <div class="wallet-card" style="width: 80%">
+                <div
+                  class="heading2 d-flex text-center justify-content-between"
+                >
+                  <span class="heading3" style="color: rgb(80, 79, 79)"
+                    >Remaining Rounds :
+                  </span>
+                  <div style="color: #160d3d">{{ remainingRounds }}</div>
+                </div>
+              </div>
+              <!-- Rounds -->
+              <div>
+                <br />
+                <div class="heading3" style="text-align: left">
+                  Round Scores
+                </div>
+                <br />
+                <div>
+                  <div
+                    class="scrollable"
+                    style="display: flex; flex-direction: row"
+                  >
+                    <div v-for="round in roundsScoreList">
+                      <div
+                        style="
+                          background: #fff;
+                          padding: 10px;
+                          margin-right: 15px;
+                          margin-bottom: 25px;
+                          box-sizing: border-box;
+                          border-radius: 6px;
+                          box-shadow: 0 0 50px #fff;
+                        "
                       >
-                        <font-awesome-icon
-                          :icon="['fas', 'eye']"
-                          style="color: #91919f"
-                        />
-                      </b-button>
-                    </div>
-                    <div class="subheading4">
-                      Credits: {{ this.creditsBalanceFromState }}
-                      Remaining games:
-                      {{ this.gameSubBalanceFromState }}
-                    </div>
-                  </div>
-                  <div class="heading2" v-if="showBalance">
-                    KES {{ this.walletBalanceFromState }}
-                  </div>
-                  <div v-if="!showBalance">
-                    <div
-                      class="heading4"
-                      style="
-                        font-size: 24px;
-                        font-weight: 800;
-                        font-family: 'Nunito Sans', sans-serif;
-                        color: #160d3d;
-                      "
-                    >
-                      ******
+                        <div>
+                          <span class="points-heading">{{
+                            round.score * 10
+                          }}</span
+                          >pts
+                        </div>
+                        <div class="round-title">Round {{ round.row }}</div>
+                      </div>
                     </div>
                   </div>
                 </div>
               </div>
+              <br />
               <!--Statistics area, quiz passed, fastest times go here-->
               <div>
                 <img src="~/assets/stats.svg" alt="" height="220px" />
               </div>
             </div>
           </div>
+
           <!--Nudge area promotions go here-->
           <div class="scrollable" style="display: flex; flex-direction: row">
             <img src="~/assets/promo.svg" height="320px" />
@@ -148,81 +216,112 @@
             <font-awesome-icon :icon="['fas', 'bell']" style="color: #160d3d" />
           </div>
         </div>
-        <!--Day quiz info-->
-        <div class="wallet-card text-center" style="margin: auto; width: 80%">
-          <div>
-            <div class="subheading2">
-              {{ banner }}
-            </div>
-            <div class="center-align-content heading2 prize-card">
-              KES {{ prize }}
-            </div>
-          </div>
-        </div>
-        <br />
         <!--Play Quiz button-->
-        <RoundedGoldLoadingButton
-          buttonText="Play NOW to WIN"
-          showIcon="true"
-          style="font-size: 24px; font-weight: bold"
-        />
-        <br />
-        <br />
-        <!-- wallet card go here -->
-        <div class="wallet-card" style="margin: auto; width: 80%">
-          <div class="d-flex justify-content-between">
-            <div class="subheading1">Wallet Balance</div>
-            <div>
-              <b-button
-                style="background-color: transparent; border: none"
-                @click="toggleShowBalance()"
-              >
-                <font-awesome-icon
-                  :icon="['fas', 'eye']"
-                  style="color: #91919f"
-                />
-              </b-button>
-            </div>
-          </div>
-          <div class="heading2" v-if="showBalance">
-            KES {{ this.walletBalanceFromState }}
-          </div>
-          <div v-if="!showBalance">
-            <div
-              class="heading4"
-              style="
-                font-size: 24px;
-                font-weight: 800;
-                font-family: 'Nunito Sans', sans-serif;
-                color: #160d3d;
-                text-align: center;
-              "
-            >
-              ******
-            </div>
-          </div>
-          <div class="subheading4">
-            Credits: {{ this.creditsBalanceFromState }}
-          </div>
-          <div class="subheading4">
-            Remaining games:
-            {{ this.gameSubBalanceFromState }}
-          </div>
-          <b-button class="outline-button" href="/deposit">Deposit</b-button>
+        <!-- Admin buttons  -->
+        <div
+          v-if="
+            this.isAdminUser === 1 &&
+            this.istournamentLive === true &&
+            this.remainingRounds > 0 &&
+            !this.hasPlayed
+          "
+          :key="rebuildbutton"
+        >
+          <RoundedGoldLoadingButton
+            buttonText="Session is live: Play Now & Win"
+            disabled="false"
+            style="font-size: 18px; font-weight: bold"
+            :key="rebuildbutton"
+          />
         </div>
-        <br />
+        <div
+          v-if="this.isAdminUser === 1 && this.istournamentLive === false"
+          :key="rebuildbutton"
+        >
+          <BeginSessionLoadingButton
+            buttonText="Let The Games Begin"
+            disabled="false"
+            style="font-size: 18px; font-weight: bold"
+          />
+        </div>
 
+        <!-- Normal Player buttons  -->
+        <div
+          v-if="
+            this.isAdminUser === 0 &&
+            this.istournamentLive === true &&
+            this.remainingRounds > 0 &&
+            !this.hasPlayed
+          "
+          :key="rebuildbutton"
+        >
+          <RoundedGoldLoadingButton
+            buttonText="Session is live: Play Now & Win"
+            disabled="false"
+            style="font-size: 18px; font-weight: bold"
+            :key="rebuildbutton"
+          />
+        </div>
+        <div v-if="this.hasPlayed" class="heading4" style="text-align: center; padding-inline: 40px">You have already participated in this trivia. Please wait for the next round.</div>
+        <div
+          v-if="this.isAdminUser === 0 && this.istournamentLive === false"
+          :key="rebuildbutton"
+        >
+          <RoundedGoldLoadingButton
+            buttonText="Game Not Live"
+            disabled="true"
+            style="font-size: 18px; font-weight: bold"
+          />
+        </div>
+        <br />
         <!-- stats card go here -->
-        <div class="scrollable" style="display: flex; flex-direction: row">
-          <div>
-            <img src="~/assets/stats.svg" alt="" height="220px" />
+        <div class="wallet-card" style="margin: auto; width: 80%">
+          <div class="heading2 d-flex text-center justify-content-between">
+            <span class="heading3" style="color: rgb(80, 79, 79)"
+              >Remaining Rounds :
+            </span>
+            <div style="color: #160d3d">{{ remainingRounds  }}</div>
           </div>
         </div>
-        <!-- promo & ads card go here -->
-        <div class="scrollable" style="display: flex; flex-direction: row">
-          <img src="~/assets/promo.svg" height="220px" />
-          <img src="~/assets/promo_two.svg" height="220px" />
-          <img src="~/assets/promo_three.svg" height="220px" />
+
+        <!-- ROunda -->
+        <div>
+          <br />
+          <div class="heading3" style="text-align: left; padding-left: 40px">
+            Round Scores
+          </div>
+          <br />
+          <div v-if="this.noRoundsScore">You have not played any round yet.</div>
+          <div v-if="!this.noRoundsScore">
+            <div
+              class="scrollable"
+              style="display: flex; flex-direction: row; margin-left: 40px"
+            >
+              <div v-for="round in roundsScoreList">
+                <div
+                  style="
+                    background: #fff;
+                    padding: 10px;
+                    margin-right: 15px;
+                    margin-bottom: 25px;
+                    box-sizing: border-box;
+                    border-radius: 15px;
+                    box-shadow: 0 0 50px #fff;
+                  "
+                >
+                  <div>
+                    <span class="points-heading">{{ round.score }}</span
+                    >pts
+                  </div>
+                  <div class="round-title">Round {{ round.round }}</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <br />
+        <div style="padding-inline: 30px;">
+          <TopPlayers/>
         </div>
       </div>
     </div>
@@ -243,6 +342,8 @@ import Salutations from "../../components/Salutations.vue";
 import RoundedGoldLoadingButton from "../../components/RoundedGoldLoadingButton.vue";
 import ConfirmationModal from "../../components/ConfirmationModal.vue";
 import NavigationBar from "../../components/NavigationBar/index.vue";
+import BeginSessionLoadingButton from "../../components/BeginSessionLoadingButton.vue";
+import Winners from '../winners/index.vue';
 export default {
   data() {
     return {
@@ -257,24 +358,59 @@ export default {
       loading: false,
       greetings: "",
       showBalance: false,
-      mswaliUserId: this.$store.state.mswaliId,
+      mswaliUserId:
+        //  '141927',
+        this.$store.state.mswaliId.toString(),
       walletBalanceFromState: "",
       creditsBalanceFromState: "",
       gameSubBalanceFromState: "",
       banner: "",
       prize: "",
       allowBuySubscription: false,
+      isAdminUser: false,
+      rebuildbutton: 0,
+      customBtnText: "",
+      isBtnDisabled: "",
+      buttonText: null,
+      disabled: null,
+      timer: null,
+      hasPlayed: null,
+      istournamentLive: null,
+      remainingRounds: "",
+      roundsScoreList: [],
+      noRoundsScore: null,
+      teamID: null,
     };
   },
-  mounted() {
+  async mounted() {
     if (this.$store.state.isAuthenticated) {
-      this.daySalutatuins();
-      this.fetchWalletBalance();
-      this.getSessionDetails();
-      this.startListeners();
+      await this.daySalutatuins();
+      await this.isAlreadyTeamMember();
+      await this.getTournamentDetails();
+      await this.fetchUserDetails();
+      // await this.getSessionDetails();
+      await this.getRoundScore();
+      await this.startListeners();
+      this.timer = setInterval(async () => {
+        if (this.istournamentLive === false) {
+          await this.getTournamentDetails();
+          await this.forceRerender()
+          // this.istournamentLive === 1 && (await this.forceRerender());
+        }
+        if (this.istournamentLive === true) {
+          await this.getTournamentDetails();
+          await this.forceRerender();
+        }
+      }, 5000);
     } else {
       this.navigateToLogin();
     }
+  },
+  watch: {
+    istournamentLive(newStatus) {
+      // yes, console.log() is a side effect
+      // console.log(`new agame status is: ${newStatus}`);
+    },
   },
   computed: {
     ...mapState({
@@ -287,6 +423,8 @@ export default {
       canWinStatus: "canWinStatus",
       gameSubs: "gameSubs",
       canNotify: "canNotify",
+      userDetails: "userDetails",
+      tournamentDetails: "tournamentDetails",
     }),
   },
   methods: {
@@ -300,7 +438,31 @@ export default {
       persistCanWinStatus: "persistCanWinStatus",
       persistgameSubs: "persistgameSubs",
       peristCanNotify: "peristCanNotify",
+      persistuserDetails: "persistuserDetails",
+      persisttournamentDetails: "persisttournamentDetails",
     }),
+    beforeDestroy() {
+      clearInterval(this.timer);
+    },
+    forceRerender() {
+      this.rebuildbutton += 1;
+    },
+    async getRoundScore() {
+      try {
+        let roundScoreResponse = await axios.get(
+          `/apiproxy/tournament-play/rounds-score&user_id=${this.mswaliUserId}`,
+        );
+        if(Object.keys(roundScoreResponse.data).length === 0) {
+          this.noRoundsScore = true;
+        } else {
+          this.noRoundsScore = false;
+          this.roundsScoreList = roundScoreResponse.data.splice(0, 4);
+        }
+      } catch (error) {
+        this.errorToast();
+        this.$store.state.dispatch("delayFiveSeconds");
+      }
+    },
     toggleShowBalance() {
       if (this.showBalance) {
         this.showBalance = false;
@@ -309,7 +471,7 @@ export default {
       }
     },
     navigateToLogin() {
-      return this.$router.push("/login");
+      return this.$router.push("/email-login");
     },
     navigateToBuySubscription(allowBuySubscription) {
       if (allowBuySubscription) {
@@ -362,39 +524,90 @@ export default {
       }
       return this.greetings;
     },
-    async fetchWalletBalance() {
+    async fetchUserDetails() {
       await this.persistwalletBalance("");
       await this.persistUserCredits("");
+      await this.$store.commit("updateTournamentUserDetails", "");
       let mswaliUserId = this.$store.state.mswaliId;
-      let getbalanceproxy = `get-balance&user_id=${mswaliUserId}`;
-      let response = await this.$axios.get(`/apiproxy/api/${getbalanceproxy}`);
-      let walletBalanceFromAPI = await Math.trunc(response.data.data);
-      let walletCreditsFromAPI = await response.data.credit_balance;
-      await this.persistwalletBalance(walletBalanceFromAPI);
-      await this.persistUserCredits(walletCreditsFromAPI);
-      this.walletBalanceFromAPI = this.$store.state.walletBalance;
-
-      // populate the balances here
-
-      this.walletBalanceFromState = Math.trunc(response.data.data);
-      this.creditsBalanceFromState = response.data.credit_balance;
-      this.gameSubBalanceFromState = response.data.game_subs;
-      // update user is disbled
       let userProfile = await axios.get(
-        `/apiproxy/api/get-user&username=mast&account_number=${this.phoneNumber}`,
+        `/apiproxy/api/get-user&username=mast&account_number=${this.$store.state.userDetails.personal.email}`,
       );
       let canNotifyUser = await userProfile.data.data.disabled;
       await this.peristCanNotify(canNotifyUser);
+      try {
+        // fetch user details
+        let userProfileDetails = await axios.get(
+          `/apiproxy/tournament-play/check-membership&user_id=${this.mswaliUserId}`,
+        );
+        if (userProfileDetails.data.status === true) {
+          await this.$store.commit(
+            "updateTournamentUserDetails",
+            userProfileDetails,
+          );
+        } else {
+          await this.addMemberToTeam();
+        }
+        // // await this.persistuserDetails(userProfileDetails)
+        this.isAdminUser =
+          this.$store.state.userDetails.tournament.data.roles.is_admin;
+      } catch (e) {
+        console.log("Error", e);
+      }
     },
-    async getSessionDetails() {
-      let sessionresponseurl = `solo-play/get-solo-session&user_id=${this.mswaliUserId}`;
-      let sessionResponse = await this.$axios.get(
-        `/apiproxy/${sessionresponseurl}`,
+    async addMemberToTeam() {
+      try {
+        // get tournament details
+        let res = await axios.get(`/apiproxy/tournament-play/get-tournament`);
+        if (res.data.status === true) {
+          // add member to team
+          let response = await axios.post(
+            `/apiproxy/tournament-play/add-member&user_id=${this.mswaliUserId}&team_id=${res.data.teams[0].id}`,
+          );
+        }
+      } catch (e) {
+        console.log(e);
+      }
+    },
+    async isAlreadyTeamMember() {
+      let isTeamMemberResponse = await this.$axios.$get(
+        `/apiproxy/tournament-play/check-membership&user_id=${this.mswaliUserId}`,
       );
-      await this.persistSessionDetails(sessionResponse.data);
-      await this.persistCanWinStatus(this.$store.state.sessionDetails.can_win);
-      this.banner = await this.$store.state.sessionDetails.banner;
-      this.prize = await this.$store.state.sessionDetails.session.prize;
+      this.teamID = isTeamMemberResponse.data.id;
+      if (isTeamMemberResponse.status) {
+      } else {
+        await this.joinTeamToast();
+        await this.$store.dispatch("delayFiveSeconds");
+        this.$router.push("/my-team");
+      }
+    },
+
+    joinTeamToast(toaster) {
+      this.$bvToast.toast(
+        `You are not a member of a team yet, we are redirecting you to join a team.`,
+        {
+          title: `Join a team!`,
+          variant: "info",
+          toaster: toaster,
+          solid: true,
+        },
+      );
+    },
+    async getTournamentDetails() {
+      // get game on 
+      let gameOnVariable = await axios.get(`/apiproxy/tournament-play/get-tournament`)
+      // fetch tournament details
+      let tournamentDetails = await axios.get(
+        `/apiproxy/tournament-play/get-tournament-session&user_id=${this.mswaliUserId}`,
+      );
+      this.hasPlayed = tournamentDetails.data.has_played;
+      await this.persisttournamentDetails(tournamentDetails);
+      await this.fetchUserDetails();
+      await gameOnVariable.data.teams.filter((team) => {if(team.id === this.teamID) { this.istournamentLive =  team.game_on;}})
+      if (!tournamentDetails.data.live) {
+        this.remainingRounds = tournamentDetails.data.remaining_rounds;
+      } else {
+        this.remainingRounds = tournamentDetails.data.remaining_rounds;
+      }
     },
 
     // FCM NOTIFICATION FUNCTIONS
@@ -456,7 +669,9 @@ export default {
     RoundedGoldLoadingButton,
     ConfirmationModal,
     NavigationBar,
-  },
+    BeginSessionLoadingButton,
+    Winners
+},
 };
 </script>
 
@@ -561,6 +776,18 @@ export default {
   }
 }
 
+.points-heading {
+  font-size: 34px;
+  font-weight: bold;
+  font-family: "Nunito Sans", sans-serif;
+  color: #160d3d;
+}
+.round-title {
+  font-size: 14px;
+  font-family: "Nunito Sans", sans-serif;
+  color: rgb(80, 79, 79);
+}
+
 .winner-container {
   background-image: url("~/assets/win.png");
   background-repeat: no-repeat;
@@ -571,10 +798,8 @@ export default {
   background-size: contain;
 }
 .wallet-card {
-  margin-bottom: 20px;
   padding: 20px;
-  margin: 10px;
-  width: 50vw;
+  margin-inline: 5px;
   border-radius: 15px;
   box-shadow: 0 0 50px #ccc;
 }

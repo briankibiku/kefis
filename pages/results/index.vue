@@ -45,10 +45,6 @@
         <u><a href="/feedback" style="color: #ffff00">feedback</a></u>
       </p>
       <div>
-        <RoundedGoldLoadingButton
-          buttonText="Play Again"
-          style="font-size: 24px; font-weight: bold; margin-bottom: 20px"
-        />
         <div>
           <img src="~/assets/twitter.png" height="30" width="30" alt="" />
           <a :href="shareOnTwitter" target="blank" style="color: #fff"

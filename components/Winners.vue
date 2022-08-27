@@ -3,7 +3,7 @@
     <div>
       <div>
         <div class="row" style="width: 100%">
-          <div class="heading3" style="padding-right: 40px">
+          <div class="heading3" style="padding-right: 40px; margin-left: 20px">
             <button
               class="text-button"
               style="height: 40px; font-weight: 600"
@@ -111,7 +111,7 @@ export default {
     async fetchWinners() {
       // if (!this.$store.state.topScoreSet) {
       this.topScores = await this.$axios.get(
-        "/apiproxy/team-play/get-top-performers",
+        "/apiproxy/tournament-play/get-top-performers",
       );
       // this.topScores = this.topScores.data;
       //   getting of user answers payload to state
@@ -119,11 +119,11 @@ export default {
       //   getting of top players from state
       this.topScores = this.$store.state.topScores.data;
       this.topTeams = await this.$axios.get(
-        "/apiproxy/team-play/get-top-teams",
+        "/apiproxy/tournament-play/get-top-teams",
       );
       this.$store.commit("updateTopScoreSet", true);
-      this.$store.commit("updateTopTeams", this.topTeams.data);
-      //   getting of top teams from state
+      this.$store.commit("updateTopTeams", this.topTeams);
+      // //   getting of top teams from state
       this.topTeams = this.$store.state.topTeams.data;
     },
   },

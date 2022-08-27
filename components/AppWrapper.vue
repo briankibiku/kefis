@@ -37,10 +37,10 @@
                 />
               </div>
             </form>
-            <RoundedGoldLoadingButton
+            <!-- <RoundedGoldLoadingButton
               buttonText="Play NOW to WIN"
               style="font-size: 24px; font-weight: bold"
-            />
+            /> -->
             <div class="d-flex align-items-center" style="flex-direction: row">
               <b-button class="text-button margin-horizontal-20" @click="">
                 <b-avatar variant="light"></b-avatar>
@@ -151,7 +151,7 @@ export default {
       }
     },
     navigateToLogin() {
-      return this.$router.push("/login");
+      return this.$router.push("/email-login");
     },
     async daySalutatuins() {
       var d = new Date();

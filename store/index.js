@@ -14,15 +14,15 @@ export const state = () => ({
       choices: [
         {
           choice: "Very disappointed",
-          index: "1"
+          index: "1",
         },
         {
           choice: "Somewhat disappointed",
-          index: "2"
+          index: "2",
         },
         {
           choice: "Not disappointed",
-          index: "3"
+          index: "3",
         },
       ],
     },
@@ -33,19 +33,19 @@ export const state = () => ({
       choices: [
         {
           choice: "0 to 3 Horrible",
-          index: "1"
+          index: "1",
         },
         {
           choice: "4 to 5 Poor",
-          index: "2"
+          index: "2",
         },
         {
           choice: "6 to 8 Okay",
-          index: "3"
+          index: "3",
         },
         {
           choice: "9 to 10 Excellent",
-          index: "4"
+          index: "4",
         },
       ],
     },
@@ -77,7 +77,7 @@ export const state = () => ({
             correct: false,
           },
         ],
-      }
+      },
     ],
   },
 
@@ -105,8 +105,14 @@ export const state = () => ({
   signUpPhone: "",
   signUpName: "",
   signUpOTP: "",
+  userDetails: {
+    personal: {},
+    tournament: {},
+  },
+  tournamentDetails: {},
   loggedinUserName: "",
   loggedinUserPhone: "",
+  loggedinUserEmail: "",
   mswaliId: "",
   walletBalance: "",
   userCredits: "",
@@ -183,11 +189,23 @@ export const mutations = {
   updateSignUpOTP(state, payload) {
     state.signUpOTP = payload;
   },
+  updateUserDetails(state, payload) {
+    state.userDetails.personal = payload;
+  },
+  updateTournamentUserDetails(state, payload) {
+    state.userDetails.tournament = payload;
+  },
+  updateTournamentDetails(state, payload) {
+    state.tournamentDetails = payload;
+  },
   updateloggedinUserName(state, payload) {
     state.loggedinUserName = payload;
   },
   updateloggedinUserPhone(state, payload) {
     state.loggedinUserPhone = payload;
+  },
+  updateloggedinUserEmail(state, payload) {
+    state.loggedinUserEmail = payload;
   },
   updateQuizScore(state, payload) {
     state.trivia_score.correct = payload;
@@ -295,6 +313,15 @@ export const actions = {
   },
   peristUserPhone({ commit }, payload) {
     commit("updateloggedinUserPhone", payload);
+  },
+  peristUserEmail({ commit }, payload) {
+    commit("updateloggedinUserEmail", payload);
+  },
+  persistuserDetails({ commit }, payload) {
+    commit("updateUserDetails", payload);
+  },
+  persisttournamentDetails({ commit }, payload) {
+    commit("updateTournamentDetails", payload);
   },
   peristUserName({ commit }, payload) {
     commit("updateloggedinUserName", payload);

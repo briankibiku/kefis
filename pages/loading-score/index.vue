@@ -45,12 +45,11 @@ export default {
     }),
     async updateScore() {
       try {
-        // console.log(parsedobj);
         // let trivia = ls.get("encryptedUserAnswers", { decrypt: true });
         let decodedResponse = JSON.stringify(this.userAnswersList);
         // post answers to backend
         let postAnswerToBackendResponse = await this.$axios.post(
-          `/apiproxy/solo-play/update-session-score&resp=${decodedResponse}`,
+          `/apiproxy/tournament-play/update-session-score&resp=${decodedResponse}`,
         );
         if (postAnswerToBackendResponse.data.message === "response saved") {
           try {
@@ -67,12 +66,13 @@ export default {
             answerPayload.userAnswersList[i].correctAnswer,
           );
         }
-        await this.awardWinner();
+        // await this.awardWinner();
         await this.$store.dispatch("delayTwoSeconds");
         await this.navigateToResults();
       } catch (e) {
         console.log(e);
-        console.log("Posting answers to backend error");
+        await this.$store.dispatch("delayTwoSeconds");
+        await this.navigateToResults();
       }
       //
     },

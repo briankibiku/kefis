@@ -297,7 +297,7 @@ export default {
       return this.$router.push("/withdraw");
     },
     navigateToLogin() {
-      return this.$router.push("/login");
+      return this.$router.push("/email-login");
     },
     makeToast(toaster, variant = null) {
       this.$bvToast.toast("Dev at work to bring this feature", {

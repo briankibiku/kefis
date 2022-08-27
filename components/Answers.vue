@@ -11,6 +11,7 @@
           You have not played mSwali yet. play to view your answers
         </div>
         <RoundedGoldLoadingButton
+          disabled="false"
           buttonText="Play NOW to WIN"
           style="font-size: 24px; font-weight: bold"
         />
@@ -45,6 +46,12 @@ export default {
       questionAnswers: [],
       mergedAnswersList: [],
       userHasNeverPlayed: false,
+      mswaliUserId: 
+      // "141649",
+      this.$store.state.mswaliId,
+      sessionID: 
+      "531820",
+      // this.$store.state.sessionDetails.session.id,
       isTable: false,
       userAnswers: [],
       items: [
@@ -65,6 +72,8 @@ export default {
     };
   },
   mounted() {
+    // console.log(this.$store.state.sessionDetails.session.id)
+    console.log(this.$store.state.sessionDetails.session.id.toString(), "Session iDs")
     this.fecthAnswers();
   },
   computed: {
@@ -81,6 +90,11 @@ export default {
       this.$router.push("/my-answers");
     },
     async fecthAnswers() {
+      let tournamentAnswers = await this.$axios.$get(
+        `/apiproxy/tournament-play/show-my-answers&user_id=${this.mswaliUserId}&session_id=${this.sessionID}`
+      );
+      console.log(tournamentAnswers)
+      console.log('<-----------ANSWS----------->')
       let loggedINPhone = this.$store.state.loggedinUserPhone;
       this.userAnswers = await this.$axios.$get(
         `/apiproxy/solo-play/show-my-answers&msisdn=${loggedINPhone}`,

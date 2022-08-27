@@ -32,34 +32,37 @@ export default {
   },
   // Disable server side rendering
   // Global CSS: https://go.nuxtjs.dev/config-css
-  css: ["~/assets/main.css", 'animate.css/animate.min.css'],
-  loading: '~/components/Loading.vue',
+  css: ["~/assets/main.css", "animate.css/animate.min.css"],
+  loading: "~/components/Loading.vue",
 
   loading: {
-    color: 'purple',
-    height: '5px',
+    color: "purple",
+    height: "5px",
   },
-  // disable server side rendering 
+  // disable server side rendering
   // ssr: false,
 
   // Plugins to run before rendering page: https://go.nuxtjs.dev/config-plugins
-  plugins: [{ src: "~/plugins/persistedState.client.js" }, "~/plugins/salutations.js"],
+  plugins: [
+    { src: "~/plugins/persistedState.client.js" },
+    "~/plugins/salutations.js",
+  ],
 
   // Auto import components: https://go.nuxtjs.dev/config-components
   components: true,
 
   // Modules for dev and build (recommended): https://go.nuxtjs.dev/config-modules
-  buildModules: ['@nuxtjs/pwa', "@nuxtjs/google-fonts"],
+  buildModules: ["@nuxtjs/pwa", "@nuxtjs/google-fonts", "@nuxtjs/dotenv"],
 
   // Modules: https://go.nuxtjs.dev/config-modules
   modules: [
     // https://go.nuxtjs.dev/bootstrap
     "bootstrap-vue/nuxt",
     "@nuxtjs/axios",
-    '@nuxtjs/proxy',
-    '@nuxt/http',
-    '@nuxtjs/firebase',
-    '@nuxtjs/sentry',
+    "@nuxtjs/proxy",
+    "@nuxt/http",
+    "@nuxtjs/firebase",
+    "@nuxtjs/sentry",
     [
       "nuxt-fontawesome",
       {
@@ -93,27 +96,29 @@ export default {
     onFirebaseHosting: false,
     services: {
       messaging: true,
-    }
+    },
   },
 
   messaging: {
     createServiceWorker: true,
     actions: [
       {
-        action: 'goHome',
-        url: 'https://localhost:3000'
-      }
+        action: "goHome",
+        url: "https://localhost:3000",
+      },
     ],
-    fcmPublicVapidKey: 'BEfgwrltEh2CBzpZGaTeOJZ3w9AmSKUpC5b8qp8G6cZNOIRIE1BRoc28mhRVg07OiISzpTcUTUPP8DQcZjUHayE' // OPTIONAL : Sets vapid key for FCM after initialization
+    fcmPublicVapidKey:
+      "BEfgwrltEh2CBzpZGaTeOJZ3w9AmSKUpC5b8qp8G6cZNOIRIE1BRoc28mhRVg07OiISzpTcUTUPP8DQcZjUHayE", // OPTIONAL : Sets vapid key for FCM after initialization
   },
 
   sentry: {
     dsn: "https://c75bd89c3db342d1ab3bd678ad3e806f@o1189979.ingest.sentry.io/6310968",
     publishRelease: true,
-    sourceMapStyle: 'hidden-source-map',
+    sourceMapStyle: "hidden-source-map",
     config: {
       release: process.env.GIT_COMMIT_SHA,
-    }, integrations: [
+    },
+    integrations: [
       new BrowserTracing({
         routingInstrumentation: Sentry.vueRouterInstrumentation(router),
         tracingOrigins: ["https://quiz.mswali.co.ke", /^\//],
@@ -136,16 +141,21 @@ export default {
       pathRewrite: { "^/apiproxy/": "" },
       changeOrigin: true,
     },
+    "/api/": { 
+      target: `http://161.35.6.91/audios/`,
+      pathRewrite: { "^/api/": "" },
+      changeOrigin: true,
+    },
   },
 
   // Build Configuration: https://go.nuxtjs.dev/config-build
   build: {},
   pwa: {
     workbox: {
-      importScripts: ['/firebase-auth-sw.js'],
+      importScripts: ["/firebase-auth-sw.js"],
       // by default the workbox module will not install the service worker in dev environment to avoid conflicts with HMR
       // only set this true for testing and remember to always clear your browser cache in development
       dev: false,
     },
-  }
+  },
 };

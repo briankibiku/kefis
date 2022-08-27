@@ -24,37 +24,20 @@
             ><span class="heading4" style="color: #160d3d">
               Home</span
             ></b-nav-item
-          ><b-nav-item href="/buy-subscription"
-            ><span class="heading4" style="color: #160d3d">
-              Buy Subscription
-            </span></b-nav-item
-          >
-          <b-nav-item href="/my-answers"
-            ><span class="heading4" style="color: #160d3d">My Answers </span>
-          </b-nav-item>
-          <b-nav-item href="/wallet"
-            ><span class="heading4" style="color: #160d3d"
-              >Wallet</span
-            ></b-nav-item
           >
           <b-nav-item href="/winners"
             ><span class="heading4" style="color: #160d3d"
               >Leaderboard</span
             ></b-nav-item
           >
+          <b-nav-item href="/my-team"
+            ><span class="heading4" style="color: #160d3d"
+              >My Team</span
+            ></b-nav-item
+          >
           <b-nav-item href="/support"
             ><span class="heading4" style="color: #160d3d"
               >Support</span
-            ></b-nav-item
-          >
-          <b-nav-item href="/faq"
-            ><span class="heading4" style="color: #160d3d"
-              >FAQs</span
-            ></b-nav-item
-          >
-          <b-nav-item href="/tournament"
-            ><span class="heading4" style="color: #160d3d"
-              >Tournaments</span
             ></b-nav-item
           >
           <b-nav-item href="/feedback"
@@ -74,10 +57,6 @@
           >
             <font-awesome-icon :icon="['fas', 'share']" />
           </b-button>
-          <RoundedGoldLoadingButton
-            buttonText="Play NOW to WIN"
-            style="font-size: 16px; font-weight: bold"
-          />
         </b-navbar-nav>
         <!-- <b-navbar-nav class="ml-auto">
           <b-nav-item-dropdown style="color: #160d3d" right>
@@ -120,6 +99,7 @@ export default {
       isAuthenticated: "isAuthenticated",
       loggedinUserName: "loggedinUserName",
       loggedinUserPhone: "loggedinUserPhone",
+      userDetails: "userDetails"
     }),
   },
   methods: {
@@ -128,6 +108,7 @@ export default {
       peristUserPhone: "peristUserPhone",
       persistSessionDetails: "persistSessionDetails",
       peristAuthentication: "peristAuthentication",
+      persistuserDetails: "persistuserDetails"
     }),
     sharemSwali() {
       navigator.clipboard.writeText("apps.mwsali.co.ke");
@@ -146,7 +127,8 @@ export default {
       await this.persistSessionDetails("");
       await this.peristUserPhone("");
       await this.peristUserName("");
-      return this.$router.push("/login");
+      await this.persistuserDetails({});
+      return this.$router.push("/email-login");
     },
   },
   components: { RoundedGoldLoadingButton },

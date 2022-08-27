@@ -4,7 +4,7 @@
       {{ this.greetings }}{{ this.$store.state.loggedinUserName }}!
     </div>
     <div class="subheading2">
-      {{ this.$store.state.loggedinUserPhone.replace(/^.{3}/g, "0") }}
+      {{ this.$store.state.loggedinUserPhone }}
     </div>
   </div>
 </template>
