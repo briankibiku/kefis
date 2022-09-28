@@ -21,7 +21,7 @@
         <li>Each mSwali session has ten questions</li>
         <li>Each of the ten questions is timed at 10 seconds</li>
         <li>
-          To WIN the trivia a user has to answer correctly ALL the ten questions
+          To WIN the trivia a user has to answer ALL questions correctly
         </li>
         <li>
           Each question answered correctly earns a user 10points on the
