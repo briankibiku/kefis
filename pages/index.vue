@@ -1,68 +1,26 @@
 <template>
-  <div class="purple-bg">
-    <div class="centered-container">
-      <div class="row">
-        <div class="col">
-          <div class="winner-container"></div>
-          <br />
-          <LogoCyan style="height: 35px; width: 150px" />
-          <br />
-          <br />
-          <p>@copyright mSwali {{ this.currentYear }}</p>
-          <p>v0.0.1</p>
-        </div>
-      </div>
-    </div>
+  <div class="">
+  <Home/>
   </div>
 </template>
 
 <script>
-import axios from "axios";
-import Purple from "../components/Logo/Purple.vue";
+import Home from '../components/Home.vue';
+
 export default {
   data() {
     return {
-      currentYear: new Date().getFullYear(),
-    };
-  },
-  head() {
-    return {
-      title: "Home",
-      link: [
-        {
-          rel: "stylesheet",
-          href: "https://fonts.googleapis.com/css?family=Work Sans",
-        },
-        {
-          href: " https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css",
-        },
-      ],
-      meta: [
-        {
-          hid: "home",
-          name: "home",
-          content: "default page",
-        },
-      ],
     };
   },
   data() {
     return {
-      currentYear: new Date().getFullYear(),
     };
   },
   mounted() {
-    this.$nextTick(() => {
-      this.$nuxt.$loading.start();
-      if (this.$store.state.isAuthenticated) {
-        setTimeout(() => (window.location.href = "/home"), 500);
-      } else {
-        setTimeout(() => (window.location.href = "/email-login"), 5000);
-      }
-    });
   },
   methods: {},
-  components: { Purple },
+  components: { Home },
+  middleware: 'redirect'
 };
 </script>
 

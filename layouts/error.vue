@@ -7,7 +7,7 @@
         error.statusCode === 504
       "
     >
-      <img src="~/assets/errorbot.gif" width="260" alt="" />
+      <!-- <img src="~/assets/errorbot.gif" width="260" alt="" /> -->
       <div class="heading1" style="color: #160d3d">Oops!!</div>
       <div class="heading4 text-center">
         An error occurred, we are working on resolving it

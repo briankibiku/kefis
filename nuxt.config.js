@@ -61,7 +61,7 @@ export default {
     "@nuxtjs/axios",
     "@nuxtjs/proxy",
     "@nuxt/http",
-    "@nuxtjs/firebase",
+    // "@nuxtjs/firebase",
     "@nuxtjs/sentry",
     [
       "nuxt-fontawesome",
@@ -81,81 +81,48 @@ export default {
   ],
   // firebase FCM starts here
 
-  firebase: {
-    lazy: false,
-    config: {
-      apiKey: "AIzaSyB_uPwm93FtfTGJ8JJ38RpRwQyEWdd4_Oc",
-      authDomain: "mswali-1171e.firebaseapp.com",
-      projectId: "mswali-1171e",
-      storageBucket: "mswali-1171e.appspot.com",
-      messagingSenderId: "746446534026",
-      appId: "1:746446534026:web:89c4f2b9cabf1a82080473",
-      measurementId: "G-BQVPFSMG80",
-      databaseURL: "https://mswali-1171e-default-rtdb.firebaseio.com/",
-    },
-    onFirebaseHosting: false,
-    services: {
-      messaging: true,
-    },
-  },
-
-  messaging: {
-    createServiceWorker: true,
-    actions: [
-      {
-        action: "goHome",
-        url: "https://localhost:3000",
-      },
-    ],
-    fcmPublicVapidKey:
-      "BEfgwrltEh2CBzpZGaTeOJZ3w9AmSKUpC5b8qp8G6cZNOIRIE1BRoc28mhRVg07OiISzpTcUTUPP8DQcZjUHayE", // OPTIONAL : Sets vapid key for FCM after initialization
-  },
-
-  sentry: {
-    dsn: "https://c75bd89c3db342d1ab3bd678ad3e806f@o1189979.ingest.sentry.io/6310968",
-    publishRelease: true,
-    sourceMapStyle: "hidden-source-map",
-    config: {
-      release: process.env.GIT_COMMIT_SHA,
-    },
-    integrations: [
-      new BrowserTracing({
-        routingInstrumentation: Sentry.vueRouterInstrumentation(router),
-        tracingOrigins: ["https://quiz.mswali.co.ke", /^\//],
-      }),
-    ],
-    // Set tracesSampleRate to 1.0 to capture 100%
-    // of transactions for performance monitoring.
-    // We recommend adjusting this value in production
-    tracesSampleRate: 1.0,
-    trackComponents: ["Header", "Navigation", "Footer"],
-    hooks: ["create", "mount"],
-  },
+  // firebase: {
+  //   lazy: false,
+  //   config: {
+  //     apiKey: "AIzaSyB_uPwm93FtfTGJ8JJ38RpRwQyEWdd4_Oc",
+  //     authDomain: "mswali-1171e.firebaseapp.com",
+  //     projectId: "mswali-1171e",
+  //     storageBucket: "mswali-1171e.appspot.com",
+  //     messagingSenderId: "746446534026",
+  //     appId: "1:746446534026:web:89c4f2b9cabf1a82080473",
+  //     measurementId: "G-BQVPFSMG80",
+  //     databaseURL: "https://mswali-1171e-default-rtdb.firebaseio.com/",
+  //   },
+  //   onFirebaseHosting: false,
+  //   services: {
+  //     messaging: true,
+  //   },
+  // },
   axios: {
     proxy: true,
   },
-  proxy: {
-    "/apiproxy/": {
-      target: `http://197.248.4.233/mswali/mswali_app/backend/web/index.php?r=`,
-      // target: `http://161.35.6.91/mswali/mswali_app/backend/web/index.php?r=`,
-      pathRewrite: { "^/apiproxy/": "" },
-      changeOrigin: true,
-    },
-    "/api/": { 
-      target: `http://161.35.6.91/audios/`,
-      pathRewrite: { "^/api/": "" },
-      changeOrigin: true,
-    },
-  },
+  // proxy: {
+  //   "/apiproxy/": {
+  //     target: `http://197.248.4.233/mswali/mswali_app/backend/web/index.php?r=`,
+  //     // target: `http://161.35.6.91/mswali/mswali_app/backend/web/index.php?r=`,
+  //     pathRewrite: { "^/apiproxy/": "" },
+  //     changeOrigin: true,
+  //   },
+  //   "/api/": { 
+  //     target: `http://161.35.6.91/audios/`,
+  //     pathRewrite: { "^/api/": "" },
+  //     changeOrigin: true,
+  //   },
+  // },
 
   // Build Configuration: https://go.nuxtjs.dev/config-build
   build: {},
-  pwa: {
-    workbox: {
-      importScripts: ["/firebase-auth-sw.js"],
-      // by default the workbox module will not install the service worker in dev environment to avoid conflicts with HMR
-      // only set this true for testing and remember to always clear your browser cache in development
-      dev: false,
-    },
-  },
+  // pwa: {
+  //   workbox: {
+  //     importScripts: ["/firebase-auth-sw.js"],
+  //     // by default the workbox module will not install the service worker in dev environment to avoid conflicts with HMR
+  //     // only set this true for testing and remember to always clear your browser cache in development
+  //     dev: false,
+  //   },
+  // },
 };
