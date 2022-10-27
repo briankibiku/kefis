@@ -55,24 +55,6 @@ export const mutations = {
 };
 
 export const actions = {
-  async getuserProfile() {
-    let res = await this.$axios.get(
-      `randomapi.user`,
-    );
-    return res;
-  },
-  async delayFourSeconds() {
-    const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
-    await delay(4000);
-  },
-  async delayFiveSeconds() {
-    const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
-    await delay(5000);
-  },
-  async delayTwoSeconds() {
-    const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
-    await delay(2000);
-  },
   startPersistance({ commit }, payload) {
     commit("updateUserAnswers", payload);
     commit("updateUserAnswersPersistance", true);
